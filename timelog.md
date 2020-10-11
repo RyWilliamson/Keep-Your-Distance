@@ -36,3 +36,9 @@
 
 - _0.5 hours_: Meeting with Jeremy
 - _0.5 hours_: Typed up meeting minutes
+
+## Week 3
+
+### 09 Oct 2020
+
+- _2.5 hours_: Finishing off user scenarios
