@@ -44,3 +44,7 @@
 - _2.5 hours_: Finishing off user scenarios
 - _1 hours_: Added user scenarios to github wiki, took longer than expected due to github markdown lacking good colour support
 - _0.5 hours_: Created entry for an idea today in my Research Journal section in personal notes.
+
+### 14 Oct 2020
+
+- _1.5 hours_: Timeline
