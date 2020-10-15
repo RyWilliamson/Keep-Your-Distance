@@ -26,6 +26,17 @@
     ABC used XXX and YYY to implement ZZZ. This is particularly interesting as XXX and YYY have
     never been used together. It was found that  
     ABC was 20\% better than XYZ, though it caused rabies in half of subjects.''
+    
+    During the COVID-19 pandemic systems were designed and developed to "track and trace" people 
+    who may have been infected. However, these systems don't offer protection to those in the 
+    potentially infections situation. This project investigated using bluetooth enabled 
+    microcontrollers to provide active feedback to reduce risk of infection in the first instance.
+    It also aims to provide data visualisations to allow identification of risk of infection over 
+    time. This uses, ESP32 microcontrollers, bluetooth recieved signal strength, and mobile 
+    connectivity to implement "active contact identification". While there are some existing 
+    solutions similar to this project, many of these are proprietary and don't explore many 
+    considerations of usability with this technology.
+    -- THIS IS NOT DONE, WILL BE UPDATED AS TIME GOES ON --
 \end{abstract}
 
 %==============================================================================
@@ -39,8 +50,8 @@
 % Please note that you are under no obligation to sign 
 % this declaration, but doing so would help future students.
 %
-%\def\consentname {My Name} % your full name
-%\def\consentdate {20 March 2018} % the date you agree
+\def\consentname {Ryan Williamson} % your full name
+\def\consentdate {15 October 2020} % the date you agree
 %
 \educationalconsent
 
@@ -78,7 +89,7 @@
 \chapter{Introduction}
 
 % reset page numbering. Don't remove this!
-\pagenumbering{arabic} 
+\pagenumbering{arabic}
 
 
 Why should the reader care about what are you doing and what are you actually doing?
@@ -93,20 +104,20 @@ This is the key question for any writing. Your reader:
 
 \begin{itemize}
     \item
-    is a trained computer scientist: \emph{don't explain basics}.
+          is a trained computer scientist: \emph{don't explain basics}.
     \item
-    has limited time: \emph{keep on topic}.
+          has limited time: \emph{keep on topic}.
     \item
-    has no idea why anyone would want to do this: \emph{motivate clearly}
+          has no idea why anyone would want to do this: \emph{motivate clearly}
     \item
-    might not know \emph{anything} about your project in particular:
-    \emph{explain your project}.
+          might not know \emph{anything} about your project in particular:
+          \emph{explain your project}.
     \item
-    but might know precise details and check them: \emph{be precise and
-    strive for accuracy.}
+          but might know precise details and check them: \emph{be precise and
+              strive for accuracy.}
     \item
-    doesn't know or care about you: \emph{personal discussions are
-    irrelevant}.
+          doesn't know or care about you: \emph{personal discussions are
+              irrelevant}.
 \end{itemize}
 
 Remember, you will be marked by your supervisor and one or more members
@@ -119,24 +130,24 @@ read these, but they will improve how you write.
 
 \begin{itemize}
     \item
-    \emph{How to write a great research paper} \cite{Pey17} (\textbf{recommended}, even though you aren't writing a research paper)
+          \emph{How to write a great research paper} \cite{Pey17} (\textbf{recommended}, even though you aren't writing a research paper)
     \item
-    \emph{How to Write with Style} \cite{Von80}. Short and easy to read. Available online.
+          \emph{How to Write with Style} \cite{Von80}. Short and easy to read. Available online.
     \item
-    \emph{Style: The Basics of Clarity and Grace} \cite{Wil09} A very popular modern English style guide.
+          \emph{Style: The Basics of Clarity and Grace} \cite{Wil09} A very popular modern English style guide.
     \item
-    \emph{Politics and the English Language} \cite{Orw68}  A famous essay on effective, clear writing in English.
+          \emph{Politics and the English Language} \cite{Orw68}  A famous essay on effective, clear writing in English.
     \item
-    \emph{The Elements of Style} \cite{StrWhi07} Outdated, and American, but a classic.
+          \emph{The Elements of Style} \cite{StrWhi07} Outdated, and American, but a classic.
     \item
-    \emph{The Sense of Style} \cite{Pin15} Excellent, though quite in-depth.
+          \emph{The Sense of Style} \cite{Pin15} Excellent, though quite in-depth.
 \end{itemize}
 
 \subsubsection{Citation styles}
 
 \begin{itemize}
-\item If you are referring to a reference as a noun, then cite it as: ``\citet{Orw68} discusses the role of language in political thought.''
-\item If you are referring implicitly to references, use: ``There are many good books on writing \citep{Orw68, Wil09, Pin15}.''
+    \item If you are referring to a reference as a noun, then cite it as: ``\citet{Orw68} discusses the role of language in political thought.''
+    \item If you are referring implicitly to references, use: ``There are many good books on writing \citep{Orw68, Wil09, Pin15}.''
 \end{itemize}
 
 There is a complete guide on good citation practice by Peter Coxhead available here: \url{http://www.cs.bham.ac.uk/~pxc/refs/index.html}. 
@@ -157,15 +168,15 @@ What did other people do, and how is it relevant to what you want to do?
 \section{Guidance}
 \begin{itemize}    
     \item
-      Don't give a laundry list of references.
+          Don't give a laundry list of references.
     \item
-      Tie everything you say to your problem.
+          Tie everything you say to your problem.
     \item
-      Present an argument.
-    \item Think critically; weigh up the contribution of the background and put it in context.    
+          Present an argument.
+    \item Think critically; weigh up the contribution of the background and put it in context.
     \item
-      \textbf{Don't write a tutorial}; provide background and cite
-      references for further information.
+          \textbf{Don't write a tutorial}; provide background and cite
+          references for further information.
 \end{itemize}
 
 %==================================================================================================================================
@@ -203,16 +214,16 @@ You may include multiple figures in one float, as in Figure \ref{fig:synthetic},
 % Figures are important. Use them well.
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{images/relu.pdf}    
-
+    \includegraphics[width=0.5\linewidth]{images/relu.pdf}
+    
     \caption{In figure captions, explain what the reader is looking at: ``A schematic of the rectifying linear unit, where $a$ is the output amplitude,
-    $d$ is a configurable dead-zone, and $Z_j$ is the input signal'', as well as why the reader is looking at this: 
-    ``It is notable that there is no activation \emph{at all} below 0, which explains our initial results.'' 
-    \textbf{Use vector image formats (.pdf) where possible}. Size figures appropriately, and do not make them over-large or too small to read.
+        $d$ is a configurable dead-zone, and $Z_j$ is the input signal'', as well as why the reader is looking at this: 
+        ``It is notable that there is no activation \emph{at all} below 0, which explains our initial results.'' 
+        \textbf{Use vector image formats (.pdf) where possible}. Size figures appropriately, and do not make them over-large or too small to read.
     }
-
+    
     % use the notation fig:name to cross reference a figure
-    \label{fig:relu} 
+    \label{fig:relu}
 \end{figure}
 
 
@@ -224,7 +235,7 @@ You may include multiple figures in one float, as in Figure \ref{fig:synthetic},
         \label{fig:syn1}
     \end{subfigure}
     ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
-      %(or a blank line to force the subfigure onto a new line)
+    %(or a blank line to force the subfigure onto a new line)
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[width=\textwidth]{images/synthetic_2.png}
         \caption{Synthetic image, white on black.}
@@ -233,8 +244,8 @@ You may include multiple figures in one float, as in Figure \ref{fig:synthetic},
     ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
     %(or a blank line to force the subfigure onto a new line)    
     \caption{Synthetic test images for edge detection algorithms. \subref{fig:syn1} shows various gray levels that require an adaptive algorithm. \subref{fig:syn2}
-    shows more challenging edge detection tests that have crossing lines. Fusing these into full segments typically requires algorithms like the Hough transform.
-    This is an example of using subfigures, with \texttt{subref}s in the caption.
+        shows more challenging edge detection tests that have crossing lines. Fusing these into full segments typically requires algorithms like the Hough transform.
+        This is an example of using subfigures, with \texttt{subref}s in the caption.
     }\label{fig:synthetic}
 \end{figure}
 
@@ -248,7 +259,7 @@ Equations should be typeset correctly and precisely. Make sure you get parenthes
 For example, we might define:
 \begin{equation}
     \hat{f}(\xi) = \frac{1}{2}\left[ \int_{-\infty}^{\infty} f(x) e^{2\pi i x \xi} \right],
-\end{equation}    
+\end{equation}
 where $\hat{f}(\xi)$ is the Fourier transform of the time domain signal $f(x)$.
 
 \subsection{Algorithms}
@@ -258,7 +269,7 @@ Algorithms can be set using \texttt{algorithm2e}, as in Algorithm \ref{alg:metro
 \begin{algorithm}
     \DontPrintSemicolon
     \KwData{$f_X(x)$, a probability density function returing the density at $x$.\; $\sigma$ a standard deviation specifying the spread of the proposal distribution.\;
-    $x_0$, an initial starting condition.}
+        $x_0$, an initial starting condition.}
     \KwResult{$s=[x_1, x_2, \dots, x_n]$, $n$ samples approximately drawn from a distribution with PDF $f_X(x)$.}
     \Begin{
         $s \longleftarrow []$\;
@@ -280,8 +291,8 @@ Algorithms can be set using \texttt{algorithm2e}, as in Algorithm \ref{alg:metro
         }
     }
     
-\caption{The Metropolis-Hastings MCMC algorithm for drawing samples from arbitrary probability distributions, 
-specialised for normal proposal distributions $q(x^\prime|x) = \mathcal{N}(x, \sigma^2)$. The symmetry of the normal distribution means the acceptance rule takes the simplified form.}\label{alg:metropolis}
+    \caption{The Metropolis-Hastings MCMC algorithm for drawing samples from arbitrary probability distributions,
+        specialised for normal proposal distributions $q(x^\prime|x) = \mathcal{N}(x, \sigma^2)$. The symmetry of the normal distribution means the acceptance rule takes the simplified form.}\label{alg:metropolis}
 \end{algorithm}
 
 \subsection{Tables}
@@ -291,47 +302,47 @@ extremely tedious otherwise.
 
 \begin{table}[]
     \caption{The standard table of operators in Python, along with their functional equivalents from the \texttt{operator} package. Note that table
-    captions go above the table, not below. Do not add additional rules/lines to tables. }\label{tab:operators}
+        captions go above the table, not below. Do not add additional rules/lines to tables. }\label{tab:operators}
     %\tt 
     \rowcolors{2}{}{gray!3}
     \begin{tabular}{@{}lll@{}}
-    %\toprule
-    \textbf{Operation}    & \textbf{Syntax}                & \textbf{Function}                            \\ %\midrule % optional rule for header
-    Addition              & \texttt{a + b}                          & \texttt{add(a, b)}                                    \\
-    Concatenation         & \texttt{seq1 + seq2}                    & \texttt{concat(seq1, seq2)}                           \\
-    Containment Test      & \texttt{obj in seq}                     & \texttt{contains(seq, obj)}                           \\
-    Division              & \texttt{a / b}                          & \texttt{div(a, b) }  \\
-    Division              & \texttt{a / b}                          & \texttt{truediv(a, b) } \\
-    Division              & \texttt{a // b}                         & \texttt{floordiv(a, b)}                               \\
-    Bitwise And           & \texttt{a \& b}                         & \texttt{and\_(a, b)}                                  \\
-    Bitwise Exclusive Or  & \texttt{a \textasciicircum b}           & \texttt{xor(a, b)}                                    \\
-    Bitwise Inversion     & \texttt{$\sim$a}                        & \texttt{invert(a)}                                    \\
-    Bitwise Or            & \texttt{a | b}                          & \texttt{or\_(a, b)}                                   \\
-    Exponentiation        & \texttt{a ** b}                         & \texttt{pow(a, b)}                                    \\
-    Identity              & \texttt{a is b}                         & \texttt{is\_(a, b)}                                   \\
-    Identity              & \texttt{a is not b}                     & \texttt{is\_not(a, b)}                                \\
-    Indexed Assignment    & \texttt{obj{[}k{]} = v}                 & \texttt{setitem(obj, k, v)}                           \\
-    Indexed Deletion      & \texttt{del obj{[}k{]}}                 & \texttt{delitem(obj, k)}                              \\
-    Indexing              & \texttt{obj{[}k{]}}                     & \texttt{getitem(obj, k)}                              \\
-    Left Shift            & \texttt{a \textless{}\textless b}       & \texttt{lshift(a, b)}                                 \\
-    Modulo                & \texttt{a \% b}                         & \texttt{mod(a, b)}                                    \\
-    Multiplication        & \texttt{a * b}                          & \texttt{mul(a, b)}                                    \\
-    Negation (Arithmetic) & \texttt{- a}                            & \texttt{neg(a)}                                       \\
-    Negation (Logical)    & \texttt{not a}                          & \texttt{not\_(a)}                                     \\
-    Positive              & \texttt{+ a}                            & \texttt{pos(a)}                                       \\
-    Right Shift           & \texttt{a \textgreater{}\textgreater b} & \texttt{rshift(a, b)}                                 \\
-    Sequence Repetition   & \texttt{seq * i}                        & \texttt{repeat(seq, i)}                               \\
-    Slice Assignment      & \texttt{seq{[}i:j{]} = values}          & \texttt{setitem(seq, slice(i, j), values)}            \\
-    Slice Deletion        & \texttt{del seq{[}i:j{]}}               & \texttt{delitem(seq, slice(i, j))}                    \\
-    Slicing               & \texttt{seq{[}i:j{]}}                   & \texttt{getitem(seq, slice(i, j))}                    \\
-    String Formatting     & \texttt{s \% obj}                       & \texttt{mod(s, obj)}                                  \\
-    Subtraction           & \texttt{a - b}                          & \texttt{sub(a, b)}                                    \\
-    Truth Test            & \texttt{obj}                            & \texttt{truth(obj)}                                   \\
-    Ordering              & \texttt{a \textless b}                  & \texttt{lt(a, b)}                                     \\
-    Ordering              & \texttt{a \textless{}= b}               & \texttt{le(a, b)}                                     \\
-    % \bottomrule
+        %\toprule
+        \textbf{Operation}    & \textbf{Syntax}                         & \textbf{Function}                          \\ %\midrule % optional rule for header
+        Addition              & \texttt{a + b}                          & \texttt{add(a, b)}                         \\
+        Concatenation         & \texttt{seq1 + seq2}                    & \texttt{concat(seq1, seq2)}                \\
+        Containment Test      & \texttt{obj in seq}                     & \texttt{contains(seq, obj)}                \\
+        Division              & \texttt{a / b}                          & \texttt{div(a, b) }                        \\
+        Division              & \texttt{a / b}                          & \texttt{truediv(a, b) }                    \\
+        Division              & \texttt{a // b}                         & \texttt{floordiv(a, b)}                    \\
+        Bitwise And           & \texttt{a \& b}                         & \texttt{and\_(a, b)}                       \\
+        Bitwise Exclusive Or  & \texttt{a \textasciicircum b}           & \texttt{xor(a, b)}                         \\
+        Bitwise Inversion     & \texttt{$\sim$a}                        & \texttt{invert(a)}                         \\
+        Bitwise Or            & \texttt{a | b}                          & \texttt{or\_(a, b)}                        \\
+        Exponentiation        & \texttt{a ** b}                         & \texttt{pow(a, b)}                         \\
+        Identity              & \texttt{a is b}                         & \texttt{is\_(a, b)}                        \\
+        Identity              & \texttt{a is not b}                     & \texttt{is\_not(a, b)}                     \\
+        Indexed Assignment    & \texttt{obj{[}k{]} = v}                 & \texttt{setitem(obj, k, v)}                \\
+        Indexed Deletion      & \texttt{del obj{[}k{]}}                 & \texttt{delitem(obj, k)}                   \\
+        Indexing              & \texttt{obj{[}k{]}}                     & \texttt{getitem(obj, k)}                   \\
+        Left Shift            & \texttt{a \textless{}\textless b}       & \texttt{lshift(a, b)}                      \\
+        Modulo                & \texttt{a \% b}                         & \texttt{mod(a, b)}                         \\
+        Multiplication        & \texttt{a * b}                          & \texttt{mul(a, b)}                         \\
+        Negation (Arithmetic) & \texttt{- a}                            & \texttt{neg(a)}                            \\
+        Negation (Logical)    & \texttt{not a}                          & \texttt{not\_(a)}                          \\
+        Positive              & \texttt{+ a}                            & \texttt{pos(a)}                            \\
+        Right Shift           & \texttt{a \textgreater{}\textgreater b} & \texttt{rshift(a, b)}                      \\
+        Sequence Repetition   & \texttt{seq * i}                        & \texttt{repeat(seq, i)}                    \\
+        Slice Assignment      & \texttt{seq{[}i:j{]} = values}          & \texttt{setitem(seq, slice(i, j), values)} \\
+        Slice Deletion        & \texttt{del seq{[}i:j{]}}               & \texttt{delitem(seq, slice(i, j))}         \\
+        Slicing               & \texttt{seq{[}i:j{]}}                   & \texttt{getitem(seq, slice(i, j))}         \\
+        String Formatting     & \texttt{s \% obj}                       & \texttt{mod(s, obj)}                       \\
+        Subtraction           & \texttt{a - b}                          & \texttt{sub(a, b)}                         \\
+        Truth Test            & \texttt{obj}                            & \texttt{truth(obj)}                        \\
+        Ordering              & \texttt{a \textless b}                  & \texttt{lt(a, b)}                          \\
+        Ordering              & \texttt{a \textless{}= b}               & \texttt{le(a, b)}                          \\
+        % \bottomrule
     \end{tabular}
-    \end{table}
+\end{table}
 \subsection{Code}
 
 Avoid putting large blocks of code in the report (more than a page in one block, for example). Use syntax highlighting if possible, as in Listing \ref{lst:callahan}.
@@ -371,21 +382,21 @@ Avoid putting large blocks of code in the report (more than a page in one block,
 \end{lstlisting}
 
 %==================================================================================================================================
-\chapter{Evaluation} 
+\chapter{Evaluation}
 How good is your solution? How well did you solve the general problem, and what evidence do you have to support that?
 
 \section{Guidance}
 \begin{itemize}
     \item
-        Ask specific questions that address the general problem.
+          Ask specific questions that address the general problem.
     \item
-        Answer them with precise evidence (graphs, numbers, statistical
-        analysis, qualitative analysis).
+          Answer them with precise evidence (graphs, numbers, statistical
+          analysis, qualitative analysis).
     \item
-        Be fair and be scientific.
+          Be fair and be scientific.
     \item
-        The key thing is to show that you know how to evaluate your work, not
-        that your work is the most amazing product ever.
+          The key thing is to show that you know how to evaluate your work, not
+          that your work is the most amazing product ever.
 \end{itemize}
 
 \section{Evidence}
@@ -393,45 +404,45 @@ Make sure you present your evidence well. Use appropriate visualisations, report
 
 If you visualise, follow the basic rules, as illustrated in Figure \ref{fig:boxplot}:
 \begin{itemize}
-\item Label everything correctly (axis, title, units).
-\item Caption thoroughly.
-\item Reference in text.
-\item \textbf{Include appropriate display of uncertainty (e.g. error bars, Box plot)}
-\item Minimize clutter.
+    \item Label everything correctly (axis, title, units).
+    \item Caption thoroughly.
+    \item Reference in text.
+    \item \textbf{Include appropriate display of uncertainty (e.g. error bars, Box plot)}
+    \item Minimize clutter.
 \end{itemize}
 
 See the file \texttt{guide\_to\_visualising.pdf} for further information and guidance.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.0\linewidth]{images/boxplot_finger_distance.pdf}    
-
+    \includegraphics[width=1.0\linewidth]{images/boxplot_finger_distance.pdf}
+    
     \caption{Average number of fingers detected by the touch sensor at different heights above the surface, averaged over all gestures. Dashed lines indicate
-    the true number of fingers present. The Box plots include bootstrapped uncertainty notches for the median. It is clear that the device is biased toward 
-    undercounting fingers, particularly at higher $z$ distances.
+        the true number of fingers present. The Box plots include bootstrapped uncertainty notches for the median. It is clear that the device is biased toward 
+        undercounting fingers, particularly at higher $z$ distances.
     }
-
+    
     % use the notation fig:name to cross reference a figure
-    \label{fig:boxplot} 
+    \label{fig:boxplot}
 \end{figure}
 
 
 %==================================================================================================================================
-\chapter{Conclusion}    
+\chapter{Conclusion}
 Summarise the whole project for a lazy reader who didn't read the rest (e.g. a prize-awarding committee).
 \section{Guidance}
 \begin{itemize}
     \item
-        Summarise briefly and fairly.
+          Summarise briefly and fairly.
     \item
-        You should be addressing the general problem you introduced in the
-        Introduction.        
+          You should be addressing the general problem you introduced in the
+          Introduction.        
     \item
-        Include summary of concrete results (``the new compiler ran 2x
-        faster'')
+          Include summary of concrete results (``the new compiler ran 2x
+          faster'')
     \item
-        Indicate what future work could be done, but remember: \textbf{you
-        won't get credit for things you haven't done}.
+          Indicate what future work could be done, but remember: \textbf{you
+              won't get credit for things you haven't done}.
 \end{itemize}
 
 %==================================================================================================================================
@@ -442,28 +453,28 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
 
 \begin{appendices}
 
-\chapter{Appendices}
-
-Typical inclusions in the appendices are:
-
-\begin{itemize}
-\item
-  Copies of ethics approvals (required if obtained)
-\item
-  Copies of questionnaires etc. used to gather data from subjects.
-\item
-  Extensive tables or figures that are too bulky to fit in the main body of
-  the report, particularly ones that are repetitive and summarised in the body.
-
-\item Outline of the source code (e.g. directory structure), or other architecture documentation like class diagrams.
-
-\item User manuals, and any guides to starting/running the software.
-
-\end{itemize}
-
-\textbf{Don't include your source code in the appendices}. It will be
-submitted separately.
-
+    \chapter{Appendices}
+    
+    Typical inclusions in the appendices are:
+    
+    \begin{itemize}
+        \item
+              Copies of ethics approvals (required if obtained)
+        \item
+              Copies of questionnaires etc. used to gather data from subjects.
+        \item
+              Extensive tables or figures that are too bulky to fit in the main body of
+              the report, particularly ones that are repetitive and summarised in the body.
+              
+        \item Outline of the source code (e.g. directory structure), or other architecture documentation like class diagrams.
+              
+        \item User manuals, and any guides to starting/running the software.
+              
+    \end{itemize}
+    
+    \textbf{Don't include your source code in the appendices}. It will be
+    submitted separately.
+    
 \end{appendices}
 
 %==================================================================================================================================

@@ -48,3 +48,9 @@
 ### 14 Oct 2020
 
 - _1.5 hours_: Timeline
+
+### 15 Oct 2020
+
+- _1 hour_: Expanded collection of papers for literature review.
+- _1 hour_: Skimmed some hall of fame dissertations to see structure, reference frequency, etc.
+- _0.5 hours_: Wrote a very early draft of an abstract.
