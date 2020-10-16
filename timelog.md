@@ -63,3 +63,5 @@
 
 - _0.5 hours_: Meeting with Jeremy
 - _0.5 hours_: Typed up meeting minutes
+- _1.5 hours_: Getting Micropython flashed onto one of the boards
+- _0.5 hours_: Writing instructions for build process so far, including LaTeX.
