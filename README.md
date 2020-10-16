@@ -29,18 +29,18 @@ Here's an overview of the structure as it stands:
 
 # Build Process
 
+I used Windows 10 throughout development. I have tried to include Linux instructions however these have not been tested so may not work as intended.
+
 ## Prerequisites
 
+1. Install LaTeX I used [texlive](https://www.tug.org/texlive/acquire-netinstall.html) on Windows 10 or on Ubuntu: `apt get install texlive-full`
 1. Install [Python 3](https://www.python.org/downloads/) or alternatively for Ubuntu based distributions: `apt get install python3`
-1. Install LaTeX I used texlive on Ubuntu: `apt get install texlive-full`
 1. Install esptool: `pip install esptool`
-1. Clone this project: `git clone `
+1. Clone this project: `git clone https://github.com/RyWilliamson/Keep-Your-Distance.git`
 
 ## ESP32 Board
 
 ### Micropython Firmware (Windows 10)
-
-Throughout my development of this project I had my dissertation project in a linux distro within WSL2. However WSL2 cannot detect USB devices, so I had to flash Micropython onto the board using Windows 10.
 
 1. Note down the COM port that the device is connected to - in my case COM3. I did this using device manager and looking under the Ports section but any method can be used, for example if you have the arduino IDE you can find the COM port of the device this way.
 1. Download the device [firmware](http://micropython.org/download/esp32/). The specific version I used was **GENERIC : esp32-idf3-20200902-v1.13.bin**
@@ -56,6 +56,6 @@ You should be able to replace the COM port with /dev/ttyUSB0 - However it should
 
 `esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 esp32-20190125-v1.10.bin`
 
-## Dissertation (Linux - WSL2 Ubuntu)
+## Dissertation (Windows 10 / Linux)
 
 Navigate to the dissertation directory within the project, inside a terminal, and use the command: `pdflatex l4proj.tex`

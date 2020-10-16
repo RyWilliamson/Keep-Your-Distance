@@ -65,3 +65,5 @@
 - _0.5 hours_: Typed up meeting minutes
 - _1.5 hours_: Getting Micropython flashed onto one of the boards
 - _0.5 hours_: Writing instructions for build process so far, including LaTeX.
+- _1 hour_: Hit a roadblock with working from WSL2 - can't access the serial ports via WSL only through windows. This means that I either need to move to a full Linux virtual machine or do all development on Windows.
+- _1.5 hours_: Switched project over to using Windows as opposed to developing via WSL.
