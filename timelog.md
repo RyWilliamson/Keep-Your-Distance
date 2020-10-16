@@ -54,3 +54,12 @@
 - _1 hour_: Expanded collection of papers for literature review.
 - _1 hour_: Skimmed some hall of fame dissertations to see structure, reference frequency, etc.
 - _0.5 hours_: Wrote a very early draft of an abstract.
+- _1 hour_: Tried to read a couple of the papers I'd found but after reading Title, Introduction, and Conclusion found that they weren't as useful as hoped
+- _1 hour_: Read and summarised A Multi-step Approach for RSSI-Based Distance Estimation Using Smartphones
+
+## Week 4
+
+### 16 Oct 2020
+
+- _0.5 hours_: Meeting with Jeremy
+- _0.5 hours_: Typed up meeting minutes
