@@ -17,12 +17,14 @@ def create_oled(width=128, height=64, scl=15, sda=4):
     return ssd1306.SSD1306_I2C(width, height, i2c)
 
 
+initialise_OLED()
 oled = create_oled()
 oled.fill(0)
-oled.text('Hello, World 1!', 1, 0)
-oled.text('Hello, World 2!', 1, 10)
-oled.text('Hello, World 3!', 1, 20)
-oled.text('Hello, World 4!', 1, 30)
+#oled.text('Hello, World 1!', 1, 0)
+#oled.text('Hello, World 2!', 1, 10)
+#oled.text('Hello, World 3!', 1, 20)
+#oled.text('Hello, World 4!', 1, 30)
+oled.rect(0,0,20,20,1)
 oled.show()
 sleep(10)
 print("test")
