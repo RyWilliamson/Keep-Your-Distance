@@ -67,3 +67,9 @@
 - _0.5 hours_: Writing instructions for build process so far, including LaTeX.
 - _1 hour_: Hit a roadblock with working from WSL2 - can't access the serial ports via WSL only through windows. This means that I either need to move to a full Linux virtual machine or do all development on Windows.
 - _1.5 hours_: Switched project over to using Windows as opposed to developing via WSL.
+
+### 18 Oct 2020
+
+- _1.5 hours_: Setting up TeraTerm to access board repl - want to find a better way to do this.
+- _4 hours_: Getting screen to display anything.
+- _0.5 hours_: Setting up vscode esp stubs.

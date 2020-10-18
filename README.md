@@ -33,9 +33,10 @@ I used Windows 10 throughout development. I have tried to include Linux instruct
 
 ## Prerequisites
 
-1. Install LaTeX I used [texlive](https://www.tug.org/texlive/acquire-netinstall.html) on Windows 10 or on Ubuntu: `apt get install texlive-full`
-1. Install [Python 3](https://www.python.org/downloads/) or alternatively for Ubuntu based distributions: `apt get install python3`
+1. Install LaTeX I used [texlive](https://www.tug.org/texlive/acquire-netinstall.html) on Windows 10 or on Ubuntu: `apt-get install texlive-full`
+1. Install [Python 3](https://www.python.org/downloads/) or alternatively for Ubuntu based distributions: `apt-get install python3 python3-pip`
 1. Install esptool: `pip install esptool`
+1. Install [Git](https://git-scm.com/downloads) or for Ubuntu `apt-get install git`.
 1. Clone this project: `git clone https://github.com/RyWilliamson/Keep-Your-Distance.git`
 
 ## ESP32 Board
