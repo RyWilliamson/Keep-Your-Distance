@@ -42,6 +42,77 @@ I used Windows 10 throughout development. I have tried to include Linux instruct
 
 ## ESP32 Board
 
+### Custom Firmware (WSL1)
+
+Here I'll detail the process used to build the custom boot firmware. I'm using WSL for this as micropython was designed to be built on Linux systems.
+Specifically I'm using Ubuntu. Note this is NOT required to build my project as I have provided the final custom bin file as part of this git repository. This is intended purely as a reference for the curious and for myself a few months down the line.
+
+**Also note WSL2 WILL NOT work as it does not have support for USB access.**
+
+1. Install Python 3 as in pre-requisites.
+   1. Also install Python 3 venv: `apt-get install python3-venv`
+1. Install build-essential: `apt-get install build-essential`
+1. Install libffi-dev: `apt-get install libffi-dev`
+1. Install pkg-config: `apt-get install pkg-config`
+1. Clone my micropython fork: `git clone https://github.com/RyWilliamson/micropython.git`
+1. Get required ESP32 dependencies
+
+   ```console
+    $ cd ports/esp32 # Start within micropython clone
+    $ make ESPIDF=  # This will print the supported hashes, copy the 3.3 version.
+    $ export ESPIDF="/mnt/e/Users/Ryan/Documents/University/4th_Year/Level_4_Project/esp-idf"  # Any path with **no spaces** can be used
+    $ mkdir -p "$ESPIDF"
+    $ cd "$ESPIDF"
+    $ git clone https://github.com/espressif/esp-idf.git "$ESPIDF"
+    $ git checkout 9e70825d1e1cbf7988cf36981774300066580ea7 # If hash is different use that one
+    $ git submodule update --init --recursive
+   ```
+
+1. Now setup python virtual environment
+
+   ```console
+    $ cd ports/esp32 # start within micropython clone
+    $ python3 -m venv build-venv
+    $ source build-venv/bin/activate
+    $ pip3 install --upgrade pip
+    $ pip3 install -r "$ESPIDF/requirements.txt"
+    $ # In future sessions do the following
+    $ cd ports/esp32 # start within micropython clone
+    $ source build-venv/bin/activate
+   ```
+
+1. Download and setup ESP32 Toolchain: [instructions here](https://docs.espressif.com/projects/esp-idf/en/v3.3.2/get-started/linux-setup.html)
+1. Create a new file in esp32 directory called GNUmakefile then copy the following into it, change port number to where the serial device is plugged in (for me this was COM3)
+
+   ```
+   ESPIDF ?= "/mnt/e/Users/Ryan/Documents/University/4th_Year/Level_4_Project/esp-idf"
+   BOARD ?= GENERIC
+   PORT ?= /dev/ttyS3
+   BAUD ?= 115200
+   #FLASH_MODE ?= qio
+   #FLASH_SIZE ?= 4MB
+   #CROSS_COMPILE ?= xtensa-esp32-elf-
+
+   include Makefile
+   ```
+
+1. To Build the firmware - starting from micropython main directory
+
+   1. First build cross-compiler
+
+      ```console
+      $ cd mpy-cross
+      $ make mpy-cross
+      ```
+
+   1. Then build to Micropython run
+
+      ```console
+      $ cd ../ports/esp32
+      $ make submodules
+      $ make
+      ```
+
 ### Micropython Firmware (Windows 10)
 
 1. Note down the COM port that the device is connected to - in my case COM3. I did this using device manager and looking under the Ports section but any method can be used, for example if you have the arduino IDE you can find the COM port of the device this way.
