@@ -36,6 +36,7 @@ I used Windows 10 throughout development. I have tried to include Linux instruct
 1. Install LaTeX I used [texlive](https://www.tug.org/texlive/acquire-netinstall.html) on Windows 10 or on Ubuntu: `apt-get install texlive-full`
 1. Install [Python 3](https://www.python.org/downloads/) or alternatively for Ubuntu based distributions: `apt-get install python3 python3-pip`
 1. Install esptool: `pip install esptool`
+1. Install ampy: `pip install adafruit-ampy` (may need to be run in an elevanted prompt)
 1. Install [Git](https://git-scm.com/downloads) or for Ubuntu `apt-get install git`.
 1. Clone this project: `git clone https://github.com/RyWilliamson/Keep-Your-Distance.git`
 
@@ -46,7 +47,8 @@ I used Windows 10 throughout development. I have tried to include Linux instruct
 1. Note down the COM port that the device is connected to - in my case COM3. I did this using device manager and looking under the Ports section but any method can be used, for example if you have the arduino IDE you can find the COM port of the device this way.
 1. Download the device [firmware](http://micropython.org/download/esp32/). The specific version I used was **GENERIC : esp32-idf3-20200902-v1.13.bin**
 1. Erase the existing flash on the ESP32: `esptool.py --chip esp32 --port <COM port> erase_flash`
-1. Finally, flash the firmware onto the board: `esptool.py --chip esp32 --port <COM port> --baud 460800 write_flash -z 0x1000 esp32-20190125-v1.10.bin`
+1. Flash the firmware onto the board: `esptool.py --chip esp32 --port <COM port> --baud 460800 write_flash -z 0x1000 esp32-20190125-v1.10.bin`
+1. Use TeraTerm or equivalent way to enter the following commands in REPL. `import esp` then `esp.osdebug(None)`. Find better way to do this
 
 ### Micropython Firmware (Linux)
 
@@ -56,6 +58,14 @@ You should be able to replace the COM port with /dev/ttyUSB0 - However it should
 `esptool.py --chip esp32 --port /dev/ttyUSB0 erase_flash`
 
 `esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 esp32-20190125-v1.10.bin`
+
+### Micropython File Interaction (Windows 10 / Linux)
+
+Here we use ampy to interact with the file system on the esp32 boards. There are a few key commands used during development namely: get, ls, put, reset, rm, and run.
+
+1. Put the ss1306 driver onto the board: `ampy -p 3 -b 115200 put ss1306.py`
+1. Run the main file for testing on the board: `ampy -p 3 -b 115200 run main.py`
+1. If running a file that loops forever, or for a long time use the `--no-output` after `run`
 
 ## Dissertation (Windows 10 / Linux)
 

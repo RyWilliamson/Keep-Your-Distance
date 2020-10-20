@@ -73,3 +73,8 @@
 - _1.5 hours_: Setting up TeraTerm to access board repl - want to find a better way to do this.
 - _4 hours_: Getting screen to display anything.
 - _0.5 hours_: Setting up vscode esp stubs.
+
+### 20 Oct 2020
+
+- _0.5 hours_: Flashing micropython and testing second board works.
+- _1.5 hours_: Researching flashing custom files onto board rather than using REPL and ampy for final version.
