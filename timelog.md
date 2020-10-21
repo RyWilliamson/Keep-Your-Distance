@@ -80,3 +80,7 @@
 - _1 hour_: Researching flashing custom files onto board rather than using REPL and ampy for final version.
 - _5.5 hours_: Setting up WSL toolchain for building custom firmware.
 - _0.5 hours_: Trying to figure out why make erase and make deploy don't function correctly but copying the built firmware and using esptool on Windows does work.
+
+### 21 Oct 2020
+
+- _0.5 hours_: Built custom firmware with custom boot code, and put it onto board.

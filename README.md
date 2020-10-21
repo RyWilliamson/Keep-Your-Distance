@@ -118,7 +118,7 @@ Specifically I'm using Ubuntu. Note this is NOT required to build my project as 
 1. Note down the COM port that the device is connected to - in my case COM3. I did this using device manager and looking under the Ports section but any method can be used, for example if you have the arduino IDE you can find the COM port of the device this way.
 1. Download the device [firmware](http://micropython.org/download/esp32/). The specific version I used was **GENERIC : esp32-idf3-20200902-v1.13.bin**
 1. Erase the existing flash on the ESP32: `esptool.py --chip esp32 --port <COM port> erase_flash`
-1. Flash the firmware onto the board: `esptool.py --chip esp32 --port <COM port> --baud 460800 write_flash -z 0x1000 esp32-20190125-v1.10.bin`
+1. Flash the firmware onto the board: `esptool.py --chip esp32 --port <COM port> --baud 460800 write_flash -z 0x1000 src/firmware/firmware.bin`
 1. Use TeraTerm or equivalent way to enter the following commands in REPL. `import esp` then `esp.osdebug(None)`. Find better way to do this
 
 ### Micropython Firmware (Linux)
