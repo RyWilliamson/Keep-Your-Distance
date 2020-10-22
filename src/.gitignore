@@ -1,2 +1,5 @@
 *.bin
 tera.bat
+copyto.bat
+copyfrom.bat
+upload_firmware.bat

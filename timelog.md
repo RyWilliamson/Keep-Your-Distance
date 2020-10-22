@@ -84,3 +84,12 @@
 ### 21 Oct 2020
 
 - _0.5 hours_: Built custom firmware with custom boot code, and put it onto board.
+- _1.5 hours_: Trying a few things and setting up a couple of scripts to ease my life.
+
+### 22 Oct 2020
+
+- _0.5 hours_: Added the idea from Jeremy as a User Persona, Story, and Scenario.
+- _1 hour_: Looking into ubluetooth.
+- _1 hour_: Getting 5 papers on current contact tracing methods, their effects, and concerns for literature review.
+- _1 hour_: Started reading and annotating A Survey of Contact Tracing COVID 19 apps
+- _0.5 hours_: Looking at Hall of Fame dissertations and coming up with some of my dissertation structure.

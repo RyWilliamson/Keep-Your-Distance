@@ -128,14 +128,14 @@ You should be able to replace the COM port with /dev/ttyUSB0 - However it should
 
 `esptool.py --chip esp32 --port /dev/ttyUSB0 erase_flash`
 
-`esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 esp32-20190125-v1.10.bin`
+`esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 firmware.bin`
 
 ### Micropython File Interaction (Windows 10 / Linux)
 
 Here we use ampy to interact with the file system on the esp32 boards. There are a few key commands used during development namely: get, ls, put, reset, rm, and run.
 
-1. Put the ss1306 driver onto the board: `ampy -p 3 -b 115200 put ss1306.py`
-1. Run the main file for testing on the board: `ampy -p 3 -b 115200 run main.py`
+1. Put the ss1306 driver onto the board: `ampy -p COM3 -b 115200 put ss1306.py`
+1. Run the main file for testing on the board: `ampy -p COM3 -b 115200 run main.py`
 1. If running a file that loops forever, or for a long time use the `--no-output` after `run`
 
 ## Dissertation (Windows 10 / Linux)

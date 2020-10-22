@@ -1,10 +1,6 @@
 import ssd1306
-import ubluetooth
 from time import sleep
 from machine import Pin, I2C, TouchPad
-from micropython import const
-
-_IRQ_SCAN_RESULT = const(5)
 
 
 def initialise_OLED(reset_pin=16):
@@ -21,22 +17,14 @@ def create_oled(width=128, height=64, scl=15, sda=4):
     return ssd1306.SSD1306_I2C(width, height, i2c)
 
 
-def clear_screen(colour):
+def clear_screen(oled, colour):
     oled.fill(colour)
     oled.show()
 
 
-def output_touch_values(oled, touch_pin):
-    touchpad = TouchPad(Pin(touch_pin))
-    oled.text(str(touchpad.read()), 1, 0)
-
-
-def init_bluetooth():
-    bluetooth = ubluetooth.BLE
-    bluetooth.active()
-
-
 initialise_OLED()
-init_bluetooth()
 oled = create_oled()
-clear_screen(0)
+
+clear_screen(oled, 0)
+oled.text("This is a test!", 1, 20)
+oled.show()
