@@ -113,6 +113,10 @@ Specifically I'm using Ubuntu. Note this is NOT required to build my project as 
       $ make
       ```
 
+   1. This will get you a 'clean' firmware with no main program running
+      1. To add programs copy python files into ports/esp32/modules in the micropython clone - Note: Will not appear in flash file system as they have been frozen as byte code into firmware.
+      1. Should have a main.py file if you want esp32 to run a program at boot.
+
 ### Micropython Firmware (Windows 10)
 
 1. Note down the COM port that the device is connected to - in my case COM3. I did this using device manager and looking under the Ports section but any method can be used, for example if you have the arduino IDE you can find the COM port of the device this way.

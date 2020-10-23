@@ -93,3 +93,11 @@
 - _1 hour_: Getting 5 papers on current contact tracing methods, their effects, and concerns for literature review.
 - _1 hour_: Started reading and annotating A Survey of Contact Tracing COVID 19 apps
 - _0.5 hours_: Looking at Hall of Fame dissertations and coming up with some of my dissertation structure.
+
+## Week 5
+
+### 23 Oct 2020
+
+- _0.5 hours_: Meeting with Jeremy
+- _0.5 hours_: Typed up meeting minutes and put them on Github.
+- _0.5 hours_: Added instruction to readme and fixed up some commits.
