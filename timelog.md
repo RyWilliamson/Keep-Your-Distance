@@ -106,3 +106,5 @@
 
 - _1 hour_: Continued reading and annotating A Survey of Contact Tracing COVID 19 apps
 - _1 hour_: Wrote a level 3 summary for A Survey of Contact Tracing COVID 19 apps
+- _1.5 hours_: Read and annotated A Privacy-preserving Mobile and Fog Computing Framework to Trace and Prevent COVID-19 Community Transmission
+- _0.5 hours_: Wrote a level 3 summary for A Privacy-preserving Mobile and Fog Computing Framework to Trace and Prevent COVID-19 Community Transmission
