@@ -101,3 +101,8 @@
 - _0.5 hours_: Meeting with Jeremy
 - _0.5 hours_: Typed up meeting minutes and put them on Github.
 - _0.5 hours_: Added instruction to readme and fixed up some commits.
+
+### 24 Oct 2020
+
+- _1 hour_: Continued reading and annotating A Survey of Contact Tracing COVID 19 apps
+- _1 hour_: Wrote a level 3 summary for A Survey of Contact Tracing COVID 19 apps
