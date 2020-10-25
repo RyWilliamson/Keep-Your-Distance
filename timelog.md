@@ -110,3 +110,8 @@
 - _0.5 hours_: Wrote a level 3 summary for A Privacy-preserving Mobile and Fog Computing Framework to Trace and Prevent COVID-19 Community Transmission
 - _1 hour_: Read and annotated ProxiTrak: a robust solution to enforce real-time social distancing & contact tracing in enterprise scenario
 - _1 hour_: Wrote a level 3 summary for ProxiTrak: a robust solution to enforce real-time social distancing & contact tracing in enterprise scenario
+
+### 25 Oct 2020
+
+- _1 hour_: Read and Annotated Technical Perspectives of Contact-Tracing Applications on Wearables for COVID-19 Control
+- _1 hour_: Wrote a level 3 summary for Technical Perspectives of Contact-Tracing Applications on Wearables for COVID-19 Control
