@@ -115,3 +115,5 @@
 
 - _1 hour_: Read and Annotated Technical Perspectives of Contact-Tracing Applications on Wearables for COVID-19 Control
 - _1 hour_: Wrote a level 3 summary for Technical Perspectives of Contact-Tracing Applications on Wearables for COVID-19 Control
+- _1.5 hours_: Read and Annotated Evaluating How Smartphone Contact Tracing Technology Can Reduce the Spread of Infectious Diseases: The Case of COVID-19
+- _1 hour_: Wrote a level 3 summary for Evaluating How Smartphone Contact Tracing Technology Can Reduce the Spread of Infectious Diseases: The Case of COVID-19
