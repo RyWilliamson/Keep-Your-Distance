@@ -123,3 +123,8 @@
 - _0.5 hours_: Ruled out An efficient algorithm to estimate Covid-19 infectiousness risk from BLE-RSSI measurements as a good paper for my project
 - _1 hour_: Read and Annotated A wearable magnetic field based proximity sensing system for monitoring COVID 19 social distancing
 - _1 hour_: Wrote a level 3 summary for A wearable magnetic field based proximity sensing system for monitoring COVID 19 social distancing
+
+### 29 Oct 2020
+
+- _1.5 hour_: Read and Annotated Overview and Evaluation of Bluetooth Low Energy: An Emerging Low-Power Wireless Technology
+- _1 hour_: Wrote a level 3 summary for Overview and Evaluation of Bluetooth Low Energy: An Emerging Low-Power Wireless Technology
