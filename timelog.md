@@ -128,3 +128,5 @@
 
 - _1.5 hour_: Read and Annotated Overview and Evaluation of Bluetooth Low Energy: An Emerging Low-Power Wireless Technology
 - _1 hour_: Wrote a level 3 summary for Overview and Evaluation of Bluetooth Low Energy: An Emerging Low-Power Wireless Technology
+- _1 hour_: Writing Functional and Non-functional MOSCOW requirements
+- _0.5 hours_: Sourcing a paper on accessiblity considerations for apps.
