@@ -117,3 +117,9 @@
 - _1 hour_: Wrote a level 3 summary for Technical Perspectives of Contact-Tracing Applications on Wearables for COVID-19 Control
 - _1.5 hours_: Read and Annotated Evaluating How Smartphone Contact Tracing Technology Can Reduce the Spread of Infectious Diseases: The Case of COVID-19
 - _1 hour_: Wrote a level 3 summary for Evaluating How Smartphone Contact Tracing Technology Can Reduce the Spread of Infectious Diseases: The Case of COVID-19
+
+### 28 Oct 2020
+
+- _0.5 hours_: Ruled out An efficient algorithm to estimate Covid-19 infectiousness risk from BLE-RSSI measurements as a good paper for my project
+- _1 hour_: Read and Annotated A wearable magnetic field based proximity sensing system for monitoring COVID 19 social distancing
+- _1 hour_: Wrote a level 3 summary for A wearable magnetic field based proximity sensing system for monitoring COVID 19 social distancing
