@@ -130,3 +130,11 @@
 - _1 hour_: Wrote a level 3 summary for Overview and Evaluation of Bluetooth Low Energy: An Emerging Low-Power Wireless Technology
 - _1 hour_: Writing Functional and Non-functional MOSCOW requirements
 - _0.5 hours_: Sourcing a paper on accessiblity considerations for apps.
+
+## Week 6
+
+### 30 Oct 2020
+
+- _0.5 hours_: Started reading and annotating An Epidemiology-inspired Large-scale Analysis of Android App Accessibility
+- _0.5 hours_: Meeting with Jeremy
+- _0.5 hours_: Typing up meeting minutes
