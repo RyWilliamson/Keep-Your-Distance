@@ -1,7 +1,7 @@
 from time import sleep
 from machine import Pin
 
-led = Pin(34, Pin.OUT)  # 25 for onboard LED
+led = Pin(25, Pin.OUT)  # 25 for onboard LED
 
 while True:
     led.value(not led.value())

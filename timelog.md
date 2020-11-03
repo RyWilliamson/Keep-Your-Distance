@@ -138,3 +138,8 @@
 - _0.5 hours_: Started reading and annotating An Epidemiology-inspired Large-scale Analysis of Android App Accessibility
 - _0.5 hours_: Meeting with Jeremy
 - _0.5 hours_: Typing up meeting minutes
+
+### 03 Nov 2020
+
+- _1 hour_: Trying to get ubluetooth to broadcast
+- _0.5 hours_: Give up and use Arduino IDE
