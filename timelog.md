@@ -143,3 +143,5 @@
 
 - _1 hour_: Trying to get ubluetooth to broadcast
 - _0.5 hours_: Give up and use Arduino IDE
+- _1 hour_: Setup PlatformIO at recommendation of ESE friend
+- _1.5 hours_: Get bluetooth broadcasting and screen example working
