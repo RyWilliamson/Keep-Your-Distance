@@ -1,22 +1,14 @@
 #include <Arduino.h>
+#include <U8x8lib.h>
 
-void setup()
-{
-  // initialize LED digital pin as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
+U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
+
+void setup() {
+    u8x8.begin();
+    u8x8.setFont(u8x8_font_chroma48medium8_r);
+    u8x8.drawString(0, 0, "Hello World!");
 }
 
-void loop()
-{
-  // turn the LED on (HIGH is the voltage level)
-  digitalWrite(LED_BUILTIN, HIGH);
-
-  // wait for a second
-  delay(1000);
-
-  // turn the LED off by making the voltage LOW
-  digitalWrite(LED_BUILTIN, LOW);
-
-   // wait for a second
-  delay(1000);
+void loop() {
+    
 }
