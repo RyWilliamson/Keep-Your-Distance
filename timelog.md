@@ -145,3 +145,4 @@
 - _0.5 hours_: Give up and use Arduino IDE
 - _1 hour_: Setup PlatformIO at recommendation of ESE friend
 - _1.5 hours_: Get bluetooth broadcasting and screen example working
+- _1 hour_: Bluetooth advertising and scanning
