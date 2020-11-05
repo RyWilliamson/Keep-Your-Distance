@@ -146,3 +146,8 @@
 - _1 hour_: Setup PlatformIO at recommendation of ESE friend
 - _1.5 hours_: Get bluetooth broadcasting and screen example working
 - _1 hour_: Bluetooth advertising and scanning
+
+### 05 Nov 2020
+
+- _0.5 hours_: Actually have two esp32's able to 'see' each other - Exciting!
+- _1.5 hours_: Separated bluetooth logic into its own library for my own sanity.
