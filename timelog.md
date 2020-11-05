@@ -151,3 +151,4 @@
 
 - _0.5 hours_: Actually have two esp32's able to 'see' each other - Exciting!
 - _1.5 hours_: Separated bluetooth logic into its own library for my own sanity.
+- _1.5 hours_: Worked on displaying RSSI and very early crude version of distance estimation.
