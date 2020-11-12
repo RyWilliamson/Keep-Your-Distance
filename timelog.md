@@ -153,3 +153,19 @@
 - _1.5 hours_: Separated bluetooth logic into its own library for my own sanity.
 - _1.5 hours_: Worked on displaying RSSI and very early crude version of distance estimation.
 - _1.5 hours_: Continued reading and annotating An Epidemiology-inspired Large-scale Analysis of Android App Accessibility
+
+## Week 7
+
+### 06 Nov 2020
+
+- _0.5 hours_: Meeting with Jeremy
+- _0.5 hours_: Typing up meeting minutes
+
+### 11 Nov 2020
+
+- _0.5 hours_: Interference vectors
+- _1 hour_: Setting up Android Studio and the app project
+
+### 12 Nov 2020
+
+- _0.5 hours_: Finishing interference vectors

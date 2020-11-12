@@ -9,10 +9,14 @@
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
 int scanTime = 1;
-float measuredPower = -80;
+float measuredPower = -80.0;
 BLEScan *pBLEScanner;
 BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
+
+float calculateDistance(int rssi, float measuredPower, float environment) {
+    return pow(10, (measuredPower - rssi) / 10 * environment);
+}
 
 class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -23,7 +27,7 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
             //screen.drawString(0, 2, lineData.c_str());
             screen.draw2x2String(0, 4, lineData.c_str());
 
-            lineData = "D: " + String(rssi / measuredPower);
+            lineData = "D: " + String(calculateDistance(rssi, measuredPower, 2), 3);
             screen.draw2x2String(0, 6, lineData.c_str());
             foundESP = true;
         }
