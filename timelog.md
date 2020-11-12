@@ -169,3 +169,8 @@
 ### 12 Nov 2020
 
 - _0.5 hours_: Finishing interference vectors
+- _0.5 hours_: Research on how the roles at a high level will work for the Bluetooth connection
+- _1.5 hours_: Learning how to and setting up a test user interface
+- _4 hours_: Trying to prototype BLE interaction between phone and esp32
+- _1 hour_: Getting Android to only return scans for ESP32.
+- _2 hours_: Run tests on ESP32 at different distances using different "measuredPower" values
