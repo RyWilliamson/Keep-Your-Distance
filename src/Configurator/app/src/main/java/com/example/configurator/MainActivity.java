@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
         BLEAdapter = btManager.getAdapter();
         BLEScanner = BLEAdapter.getBluetoothLeScanner();
 
-        deviceNameLabel = (TextView) findViewById( R.id.foundInfo );
-        deviceMacLabel = (TextView) findViewById( R.id.macInfo );
-        deviceCharacteristicLabel = (TextView) findViewById( R.id.serviceLabel );
+        deviceNameLabel = findViewById( R.id.foundInfo );
+        deviceMacLabel = findViewById( R.id.macInfo );
+        deviceCharacteristicLabel = findViewById( R.id.serviceInfo );
         setupFilter();
         setupSettings();
         checkBLEPermissions();
@@ -159,19 +161,16 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean readCharacteristic( final BluetoothGattCharacteristic characteristic ) {
         if ( BLEGatt == null ) {
-            // TODO: Log this error
             Log.e( "Read Characteristic", "gatt is null" );
             return false;
         }
 
         if ( characteristic == null ) {
-            // TODO: Log this error
             Log.e( "Read Characteristic", "characteristic is null" );
             return false;
         }
 
         if ( ( characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_READ ) == 0 ) {
-            // TODO: Log this error
             Log.e( "Read Characteristic",
                     String.format( "Characteristic %s doesn't have read property",
                             characteristic.getUuid() ) );
@@ -221,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
         if ( commandQueue.size() > 0 ) {
             final Runnable command = commandQueue.peek();
+            commandBusy = true;
 
             handler.post( new Runnable() {
                 @Override
@@ -294,8 +294,25 @@ public class MainActivity extends AppCompatActivity {
                 completedCommand();
                 return;
             }
-            Log.d( "Character Read Callback", characteristic.getStringValue( 0 ) );
+            if ( characteristic.getUuid().toString().equals(
+                    "beb5483e-36e1-4688-b7f5-ea07361b26a8" ) ) {
+                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
+                        UUID.fromString( "00002902-0000-1000-8000-00805f9b34fb" ));
+                if ( descriptor != null ){
+                    Log.d( "Character Read Callback", String.format("Success - found relevant characteristic: %s" , descriptor.getUuid().toString()));
+                    updateTextViewFromRunnable( deviceCharacteristicLabel, descriptor.getUuid().toString() );
+                }
+            }
             completedCommand();
         }
     };
+
+    private void updateTextViewFromRunnable(TextView tv, String data) {
+        MainActivity.this.runOnUiThread( new Runnable() {
+            @Override
+            public void run() {
+                tv.setText( data );
+            }
+        } );
+    }
 }

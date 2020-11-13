@@ -10,24 +10,22 @@
         android:id="@+id/serviceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="44dp"
         android:text="Service Characteristic:"
-        app:layout_constraintEnd_toStartOf="@+id/scanButton"
-        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/foundLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/macLabel" />
 
     <TextView
-        android:id="@+id/serverInfo"
+        android:id="@+id/serviceInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="None"
-        app:layout_constraintBottom_toBottomOf="@+id/serviceLabel"
+        app:layout_constraintBottom_toTopOf="@+id/connectButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.46"
-        app:layout_constraintStart_toEndOf="@+id/serviceLabel"
-        app:layout_constraintTop_toTopOf="@+id/serviceLabel"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/serviceLabel" />
 
     <TextView
         android:id="@+id/macLabel"

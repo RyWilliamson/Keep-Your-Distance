@@ -175,3 +175,9 @@
 - _1 hour_: Getting Android to only return scans for ESP32.
 - _2 hours_: Trying to get a "real" connection between the devices instead of just a scan.
 - _2 hours_: Trying to read characteristics I set in the esp32 code from the app.
+
+## Week 8
+
+### 13 Nov 2020
+
+- _1 hour_: Managed to get readCharacteristics working correctly, next work on esp32 giving useful data through it.
