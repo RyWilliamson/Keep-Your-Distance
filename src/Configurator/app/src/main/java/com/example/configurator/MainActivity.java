@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean mScanning;
     private Handler handler = new Handler();
 
-    private Queue<Runnable> commandQueue;
+    private Queue<Runnable> commandQueue = new ConcurrentLinkedQueue<>();
     private boolean commandBusy;
 
     private TextView deviceNameLabel;
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int GATT_INTERNAL_ERROR = 129;
 
     @Override
-
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
@@ -107,6 +108,14 @@ public class MainActivity extends AppCompatActivity {
         BLEGatt.disconnect();
     }
 
+    public void onRead( View view ) {
+        for ( BluetoothGattService service : BLEGatt.getServices() ) {
+            for ( BluetoothGattCharacteristic characteristic : service.getCharacteristics() ) {
+                readCharacteristic( characteristic );
+            }
+        }
+    }
+
     private void checkBLEPermissions() {
         if ( ContextCompat.checkSelfPermission( this,
                 Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
@@ -141,12 +150,90 @@ public class MainActivity extends AppCompatActivity {
             Log.d( "Scan Result", "Found: " + result.getDevice().getName() );
             String deviceName = result.getDevice().getName();
             if ( deviceName != null && deviceName.equals( "ESP32" ) ) {
-                deviceNameLabel.setText( "ESP32" );
-                deviceMacLabel.setText( result.getDevice().getAddress() );
                 BLEDevice = result.getDevice();
+                deviceNameLabel.setText( "ESP32" );
+                deviceMacLabel.setText( BLEDevice.getAddress() );
             }
         }
     };
+
+    private boolean readCharacteristic( final BluetoothGattCharacteristic characteristic ) {
+        if ( BLEGatt == null ) {
+            // TODO: Log this error
+            Log.e( "Read Characteristic", "gatt is null" );
+            return false;
+        }
+
+        if ( characteristic == null ) {
+            // TODO: Log this error
+            Log.e( "Read Characteristic", "characteristic is null" );
+            return false;
+        }
+
+        if ( ( characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_READ ) == 0 ) {
+            // TODO: Log this error
+            Log.e( "Read Characteristic",
+                    String.format( "Characteristic %s doesn't have read property",
+                            characteristic.getUuid() ) );
+            return false;
+        }
+
+        boolean result = commandQueue.add( new Runnable() {
+            @Override
+            public void run() {
+                if ( !BLEGatt.readCharacteristic( characteristic ) ) {
+                    Log.e( "Read Characteristic", String.format(
+                            "ERROR: readCharacteristic failed for characteristic: %s",
+                            characteristic.getUuid() ) );
+                    completedCommand();
+                } else {
+                    Log.d( "Read Characteristic", String.format( "reading characteristic <%s>",
+                            characteristic.getUuid() ) );
+                }
+            }
+        } );
+
+        if ( result ) {
+            nextCommand();
+        } else {
+            Log.e( "Read Characteristic", "ERROR: Could not enqueue read characteristic command" );
+        }
+        return result;
+    }
+
+    private void completedCommand() {
+        commandBusy = false;
+        commandQueue.poll();
+        nextCommand();
+    }
+
+    private void nextCommand() {
+        if ( commandBusy ) {
+            return;
+        }
+
+        if ( BLEGatt == null ) {
+            Log.e( "Next Command", "Gatt is null" );
+            commandQueue.clear();
+            commandBusy = false;
+            return;
+        }
+
+        if ( commandQueue.size() > 0 ) {
+            final Runnable command = commandQueue.peek();
+
+            handler.post( new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        command.run();
+                    } catch ( Exception ex ) {
+                        Log.e( "Next Command", "Error in command" );
+                    }
+                }
+            } );
+        }
+    }
 
     private BluetoothGattCallback BLEGattCallback = new BluetoothGattCallback() {
         @Override
@@ -196,6 +283,19 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             Log.d( "Services Discovered", gatt.getServices().toString() );
+        }
+
+        @Override
+        public void onCharacteristicRead( BluetoothGatt gatt,
+                BluetoothGattCharacteristic characteristic, int status ) {
+            super.onCharacteristicRead( gatt, characteristic, status );
+            if ( status != BluetoothGatt.GATT_SUCCESS ) {
+                Log.e( "Character Read Callback", "Read Failed" );
+                completedCommand();
+                return;
+            }
+            Log.d( "Character Read Callback", characteristic.getStringValue( 0 ) );
+            completedCommand();
         }
     };
 }

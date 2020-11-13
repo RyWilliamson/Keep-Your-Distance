@@ -173,4 +173,5 @@
 - _1.5 hours_: Learning how to and setting up a test user interface
 - _4 hours_: Trying to prototype BLE interaction between phone and esp32
 - _1 hour_: Getting Android to only return scans for ESP32.
-- _2 hours_: Run tests on ESP32 at different distances using different "measuredPower" values
+- _2 hours_: Trying to get a "real" connection between the devices instead of just a scan.
+- _2 hours_: Trying to read characteristics I set in the esp32 code from the app.
