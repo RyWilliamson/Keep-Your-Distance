@@ -181,3 +181,8 @@
 ### 13 Nov 2020
 
 - _1 hour_: Managed to get readCharacteristics working correctly, next work on esp32 giving useful data through it.
+- _0.5 hours_: Meeting with Jeremy
+
+### 18 Nov 2020
+
+- _1.5 hours_: Refactoring code to create a high level Bluetooth Library.
