@@ -13,6 +13,7 @@ float measuredPower = -80.0;
 BLEScan *pBLEScanner;
 BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
+uint8_t data = 5; 
 
 float calculateDistance(int rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / 10 * environment);
@@ -31,14 +32,21 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
             screen.draw2x2String(0, 6, lineData.c_str());
             foundESP = true;
         }
-        Serial.printf("Advertised Device: %s RSSI: %d \n", advertisedDevice.toString().c_str(), advertisedDevice.getRSSI());
+        //Serial.printf("Advertised Device: %s RSSI: %d \n", advertisedDevice.toString().c_str(), advertisedDevice.getRSSI());
     }
 };
 
 class CharacteristicCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic* characteristic) {
-        String str = String(characteristic->getValue().c_str());
-        Serial.println("String value is: " + str);
+        uint8_t* val = characteristic->getData();
+        Serial.println("From Device value is: " + String(*val));
+        characteristic->setValue(&data, 1);
+    }
+
+    void onRead(BLECharacteristic* characteristic) {
+        data++;
+        characteristic->setValue(&data, 1);
+        Serial.println("To Device value is: " + String(data));
     }
 };
 
@@ -47,7 +55,7 @@ void setup() {
     screen.begin();
     screen.setFont(u8x8_font_chroma48medium8_r);
 
-    constructBLEServer("ESP32", new BLE2902());
+    constructBLEServer("ESP32", new BLE2902(), new CharacteristicCallbacks);
     pBLEAdvertiser = startBLEAdvertising();
     pBLEScanner = startBLEScanning(new AdvertisedDeviceCallbacks);
 }
@@ -59,9 +67,9 @@ void loop() {
     screen.draw2x2String(0, 2, "Scan..");
 
     BLEScanResults foundDevices = pBLEScanner->start(scanTime, false); // Blocks until done
-    Serial.print("Devices found: ");
-    Serial.println(foundDevices.getCount());
-    Serial.println("Scan done!");
+    //Serial.print("Devices found: ");
+    //Serial.println(foundDevices.getCount());
+    //Serial.println("Scan done!");
     pBLEScanner->clearResults();   // delete results fromBLEScan buffer to release memory
 
     clear2x2Line(&screen, 2);

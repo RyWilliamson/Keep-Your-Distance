@@ -6,8 +6,9 @@
 
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+#define CHARA_RSSI_UUID     "3f237eb3-99b4-4bbd-9475-f2e7b39ac899"
 
-BLEServer * constructBLEServer(String name, BLEDescriptor* descriptor, BLECharacteristicCallbacks* callbacks) {
+void constructBLEServer(String name, BLEDescriptor* descriptor, BLECharacteristicCallbacks* callbacks) {
     BLEDevice::init(name.c_str());
 
     BLEServer *pServer = BLEDevice::createServer();
@@ -21,8 +22,19 @@ BLEServer * constructBLEServer(String name, BLEDescriptor* descriptor, BLECharac
         BLECharacteristic::PROPERTY_NOTIFY |
         BLECharacteristic::PROPERTY_INDICATE
     );
+
+    // BLECharacteristic *pRSSICharacteristic = pService->createCharacteristic(
+    //     CHARA_RSSI_UUID,
+    //     BLECharacteristic::PROPERTY_READ |
+    //     BLECharacteristic::PROPERTY_WRITE |
+    //     BLECharacteristic::PROPERTY_NOTIFY |
+    //     BLECharacteristic::PROPERTY_INDICATE
+    // );
     pCharacteristic->addDescriptor(descriptor);
     pCharacteristic->setCallbacks(callbacks);
+
+    // pRSSICharacteristic->addDescriptor(descriptor);
+    // pRSSICharacteristic->setCallbacks(callbacks);
 
     pService->start();
 }

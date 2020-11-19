@@ -191,3 +191,9 @@
 
 - _2.5 hours_: Trying to get write characteristic working.
 - _1.5 hours_: Switching to using Blessed bluetooth library.
+- _1 hour_: Getting writing from app to device working with Blessed.
+- _1 hour_: Getting writing from device to app working with Blessed.
+- _1 hour_: Debugging strange data interaction between data being read and written.
+- _2 hours_: Trying to get RSSI data from the device to the app using different characteristic.
+- _0.5 hours_: Manually conducting RSSI experimental measurements
+- _2 hours_: Inputting data into Excel and generating some visualisations.
