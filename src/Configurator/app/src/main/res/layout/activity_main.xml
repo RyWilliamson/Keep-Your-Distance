@@ -22,10 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="None"
-        app:layout_constraintBottom_toTopOf="@+id/connectButton"
+        app:layout_constraintBottom_toTopOf="@+id/disconnectButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/serviceLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/serviceLabel"
+        app:layout_constraintVertical_bias="0.277" />
 
     <TextView
         android:id="@+id/macLabel"
@@ -33,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="Mac Address:"
-        app:layout_constraintEnd_toStartOf="@+id/scanButton"
+        app:layout_constraintEnd_toStartOf="@+id/connectButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/foundLabel" />
 
@@ -50,11 +51,11 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/scanButton"
+        android:id="@+id/connectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="deviceScan"
-        android:text="Scan"
+        android:text="Connect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,9 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="Device Found:"
-        app:layout_constraintEnd_toStartOf="@+id/scanButton"
+        app:layout_constraintEnd_toStartOf="@+id/connectButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scanButton" />
+        app:layout_constraintTop_toBottomOf="@+id/connectButton" />
 
     <TextView
         android:id="@+id/foundInfo"
@@ -83,19 +84,6 @@
         app:layout_constraintTop_toTopOf="@+id/foundLabel" />
 
     <Button
-        android:id="@+id/connectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="connectToDevice"
-        android:text="Connect"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/serviceLabel"
-        app:layout_constraintVertical_bias="0.16" />
-
-    <Button
         android:id="@+id/disconnectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,10 +91,9 @@
         android:text="Disconnect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectButton"
-        app:layout_constraintVertical_bias="0.145" />
+        app:layout_constraintTop_toBottomOf="@+id/serviceLabel"
+        app:layout_constraintVertical_bias="0.279" />
 
     <Button
         android:id="@+id/readButton"
