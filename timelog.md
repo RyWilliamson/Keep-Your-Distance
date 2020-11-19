@@ -189,4 +189,5 @@
 
 ### 19 Nov 2020
 
-- _2.5 hours_: Getting write characteristic working
+- _2.5 hours_: Trying to get write characteristic working.
+- _1.5 hours_: Switching to using Blessed bluetooth library.
