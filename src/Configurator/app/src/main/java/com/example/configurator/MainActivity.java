@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                             String.format( "Success - found relevant characteristic: %s",
                                     descriptor.getUuid().toString() ) );
                     updateTextViewFromRunnable( deviceCharacteristicLabel,
-                            descriptor.getUuid().toString() );
+                            characteristic.getValue().toString() );
                 }
             }
         }

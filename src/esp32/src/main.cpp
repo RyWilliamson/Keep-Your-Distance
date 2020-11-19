@@ -35,6 +35,13 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     }
 };
 
+class CharacteristicCallbacks: public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic* characteristic) {
+        String str = String(characteristic->getValue().c_str());
+        Serial.println("String value is: " + str);
+    }
+};
+
 void setup() {
     Serial.begin(115200);
     screen.begin();

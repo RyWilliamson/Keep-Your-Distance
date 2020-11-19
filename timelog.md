@@ -186,3 +186,7 @@
 ### 18 Nov 2020
 
 - _1.5 hours_: Refactoring code to create a high level Bluetooth Library.
+
+### 19 Nov 2020
+
+- _2.5 hours_: Getting write characteristic working
