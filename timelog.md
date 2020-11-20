@@ -205,3 +205,5 @@
 
 - _2 hours_: Got RSSI with read to work
 - _1 hour_: Try to get esp32 to notify app when RSSI changes
+- _0.5 hours_: Meeting with Jeremy
+- _0.5 hours_: Typed up meeting minutes
