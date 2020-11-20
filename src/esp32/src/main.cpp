@@ -9,11 +9,14 @@
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
 int scanTime = 1;
-float measuredPower = -80.0;
+float measuredPower = -87.0;
 BLEScan *pBLEScanner;
 BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
-uint8_t data = 5; 
+uint8_t data = 5;
+int rssi = 0;
+
+BLECharacteristic *rssiCharacteristic;
 
 float calculateDistance(int rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / 10 * environment);
@@ -23,7 +26,9 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
         // Only an inital check - bad for security long-term
         if (advertisedDevice.getName() == "ESP32") {
-            int rssi = advertisedDevice.getRSSI();
+            rssi = advertisedDevice.getRSSI();
+            rssiCharacteristic->setValue(rssi);
+            rssiCharacteristic->notify();
             String lineData = "ESP: " + String(rssi);
             //screen.drawString(0, 2, lineData.c_str());
             screen.draw2x2String(0, 4, lineData.c_str());
@@ -36,17 +41,24 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     }
 };
 
+// class RSSICallbacks: public BLECharacteristicCallbacks {
+//     void onRead(BLECharacteristic* characteristic) {
+//         characteristic->setValue(rssi);
+//         Serial.println("To Device value is: " + String(rssi));
+//     }
+// };
+
+class RSSICallbacks: public BLECharacteristicCallbacks {
+    void onRead(BLECharacteristic* characteristic) {
+        Serial.println("Has been read from " + String(*characteristic->getData()));
+    }
+};
+
 class CharacteristicCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic* characteristic) {
         uint8_t* val = characteristic->getData();
-        Serial.println("From Device value is: " + String(*val));
-        characteristic->setValue(&data, 1);
-    }
-
-    void onRead(BLECharacteristic* characteristic) {
-        data++;
-        characteristic->setValue(&data, 1);
-        Serial.println("To Device value is: " + String(data));
+        Serial.println("2From Device value is: " + String(*val));
+        //characteristic->setValue(&data, 1);
     }
 };
 
@@ -55,7 +67,7 @@ void setup() {
     screen.begin();
     screen.setFont(u8x8_font_chroma48medium8_r);
 
-    constructBLEServer("ESP32", new BLE2902(), new CharacteristicCallbacks);
+    rssiCharacteristic = constructBLEServer("ESP32", new BLE2902(), new CharacteristicCallbacks, new RSSICallbacks);
     pBLEAdvertiser = startBLEAdvertising();
     pBLEScanner = startBLEScanning(new AdvertisedDeviceCallbacks);
 }

@@ -1,5 +1,6 @@
 package com.example.configurator;
 
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
@@ -19,6 +20,9 @@ import com.welie.blessed.BluetoothPeripheralCallback;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.UUID;
 
 import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
@@ -29,13 +33,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView deviceMacLabel;
     private TextView deviceCharacteristicLabel;
     private byte vals = 0;
+    private boolean notify = false;
 
     private BluetoothCentral central;
     private BluetoothPeripheral BLEPeripheral;
-    private BluetoothGattCharacteristic characteristic;
+    private BluetoothGattCharacteristic rssiCharcteristic;
+    private BluetoothGattCharacteristic normalCharacteristic;
     private final UUID ESP_SERVICE_ID = UUID.fromString( "4fafc201-1fb5-459e-8fcc-c5c9c331914b" );
-    private final UUID ESP_CHARACTERISTIC_ID = UUID.fromString( "beb5483e-36e1-4688-b7f5-ea07361b26a8" );
-    private final UUID RSSI_CHARACTERISTIC_ID = UUID.fromString( "3f237eb3-99b4-4bbd-9475-f2e7b39ac899" );
+    private final UUID ESP_CHARACTERISTIC_ID = UUID.fromString(
+            "beb5483e-36e1-4688-b7f5-ea07361b26a8" );
+    private final UUID RSSI_CHARACTERISTIC_ID = UUID.fromString(
+            "3f237eb3-99b4-4bbd-9475-f2e7b39ac899" );
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -60,15 +68,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onRead( View view ) {
-        // Read characteristic with UUID beb5483e-36e1-4688-b7f5-ea07361b26a8
-        boolean written = BLEPeripheral.writeCharacteristic( characteristic, new byte[]{ vals },
-                WRITE_TYPE_DEFAULT );
-        BLEPeripheral.readCharacteristic( characteristic );
+//        Log.d("read", String.valueOf(BLEPeripheral.readCharacteristic( rssiCharcteristic )));
+        notify = !notify;
+        Log.d("read", String.valueOf(notify));
+        Log.d("read", String.valueOf(BLEPeripheral.setNotify( rssiCharcteristic, notify )));
     }
 
-    public void onWrite(View view) {
-        boolean written = BLEPeripheral.writeCharacteristic( characteristic, new byte[]{ vals++ },
+    public void onWrite( View view ) {
+        boolean written = BLEPeripheral.writeCharacteristic( normalCharacteristic, new byte[]{ vals++ },
                 WRITE_TYPE_DEFAULT );
+        Log.d("write", String.valueOf(written));
     }
 
     private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
@@ -83,10 +92,6 @@ public class MainActivity extends AppCompatActivity {
         public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
             super.onConnectedPeripheral( peripheral );
             BLEPeripheral = peripheral;
-//            if(peripheral.getService(CTS_SERVICE_UUID) != null) {
-//                BluetoothGattCharacteristic currentTimeCharacteristic = peripheral.getCharacteristic(CTS_SERVICE_UUID, CURRENT_TIME_CHARACTERISTIC_UUID);
-//                peripheral.setNotify(currentTimeCharacteristic, true);
-//            }
             deviceNameLabel.setText( peripheral.getName() );
             deviceMacLabel.setText( peripheral.getAddress() );
             Log.d( "Central Callback", "Connected" );
@@ -96,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
         public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
             super.onConnectionFailed( peripheral, status );
             BLEPeripheral = null;
-            characteristic = null;
+            normalCharacteristic = null;
+            rssiCharcteristic = null;
             deviceNameLabel.setText( "" );
             deviceMacLabel.setText( "" );
             deviceCharacteristicLabel.setText( "" );
@@ -107,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
         public void onDisconnectedPeripheral( BluetoothPeripheral peripheral, int status ) {
             super.onDisconnectedPeripheral( peripheral, status );
             BLEPeripheral = null;
-            characteristic = null;
+            normalCharacteristic = null;
+            rssiCharcteristic = null;
             deviceNameLabel.setText( "" );
             deviceMacLabel.setText( "" );
             deviceCharacteristicLabel.setText( "" );
@@ -119,16 +126,21 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onServicesDiscovered( BluetoothPeripheral peripheral ) {
             super.onServicesDiscovered( peripheral );
-            characteristic = peripheral.getCharacteristic( ESP_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
+            for (BluetoothGattCharacteristic characteristic : peripheral.getService( ESP_SERVICE_ID ).getCharacteristics()) {
+                Log.d("test", String.valueOf( characteristic.getUuid()));
+            }
+            rssiCharcteristic = peripheral.getCharacteristic( ESP_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
+            normalCharacteristic = peripheral.getCharacteristic( ESP_SERVICE_ID, ESP_CHARACTERISTIC_ID );
         }
 
         @Override
         public void onCharacteristicUpdate( BluetoothPeripheral peripheral, byte[] value,
                 BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
-            for (byte val : value) {
-                deviceCharacteristicLabel.setText(String.valueOf( val ));
-            }
+
+            Log.d("test", String.valueOf( value.length ));
+            int val = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            deviceCharacteristicLabel.setText( String.valueOf( val ) );
         }
     };
 

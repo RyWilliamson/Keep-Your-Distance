@@ -197,3 +197,11 @@
 - _2 hours_: Trying to get RSSI data from the device to the app using different characteristic.
 - _0.5 hours_: Manually conducting RSSI experimental measurements
 - _2 hours_: Inputting data into Excel and generating some visualisations.
+- _0.5 hours_: Typed up meeting minutes I'd forgotten about - whoops.
+
+## Week 9
+
+### 20 Nov 2020
+
+- _2 hours_: Got RSSI with read to work
+- _1 hour_: Try to get esp32 to notify app when RSSI changes
