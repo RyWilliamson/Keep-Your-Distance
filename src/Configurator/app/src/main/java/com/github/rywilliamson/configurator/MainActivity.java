@@ -1,10 +1,6 @@
-package com.example.configurator;
+package com.github.rywilliamson.configurator;
 
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
-import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,19 +9,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.welie.blessed.BluetoothCentral;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.UUID;
 
 import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+import static com.github.rywilliamson.configurator.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.CustomCharacteristics.ESP_SERVICE_ID;
+import static com.github.rywilliamson.configurator.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,11 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothPeripheral BLEPeripheral;
     private BluetoothGattCharacteristic rssiCharcteristic;
     private BluetoothGattCharacteristic normalCharacteristic;
-    private final UUID ESP_SERVICE_ID = UUID.fromString( "4fafc201-1fb5-459e-8fcc-c5c9c331914b" );
-    private final UUID ESP_CHARACTERISTIC_ID = UUID.fromString(
-            "beb5483e-36e1-4688-b7f5-ea07361b26a8" );
-    private final UUID RSSI_CHARACTERISTIC_ID = UUID.fromString(
-            "3f237eb3-99b4-4bbd-9475-f2e7b39ac899" );
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {

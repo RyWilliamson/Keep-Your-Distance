@@ -1,4 +1,4 @@
-package com.example.configurator;
+package com.github.rywilliamson.configurator;
 
 public class Keys {
     public static final int REQUEST_ENABLE_BT = 1;

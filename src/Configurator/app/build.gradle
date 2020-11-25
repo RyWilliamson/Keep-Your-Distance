@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.configurator"
+        applicationId "com.github.rywilliamson.configurator"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1

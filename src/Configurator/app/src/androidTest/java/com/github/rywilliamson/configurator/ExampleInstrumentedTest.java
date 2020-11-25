@@ -1,4 +1,4 @@
-package com.example.configurator;
+package com.github.rywilliamson.configurator;
 
 import android.content.Context;
 
