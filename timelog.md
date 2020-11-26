@@ -217,3 +217,5 @@
 ### 26 Nov 2020
 
 - _3 hours_: Trying to get navhostfragments to work correctly with a shared bluetooth environment
+- _1 hour_: Figure out rough programmatic design for experiment
+- _1 hour_: Implement experiment fragment
