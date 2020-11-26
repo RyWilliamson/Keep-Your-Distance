@@ -1,8 +1,10 @@
 package com.github.rywilliamson.configurator.Activities;
 
+import android.Manifest;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,9 +12,14 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.Keys;
 import com.welie.blessed.BluetoothCentral;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
@@ -45,11 +52,20 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         return this.central;
     }
 
-    public void swapToDebug( View view ) {
-        startActivity(new Intent(this, DevActivity.class));
+    public void checkBLEPermissions() {
+        if ( ContextCompat.checkSelfPermission( this,
+                Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions( this,
+                    new String[]{ Manifest.permission.ACCESS_FINE_LOCATION },
+                    Keys.REQUEST_FINE_LOCATION );
+        }
     }
 
-    private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
+    public void swapToDebug( View view ) {
+        startActivity( new Intent( this, DevActivity.class ) );
+    }
+
+    private BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
         @Override
         public void onDiscoveredPeripheral( BluetoothPeripheral peripheral,
                 ScanResult scanResult ) {
@@ -83,24 +99,33 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         }
     };
 
-    private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
+    private BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
         @Override
         public void onServicesDiscovered( BluetoothPeripheral peripheral ) {
             super.onServicesDiscovered( peripheral );
-            for (BluetoothGattCharacteristic characteristic : peripheral.getService( ESP_SERVICE_ID ).getCharacteristics()) {
-                Log.d("test", String.valueOf( characteristic.getUuid()));
+            for ( BluetoothGattCharacteristic characteristic : peripheral.getService(
+                    ESP_SERVICE_ID ).getCharacteristics() ) {
+                Log.d( "test", String.valueOf( characteristic.getUuid() ) );
             }
-            rssiCharcteristic = peripheral.getCharacteristic( ESP_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
-            normalCharacteristic = peripheral.getCharacteristic( ESP_SERVICE_ID, ESP_CHARACTERISTIC_ID );
+            rssiCharcteristic = peripheral.getCharacteristic( ESP_SERVICE_ID,
+                    RSSI_CHARACTERISTIC_ID );
+            normalCharacteristic = peripheral.getCharacteristic( ESP_SERVICE_ID,
+                    ESP_CHARACTERISTIC_ID );
+            BLEPeripheral.setNotify( rssiCharcteristic, true );
         }
 
         @Override
         public void onCharacteristicUpdate( BluetoothPeripheral peripheral, byte[] value,
                 BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
-
-            int val = ByteBuffer.wrap(value).order( ByteOrder.LITTLE_ENDIAN).getInt();
-            Log.d("Default update", String.valueOf( val ));
+            getCurrentImplementer().getPeripheralCallback().onCharacteristicUpdate( peripheral,
+                    value, characteristic, status );
         }
     };
+
+    private BluetoothImplementer getCurrentImplementer() {
+        Log.d("test", "update");
+        return (BluetoothImplementer) getSupportFragmentManager().findFragmentById(
+                R.id.nav_host_fragment ).getChildFragmentManager().getFragments().get( 0 );
+    }
 }

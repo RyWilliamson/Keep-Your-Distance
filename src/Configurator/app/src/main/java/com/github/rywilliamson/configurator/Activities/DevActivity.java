@@ -1,9 +1,13 @@
 package com.github.rywilliamson.configurator.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.Keys;
 import com.welie.blessed.BluetoothCentral;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
@@ -51,8 +56,18 @@ public class DevActivity extends AppCompatActivity {
                 Looper.myLooper() ) );
     }
 
+    private void checkBLEPermissions() {
+        if ( ContextCompat.checkSelfPermission( this,
+                Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions( this,
+                    new String[]{ Manifest.permission.ACCESS_FINE_LOCATION },
+                    Keys.REQUEST_FINE_LOCATION );
+        }
+    }
+
     public void deviceScan( View view ) {
         // Start Scan
+        checkBLEPermissions();
         central.scanForPeripheralsWithNames( new String[]{ "ESP32" } );
         Log.d("test", String.valueOf(central.isBluetoothEnabled()));
     }

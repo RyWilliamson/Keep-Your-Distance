@@ -207,3 +207,13 @@
 - _1 hour_: Try to get esp32 to notify app when RSSI changes
 - _0.5 hours_: Meeting with Jeremy
 - _0.5 hours_: Typed up meeting minutes
+
+### 25 Nov 2020
+
+- _1 hour_: Researching navigation view
+- _1 hour_: Refactoring to use proper package name
+- _6 hours_: Figuring out why Bluetooth doesn't run once changed package name
+
+### 26 Nov 2020
+
+- _3 hours_: Trying to get navhostfragments to work correctly with a shared bluetooth environment

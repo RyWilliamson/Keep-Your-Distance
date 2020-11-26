@@ -1,5 +1,7 @@
 package com.github.rywilliamson.configurator.Fragments;
 
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.le.ScanResult;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,9 +14,20 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheral;
+import com.welie.blessed.BluetoothPeripheralCallback;
 
-public class SyncDeviceFragment extends Fragment {
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_SERVICE_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
+
+public class SyncDeviceFragment extends Fragment implements BluetoothImplementer {
 
     private BluetoothContainer container;
 
@@ -45,11 +58,10 @@ public class SyncDeviceFragment extends Fragment {
     private void setupButtons() {
         syncButton.setOnClickListener( this::connectToDevice );
         experimentButton.setOnClickListener( this::moveToExperiment );
-        Log.d("test", "test");
     }
 
     private void connectToDevice( View view ) {
-        Log.d("test", "test");
+        container.checkBLEPermissions();
         container.getCentral().scanForPeripheralsWithNames( new String[]{ "ESP32" } );
     }
 
@@ -58,4 +70,53 @@ public class SyncDeviceFragment extends Fragment {
                 container );
         Navigation.findNavController( view ).navigate( action );
     }
+
+    @Override
+    public BluetoothCentralCallback getCentralCallback() {
+        return bluetoothCentralCallback;
+    }
+
+    @Override
+    public BluetoothPeripheralCallback getPeripheralCallback() {
+        return peripheralCallback;
+    }
+
+    private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
+        @Override
+        public void onDiscoveredPeripheral( BluetoothPeripheral peripheral,
+                ScanResult scanResult ) {
+
+        }
+
+        @Override
+        public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
+
+        }
+
+        @Override
+        public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
+
+        }
+
+        @Override
+        public void onDisconnectedPeripheral( BluetoothPeripheral peripheral, int status ) {
+
+        }
+    };
+
+    private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
+        @Override
+        public void onServicesDiscovered( BluetoothPeripheral peripheral ) {
+
+        }
+
+        @Override
+        public void onCharacteristicUpdate( BluetoothPeripheral peripheral, byte[] value,
+                BluetoothGattCharacteristic characteristic, int status ) {
+            super.onCharacteristicUpdate( peripheral, value, characteristic, status );
+
+            int val = ByteBuffer.wrap( value ).order( ByteOrder.LITTLE_ENDIAN ).getInt();
+            Log.d( "Default update", String.valueOf( val ) );
+        }
+    };
 }
