@@ -15,6 +15,7 @@ BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
 uint8_t data = 5;
 int rssi = 0;
+int nullValue = 99;
 
 BLECharacteristic *rssiCharacteristic;
 
@@ -89,7 +90,9 @@ void loop() {
     if (!foundESP) {
         clear2x2Line(&screen, 4);
         clear2x2Line(&screen, 6);
+        rssiCharacteristic->setValue(nullValue);
+        rssiCharacteristic->notify();
     }
     foundESP = false;
-    delay(200);
+    //delay(200);
 }

@@ -1,11 +1,15 @@
 package com.github.rywilliamson.configurator.Fragments;
 
+import android.Manifest;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -20,10 +24,14 @@ import android.widget.TextView;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.Keys;
+import com.opencsv.CSVWriter;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -40,10 +48,10 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
     private TextView outputTextView;
 
     private BluetoothContainer container;
-    private List<Integer> rssiValues;
+    private List<String[]> rssiValues;
     private boolean capturing;
     private int counter;
-    private final int VALUECOUNT = 10;
+    private final int VALUECOUNT = 250;
 
     public DevExperimentFragment() {
         // Required empty public constructor
@@ -110,6 +118,27 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
         container.getPeripheral().setNotify( container.getRssiCharacteristic(), false );
     }
 
+    private void writeCSV() {
+        checkFilePermissions();
+        String csv = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/output.csv";
+        try {
+            CSVWriter writer = new CSVWriter( new FileWriter( csv ) );
+            writer.writeAll( rssiValues );
+            writer.close();
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkFilePermissions() {
+        if ( ContextCompat.checkSelfPermission( getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions( getActivity(),
+                    new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    Keys.REQUEST_WRITE_EXTERNAL );
+        }
+    }
+
     @Override
     public BluetoothCentralCallback getCentralCallback() {
         return bluetoothCentralCallback;
@@ -157,11 +186,12 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
             int val = ByteBuffer.wrap( value ).order( ByteOrder.LITTLE_ENDIAN ).getInt();
             if ( counter >= VALUECOUNT ) {
                 Log.i( "RSSI Values", rssiValues.toString() );
+                writeCSV();
                 outputTextView.setText( R.string.f_dev_done );
                 cancel();
                 return;
             }
-            rssiValues.add( val );
+            rssiValues.add( new String[] {String.valueOf( counter ), String.valueOf( val )} );
             outputTextView.setText( getResources().getString( R.string.f_dev_capturing, counter, VALUECOUNT ));
             counter++;
         }

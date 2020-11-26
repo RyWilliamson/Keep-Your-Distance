@@ -219,3 +219,5 @@
 - _3 hours_: Trying to get navhostfragments to work correctly with a shared bluetooth environment
 - _1 hour_: Figure out rough programmatic design for experiment
 - _1 hour_: Implement bluetooth part of experiment fragment
+- _2 hours_: Implement csv support and modify esp32 code to give positive 99 to app for missed connections
+- _1 hour_: Running experiment
