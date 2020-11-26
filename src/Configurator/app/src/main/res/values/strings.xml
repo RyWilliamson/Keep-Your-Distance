@@ -9,6 +9,6 @@
     <string name="f_dev_begin">Start</string>
     <string name="f_dev_cancel">Cancel</string>
     <string name="f_dev_waiting">Waiting to start…</string>
-    <string name="f_dev_capturing">Capturing…</string>
+    <string name="f_dev_capturing">Capturing… Value: %d of %d</string>
     <string name="f_dev_done">Done capturing</string>
 </resources>

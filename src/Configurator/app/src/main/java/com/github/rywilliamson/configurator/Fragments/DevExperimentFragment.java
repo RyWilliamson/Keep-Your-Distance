@@ -101,7 +101,6 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
         counter = 0;
         capturing = true;
         interactButton.setText( R.string.f_dev_cancel );
-        outputTextView.setText( R.string.f_dev_capturing );
         container.getPeripheral().setNotify( container.getRssiCharacteristic(), true );
     }
 
@@ -163,6 +162,7 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
                 return;
             }
             rssiValues.add( val );
+            outputTextView.setText( getResources().getString( R.string.f_dev_capturing, counter, VALUECOUNT ));
             counter++;
         }
     };
