@@ -1,4 +1,4 @@
-package com.github.rywilliamson.configurator;
+package com.github.rywilliamson.configurator.Utils;
 
 import java.util.UUID;
 

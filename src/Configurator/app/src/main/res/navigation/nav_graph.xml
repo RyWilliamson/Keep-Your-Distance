@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/syncDeviceFragment">
+
+    <fragment
+        android:id="@+id/syncDeviceFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.SyncDeviceFragment"
+        android:label="fragment_sync_device"
+        tools:layout="@layout/fragment_sync_device" >
+        <action
+            android:id="@+id/action_syncDeviceFragment_to_dev_experiment"
+            app:destination="@id/devExperimentFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/devExperimentFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.DevExperimentFragment"
+        android:label="fragment_dev_experiment"
+        tools:layout="@layout/fragment_dev_experiment" >
+        <argument android:name="container"
+            app:argType="com.github.rywilliamson.configurator.Interfaces.BluetoothContainer" />
+    </fragment>
+</navigation>

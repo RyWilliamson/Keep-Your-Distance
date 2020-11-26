@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Configurator</string>
+    <!-- Sync Device Fragment -->
+    <string name="f_sync_connect">Connect to ESP32</string>
+    <string name="f_sync_experiment">Move to Experiment</string>
+
+
 </resources>

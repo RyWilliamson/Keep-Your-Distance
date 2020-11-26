@@ -1,4 +1,6 @@
-package com.github.rywilliamson.configurator;
+package com.github.rywilliamson.configurator.Activities;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
@@ -9,8 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.github.rywilliamson.configurator.R;
 import com.welie.blessed.BluetoothCentral;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
@@ -20,11 +21,11 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-import static com.github.rywilliamson.configurator.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
-import static com.github.rywilliamson.configurator.CustomCharacteristics.ESP_SERVICE_ID;
-import static com.github.rywilliamson.configurator.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_SERVICE_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
 
-public class MainActivity extends AppCompatActivity {
+public class DevActivity extends AppCompatActivity {
 
     private TextView deviceNameLabel;
     private TextView deviceMacLabel;
@@ -40,19 +41,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
+        setContentView( R.layout.activity_dev );
 
         deviceNameLabel = findViewById( R.id.foundInfo );
         deviceMacLabel = findViewById( R.id.macInfo );
         deviceCharacteristicLabel = findViewById( R.id.serviceInfo );
 
         central = new BluetoothCentral( this, bluetoothCentralCallback, new Handler(
-                Looper.getMainLooper() ) );
+                Looper.myLooper() ) );
     }
 
     public void deviceScan( View view ) {
         // Start Scan
         central.scanForPeripheralsWithNames( new String[]{ "ESP32" } );
+        Log.d("test", String.valueOf(central.isBluetoothEnabled()));
     }
 
     public void disconnectFromDevice( View view ) {
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDiscoveredPeripheral( BluetoothPeripheral peripheral,
                 ScanResult scanResult ) {
+            Log.d( "Central Callback", "Scanned" );
             central.stopScan();
             central.connectPeripheral( peripheral, peripheralCallback );
         }
@@ -131,9 +134,8 @@ public class MainActivity extends AppCompatActivity {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
 
             Log.d("test", String.valueOf( value.length ));
-            int val = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            int val = ByteBuffer.wrap(value).order( ByteOrder.LITTLE_ENDIAN).getInt();
             deviceCharacteristicLabel.setText( String.valueOf( val ) );
         }
     };
-
 }
