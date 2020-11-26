@@ -23,5 +23,12 @@
         tools:layout="@layout/fragment_dev_experiment" >
         <argument android:name="container"
             app:argType="com.github.rywilliamson.configurator.Interfaces.BluetoothContainer" />
+        <action
+            android:id="@+id/action_devExperimentFragment_to_syncDeviceFragment"
+            app:destination="@id/syncDeviceFragment" >
+            <argument
+                android:name="container"
+                android:defaultValue="null" />
+        </action>
     </fragment>
 </navigation>

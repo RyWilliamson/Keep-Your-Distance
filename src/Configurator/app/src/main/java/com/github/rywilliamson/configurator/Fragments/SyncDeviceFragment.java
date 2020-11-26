@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -23,6 +25,8 @@ import com.welie.blessed.BluetoothPeripheralCallback;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_SERVICE_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
@@ -90,17 +94,17 @@ public class SyncDeviceFragment extends Fragment implements BluetoothImplementer
 
         @Override
         public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
-
+            experimentButton.setVisibility( VISIBLE );
         }
 
         @Override
         public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
-
+            experimentButton.setVisibility( GONE );
         }
 
         @Override
         public void onDisconnectedPeripheral( BluetoothPeripheral peripheral, int status ) {
-
+            experimentButton.setVisibility( GONE );
         }
     };
 
@@ -114,9 +118,6 @@ public class SyncDeviceFragment extends Fragment implements BluetoothImplementer
         public void onCharacteristicUpdate( BluetoothPeripheral peripheral, byte[] value,
                 BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
-
-            int val = ByteBuffer.wrap( value ).order( ByteOrder.LITTLE_ENDIAN ).getInt();
-            Log.d( "Default update", String.valueOf( val ) );
         }
     };
 }

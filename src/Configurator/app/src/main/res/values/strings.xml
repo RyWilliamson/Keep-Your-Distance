@@ -4,5 +4,11 @@
     <string name="f_sync_connect">Connect to ESP32</string>
     <string name="f_sync_experiment">Move to Experiment</string>
 
-
+    <!-- Dev Experiment Fragment -->
+    <string name="f_dev_back">Back</string>
+    <string name="f_dev_begin">Start</string>
+    <string name="f_dev_cancel">Cancel</string>
+    <string name="f_dev_waiting">Waiting to start…</string>
+    <string name="f_dev_capturing">Capturing…</string>
+    <string name="f_dev_done">Done capturing</string>
 </resources>

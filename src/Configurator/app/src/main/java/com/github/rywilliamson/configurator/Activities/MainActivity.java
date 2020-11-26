@@ -52,6 +52,18 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         return this.central;
     }
 
+    public BluetoothPeripheral getPeripheral() {
+        return this.BLEPeripheral;
+    }
+
+    public BluetoothGattCharacteristic getRssiCharacteristic() {
+        return this.rssiCharcteristic;
+    }
+
+    public BluetoothGattCharacteristic getNormalCharacteristic() {
+        return this.normalCharacteristic;
+    }
+
     public void checkBLEPermissions() {
         if ( ContextCompat.checkSelfPermission( this,
                 Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
@@ -71,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
                 ScanResult scanResult ) {
             central.stopScan();
             central.connectPeripheral( peripheral, peripheralCallback );
+            getCurrentImplementer().getCentralCallback().onDiscoveredPeripheral( peripheral, scanResult );
         }
 
         @Override
@@ -78,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
             super.onConnectedPeripheral( peripheral );
             BLEPeripheral = peripheral;
             Log.d( "Central Callback", "Connection Completed" );
+            getCurrentImplementer().getCentralCallback().onConnectedPeripheral( peripheral );
         }
 
         @Override
@@ -87,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
             normalCharacteristic = null;
             rssiCharcteristic = null;
             Log.d( "Central Callback", "Connection Failed" );
+            getCurrentImplementer().getCentralCallback().onConnectionFailed( peripheral,
+                    status );
         }
 
         @Override
@@ -96,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
             normalCharacteristic = null;
             rssiCharcteristic = null;
             Log.d( "Central Callback", "Disconnected" );
+            getCurrentImplementer().getCentralCallback().onDisconnectedPeripheral( peripheral,
+                    status );
         }
     };
 
@@ -111,7 +129,8 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
                     RSSI_CHARACTERISTIC_ID );
             normalCharacteristic = peripheral.getCharacteristic( ESP_SERVICE_ID,
                     ESP_CHARACTERISTIC_ID );
-            BLEPeripheral.setNotify( rssiCharcteristic, true );
+
+            getCurrentImplementer().getPeripheralCallback().onServicesDiscovered( peripheral );
         }
 
         @Override
@@ -124,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
     };
 
     private BluetoothImplementer getCurrentImplementer() {
-        Log.d("test", "update");
         return (BluetoothImplementer) getSupportFragmentManager().findFragmentById(
                 R.id.nav_host_fragment ).getChildFragmentManager().getFragments().get( 0 );
     }
