@@ -221,3 +221,4 @@
 - _1 hour_: Implement bluetooth part of experiment fragment
 - _2 hours_: Implement csv support and modify esp32 code to give positive 99 to app for missed connections
 - _1 hour_: Running experiment
+- _0.5 hours_: Processing data
