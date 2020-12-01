@@ -222,3 +222,15 @@
 - _2 hours_: Implement csv support and modify esp32 code to give positive 99 to app for missed connections
 - _1 hour_: Running experiment
 - _0.5 hours_: Processing data
+
+## Week 10
+
+### 27 Nov 2020
+
+- _0.5 hours_: Meeting with Jeremy
+- _0.5 hours_: Typing up meeting minutes
+
+### 01 Dec 2020
+
+- _1 hour_: Research into multiple connections (one device advertising and one mobile connection)
+- _6 hours_: Trying different approaches to get concurrent advertising working

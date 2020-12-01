@@ -49,6 +49,19 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 //     }
 // };
 
+
+class ServerCallbacks: public BLEServerCallbacks {
+    void onConnect(BLEServer* pServer) {
+        pServer->getAdvertising()->stop();
+        pBLEAdvertiser = startJustESPAdvertising();
+    }
+
+    void onDisconnect(BLEServer* pServer) {
+        pServer->getAdvertising()->stop();
+        pBLEAdvertiser = startBLEAdvertising();
+    }
+};
+
 class RSSICallbacks: public BLECharacteristicCallbacks {
     void onRead(BLECharacteristic* characteristic) {
         Serial.println("Has been read from " + String(*characteristic->getData()));
@@ -68,7 +81,7 @@ void setup() {
     screen.begin();
     screen.setFont(u8x8_font_chroma48medium8_r);
 
-    rssiCharacteristic = constructBLEServer("ESP32", new BLE2902(), new CharacteristicCallbacks, new RSSICallbacks);
+    rssiCharacteristic = constructBLEServer("ESP32", new ServerCallbacks, new BLE2902(), new CharacteristicCallbacks, new RSSICallbacks);
     pBLEAdvertiser = startBLEAdvertising();
     pBLEScanner = startBLEScanning(new AdvertisedDeviceCallbacks);
 }
