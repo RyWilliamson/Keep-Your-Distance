@@ -234,3 +234,4 @@
 
 - _1 hour_: Research into multiple connections (one device advertising and one mobile connection)
 - _6 hours_: Trying different approaches to get concurrent advertising working
+- _0.5 hours_: Fixing broken data processing code
