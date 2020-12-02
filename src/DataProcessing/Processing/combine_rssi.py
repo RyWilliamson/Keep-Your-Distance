@@ -34,6 +34,8 @@ with open(output_file, "w", encoding="utf-8", newline='') as output:
         record = [i]
         for file in files:
             val = int(file.readline().strip().split(',')[1].strip("\"\""))
+            if val == 99:
+                val = None
             record.append(val)
         datawriter.writerow(record)
     closeInputFiles(files)

@@ -235,3 +235,11 @@
 - _1 hour_: Research into multiple connections (one device advertising and one mobile connection)
 - _6 hours_: Trying different approaches to get concurrent advertising working
 - _0.5 hours_: Fixing broken data processing code
+- _1 hour_: Set up Jupyter notebook and integration with vscode
+- _3 hours_: Spending some time to get to grips with pandas and seaborn
+
+### 02 Dec 2020
+
+- _1 hour_: Finishing up with the plots based off raw data
+- _0.5 hours_: Calculating average and missing values
+- _3 hours_: Trying to create dataframe for measured power
