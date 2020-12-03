@@ -242,4 +242,11 @@
 
 - _1 hour_: Finishing up with the plots based off raw data
 - _0.5 hours_: Calculating average and missing values
-- _3 hours_: Trying to create dataframe for measured power
+- _2 hours_: Trying to create dataframe for measured power
+- _2 hours_: Creating some visualisations with Measured Power
+
+### 03 Dec 2020
+
+- _0.5 hours_: Updated raw rssi violin / swarm plot to be stacked instead of overlayed
+- _0.5 hours_: Fixing up graphs
+- _2.5 hours_: Adding in and exploring medians for error estimation
