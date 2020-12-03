@@ -250,3 +250,4 @@
 - _0.5 hours_: Updated raw rssi violin / swarm plot to be stacked instead of overlayed
 - _0.5 hours_: Fixing up graphs
 - _2.5 hours_: Adding in and exploring medians for error estimation
+- _0.5 hours_: Calculating best value for all distances at each environment
