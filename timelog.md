@@ -260,3 +260,4 @@
 - _0.5 hours_: Meeting with Jeremy
 - _0.5 hours_: Typed up meeting minutes
 - _0.5 hours_: Continue working on text protocol design
+- _0.5 hours_: Add characteristic properties to protocol design
