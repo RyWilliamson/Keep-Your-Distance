@@ -251,3 +251,12 @@
 - _0.5 hours_: Fixing up graphs
 - _2.5 hours_: Adding in and exploring medians for error estimation
 - _0.5 hours_: Calculating best value for all distances at each environment
+
+## Week 11
+
+### 04 Dec 2020
+
+- _0.5 hours_: Started work on protocol design
+- _0.5 hours_: Meeting with Jeremy
+- _0.5 hours_: Typed up meeting minutes
+- _0.5 hours_: Continue working on text protocol design
