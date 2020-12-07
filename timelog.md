@@ -260,4 +260,8 @@
 - _0.5 hours_: Meeting with Jeremy
 - _0.5 hours_: Typed up meeting minutes
 - _0.5 hours_: Continue working on text protocol design
-- _0.5 hours_: Add characteristic properties to protocol design
+- _1 hour_: Add characteristic properties to protocol design
+
+### 07 Dec 2020
+
+- _1 hour_: Create protcol architecture diagram
