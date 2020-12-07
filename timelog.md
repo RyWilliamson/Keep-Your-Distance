@@ -264,4 +264,9 @@
 
 ### 07 Dec 2020
 
-- _1 hour_: Create protcol architecture diagram
+- _1 hour_: Create protocol architecture diagram
+- _0.5 hours_: Read over exemplar status report
+- _0.5 hours_: Read over ethics checklist
+- _5 hours_: Fill out ethics approval form, along with creation of all related documents, checked by supervisor and sent off to Prof Stephen Brewster.
+- _1.5 hours_: First three sections of status report draft completed.
+- _2 hours_: Finish off status report.

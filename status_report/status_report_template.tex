@@ -3,8 +3,8 @@
 \usepackage{times}
     \usepackage{fullpage}
     
-    \title{ {{cookiecutter.project_title}}
-    \author{ {{cookiecutter.student_name}} - {{cookiecutter.student_id}} }
+    \title{Keep Your Distance! Real-time Social Distancing}
+    \author{Ryan Williamson - 2306841w}
 
     \begin{document}
     \maketitle
@@ -18,51 +18,106 @@
 
 \subsubsection{Motivation}\label{motivation}
 
-\emph{{[}Clearly motivate the purpose of your project; why someone would
-care about what you are doing{]}}
+A real-time distance sensor configurable for the various distances recommended 
+for social distancing allows for users, particularly office / retail 
+workers, to feel more comfortable that they are staying as safe as 
+possible from SARS-CoV-2. This could also be applicable to unknown 
+future pandemics to help reduce initial impacts.
 
 \subsubsection{Aims}\label{aims}
 
-\emph{{[}Clearly state what the project is intended to do. This should
-be something which is measurable; it should be possible to tell if you
-succeeded{]}}
+This project will develop a system involving two components, an 
+Android app, and an ESP32 micro-controller. The esp32 will detect 
+other so configured esp32 devices and alert the user, while also 
+logging this interaction to the companion app. Both the device-device 
+and phone-device connections will be implemented using Bluetooth Low 
+Energy (BLE).
 
 \subsection{Progress}\label{progress}
 
-\emph{{[}Briefly state your progress so far, as a bulleted list{]}}
+\begin{itemize}
+    \setlength\itemsep{0.1em}
+\item Languages chosen for both Android App (Java), and ESP32 (C++ after switching
+from Micropython).
+\item Seven papers summarised, with a partial literature review created to link 
+five of the papers together.
+\item User stories, personas, and scenarios created.
+\item  MOSCOW requirements specification created.
+\item  Very rough dissertation structure outlined.
+\item  Interference vectors considered and documented.
+\item  Bluetooth protocol between devices and device to app created and visualised.
+\item  Prototype app and device created to implement initial BLE stack, as well
+as allow for an experiment to be conducted.
+\item  Experiment conducted to get 250 RSSI values at 5 distances, incremented at 
+0.5m.
+\item  Parameter space exploration conducted on experiment data to get best fit 
+values for measured power and environment factor.
+
+\end{itemize}
 
 \subsection{Problems and risks}\label{problems-and-risks}
 
 \subsubsection{Problems}\label{problems}
 
-\emph{{[}What problems have you had so far, that have held up the
-project?{]}}
+The following issues were encountered in the project so far.
+
+\begin{itemize}
+    \setlength\itemsep{0.1em}
+\item Micropython BLE functionality still in development and was not suitable for 
+the project. This meant there was a lot of work in Micropython in the beginning that 
+had to be replicated in Arduino C++.
+\item Android Bluetooth libraries very low level, so it took quite some time to get 
+the app BLE functionality working.
+\item Not much documentation of the esp32 BLE library, so took quite a lot of digging
+and reading source code to get it working.
+\item Current BLE scanning method is not secure - will need to be replaced.
+
+\end{itemize}
 
 \subsubsection{Risks}\label{risks}
 
-\emph{{[}What problems do you foresee in the future and how will you
-mitigate them?{]}}
+The following are potential issues I see coming up.
+
+\begin{itemize}
+    \setlength\itemsep{0.1em}
+\item Lack of real user evaluation due to COVID. \textbf{Mitigation}: will consider 
+alternate styles of evaluation to supplment limited hands-on evaluation.
+\item RSSI values are quite inconsistent. \textbf{Mitigation}: Look into an 
+algorithm, such as a sliding window based one, to look at the past n readings. As 
+opposed to a simple threshold.
+\item Can't figure out how to store data in non-volatile on esp 32. 
+\textbf{Mitigation}: Currently just sending data to phone, but would like to try and 
+find a solution to prevent data loss on the device for an extra layer of redundancy.
+
+\end{itemize}
 
 \subsection{Plan}\label{plan}
 
-\emph{{[}Time plan, in roughly weekly to monthly blocks, up until
-submission week{]}}
+\begin{itemize}
+    \setlength\itemsep{0.1em}
+    \item
+      Week 1-2: Finalise and begin to send out user surveys, and perform experiments 
+      with users. \textbf{Deliverable: Raw data, and experiment results.}
+    \item
+      Week 3-4: Analyse user evaluations and experiments to draw conclusions about
+      system accuracy, efficiency, and usability. \textbf{Deliverable: Some graphs 
+      and conclusions.}
+    \item
+      Week 5-7: Write up. \textbf{Deliverable: First draft submitted to
+      Jeremy.}
+    \item
+      Week 8-9: Write up - Second Draft. \textbf{Deliverable: Second draft submitted to
+      Jeremy.}
+    \item
+      Week 10: Final polish on dissertation. \textbf{Deliverable: Final changes checked 
+      over by Jeremy, then submitted via Moodle.}
+    \end{itemize}
 
     
 \subsection{Ethics and data}\label{ethics}
-\emph{Specify what ethical approval you need to do your evaluation and how you are approaching it. This is mandatory. 
-Specify what data you expect to collect in your evaluation. Explain how this data will help you evaluate your project.
-}
 
-Options for ethics:
-\item This project does not involve human subjects or data. No approval required.
-\item I have verified that the ethics checklist will apply to any evaluation I need to do. I will sign and complete the checklist.
-\item I have sought ethical guidance from the School's ethics convener and I will:
-\begin{itemize}
-    \item Proceed under specific instructions from the Ethics convener (e.g. modified checklist).
-    \item Apply for College Ethics Board approval.
-    \item Other procedure (give details)
-\end{itemize}    
+I have verified that the ethics checklist will apply to surveys I need to do. I will sign and complete the checklist.
+I have sought ethical guidance from the School's ethics convener, as I need to use non-standard hardware (ESP32).
 
 
 \end{document}
