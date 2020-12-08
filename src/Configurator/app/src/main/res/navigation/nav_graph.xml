@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/syncDeviceFragment">
+    app:startDestination="@id/deviceConnectFragment">
 
     <fragment
         android:id="@+id/syncDeviceFragment"
-        android:name="com.github.rywilliamson.configurator.Fragments.SyncDeviceFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.DevSyncDeviceFragment"
         android:label="fragment_sync_device"
-        tools:layout="@layout/fragment_sync_device" >
+        tools:layout="@layout/fragment_dev_sync_device" >
         <action
             android:id="@+id/action_syncDeviceFragment_to_dev_experiment"
             app:destination="@id/devExperimentFragment"
@@ -31,4 +31,32 @@
                 android:defaultValue="null" />
         </action>
     </fragment>
+    <fragment
+        android:id="@+id/deviceInfoFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.DeviceInfoFragment"
+        android:label="fragment_device_info"
+        tools:layout="@layout/fragment_device_info" >
+        <action
+            android:id="@+id/action_deviceInfoFragment_to_deviceConnectFragment2"
+            app:destination="@id/deviceConnectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceConnectFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.DeviceConnectFragment"
+        android:label="fragment_device_connect"
+        tools:layout="@layout/fragment_device_connect" >
+        <action
+            android:id="@+id/action_deviceConnectFragment_to_deviceInfoFragment2"
+            app:destination="@id/deviceInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/graphFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.GraphFragment"
+        android:label="fragment_graph"
+        tools:layout="@layout/fragment_graph" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

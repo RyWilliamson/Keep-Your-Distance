@@ -273,4 +273,9 @@
 
 ### 08 Dec 2020
 
-- _1.5 hour_: Finished up 1st draft of status report.
+- _4 hours_: Level 4 Project Lectures
+- _1.5 hours_: Finished up 1st draft of status report before sending to Jeremy.
+- _1.5 hours_: Design mockups for device info page, in connected and disconnected state.
+- _1 hour_: Design mockup for settings page, in connected and disconnected state.
+- _1 hour_: Design mockup for graph page, only one state required.
+- _2.5 hours_: Began to implement UI in app.

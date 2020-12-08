@@ -3,14 +3,11 @@ package com.github.rywilliamson.configurator.Fragments;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -22,23 +19,17 @@ import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_SERVICE_ID;
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
 
-public class SyncDeviceFragment extends Fragment implements BluetoothImplementer {
+public class DevSyncDeviceFragment extends Fragment implements BluetoothImplementer {
 
     private BluetoothContainer container;
 
     private Button syncButton;
     private Button experimentButton;
 
-    public SyncDeviceFragment() {
+    public DevSyncDeviceFragment() {
         // Required empty public constructor
     }
 
@@ -52,7 +43,7 @@ public class SyncDeviceFragment extends Fragment implements BluetoothImplementer
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState ) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate( R.layout.fragment_sync_device, container, false );
+        View view = inflater.inflate( R.layout.fragment_dev_sync_device, container, false );
         syncButton = view.findViewById( R.id.fSyncConnectButton );
         experimentButton = view.findViewById( R.id.fSyncToExperimentButton );
         setupButtons();
@@ -70,7 +61,7 @@ public class SyncDeviceFragment extends Fragment implements BluetoothImplementer
     }
 
     private void moveToExperiment( View view ) {
-        NavDirections action = SyncDeviceFragmentDirections.actionSyncDeviceFragmentToDevExperiment(
+        NavDirections action = DevSyncDeviceFragmentDirections.actionSyncDeviceFragmentToDevExperiment(
                 container );
         Navigation.findNavController( view ).navigate( action );
     }
