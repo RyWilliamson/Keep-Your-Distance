@@ -270,3 +270,7 @@
 - _5 hours_: Fill out ethics approval form, along with creation of all related documents, checked by supervisor and sent off to Prof Stephen Brewster.
 - _1.5 hours_: First three sections of status report draft completed.
 - _2 hours_: Finish off status report.
+
+### 08 Dec 2020
+
+- _1.5 hour_: Finished up 1st draft of status report.

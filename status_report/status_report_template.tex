@@ -1,9 +1,11 @@
     
 \documentclass[11pt]{article}
 \usepackage{times}
+\usepackage{graphicx}
+\usepackage[format=plain,labelfont={bf,it},textfont=it,tableposition=above]{caption}
     \usepackage{fullpage}
     
-    \title{Keep Your Distance! Real-time Social Distancing}
+    \title{Keep Your Distance! Real-time Social Distancing Using Wearable ESP32s}
     \author{Ryan Williamson - 2306841w}
 
     \begin{document}
@@ -18,7 +20,7 @@
 
 \subsubsection{Motivation}\label{motivation}
 
-A real-time distance sensor configurable for the various distances recommended 
+A real-time proximity sensor configurable for the various distances recommended 
 for social distancing allows for users, particularly office / retail 
 workers, to feel more comfortable that they are staying as safe as 
 possible from SARS-CoV-2. This could also be applicable to unknown 
@@ -27,8 +29,8 @@ future pandemics to help reduce initial impacts.
 \subsubsection{Aims}\label{aims}
 
 This project will develop a system involving two components, an 
-Android app, and an ESP32 micro-controller. The esp32 will detect 
-other so configured esp32 devices and alert the user, while also 
+Android app, and an ESP32 micro-controller. The ESP32 will detect 
+other so configured ESP32 devices and alert the user, while also 
 logging this interaction to the companion app. Both the device-device 
 and phone-device connections will be implemented using Bluetooth Low 
 Energy (BLE).
@@ -49,11 +51,26 @@ five of the papers together.
 \item  Prototype app and device created to implement initial BLE stack, as well
 as allow for an experiment to be conducted.
 \item  Experiment conducted to get 250 RSSI values at 5 distances, incremented at 
-0.5m.
+0.5 metres.
 \item  Parameter space exploration conducted on experiment data to get best fit 
-values for measured power and environment factor.
+values for measured power and environment factor. As shown in Figure \ref{fig:rssi_experiment_graph}.
 
 \end{itemize}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\linewidth]{../images/pdf/rssi_experiment_graph.pdf}
+    
+    \caption{
+      ``A line graph showing the absolute error of the calculated distance vs the 
+      actual distance for different values of measured power. Environment=3 was 
+      chosen as best. Finding best measured power is where all lines here are 
+      as close to zero as possible.''
+    }
+    
+    % use the notation fig:name to cross reference a figure
+    \label{fig:rssi_experiment_graph}
+\end{figure}
 
 \subsection{Problems and risks}\label{problems-and-risks}
 
