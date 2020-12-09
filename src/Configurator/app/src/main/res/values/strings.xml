@@ -11,11 +11,32 @@
     <string name="f_dev_waiting">Waiting to start…</string>
     <string name="f_dev_capturing">Capturing… Value: %d of %d</string>
     <string name="f_dev_done">Done capturing</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Device Connect Fragment -->
+    <string name="f_dc_title">Connect to Device</string>
+    <string name="f_dc_maclabel">Previous Mac Address:</string>
+    <string name="f_dc_previousmac">None</string>
+    <string name="f_dc_reconnect">Reconnect to Device</string>
+    <string name="f_dc_scan">Scan</string>
+    <string name="f_dc_choose">Choose Device</string>
+    <string name="f_dc_connect">Connect to Selected Device</string>
+
+    <!-- Device Info Fragment -->
+    <string name="f_di_title">Device Info</string>
+    <string name="f_di_maclabel">Device MAC Address:</string>
+    <string name="f_di_mac_default">00:11:22:33:EE:FF</string>
+    <string name="f_di_total_interactions">Total Interactions:</string>
+    <string name="f_di_connection_interactions">Interactions Since Connection:</string>
+    <string name="f_di_export">Export Data</string>
+    <string name="f_di_clear">Clear Data</string>
+    <string name="f_di_disconnect">Disconnect</string>
 
     <!-- Nav Bar -->
     <string name="nav_device">Device</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_graphs">Graphs</string>
+
+    <!-- All Fragments -->
+    <string name="cd_img_connected">Image showing that ESP32 device is connected.</string>
+    <string name="cd_img_not_connected">Image showing that ESP32 device is not connected.</string>
 </resources>

@@ -1,66 +1,98 @@
 package com.github.rywilliamson.configurator.Fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheralCallback;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DeviceConnectFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DeviceConnectFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class DeviceConnectFragment extends Fragment implements BluetoothImplementer {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Spinner macSpinner;
+    private ArrayAdapter<String> macAdapter;
+    private List<String> macList;
+    private BluetoothContainer container;
 
     public DeviceConnectFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DeviceConnectFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DeviceConnectFragment newInstance( String param1, String param2 ) {
-        DeviceConnectFragment fragment = new DeviceConnectFragment();
-        Bundle args = new Bundle();
-        args.putString( ARG_PARAM1, param1 );
-        args.putString( ARG_PARAM2, param2 );
-        fragment.setArguments( args );
-        return fragment;
-    }
-
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        if ( getArguments() != null ) {
-            mParam1 = getArguments().getString( ARG_PARAM1 );
-            mParam2 = getArguments().getString( ARG_PARAM2 );
-        }
     }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState ) {
-        // Inflate the layout for this fragment
         return inflater.inflate( R.layout.fragment_device_connect, container, false );
+    }
+
+    @Override
+    public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
+        super.onViewCreated( view, savedInstanceState );
+
+        container = (BluetoothContainer) getActivity();
+
+        macSpinner = view.findViewById( R.id.spDcMacs );
+        macList = new ArrayList<>();
+        macAdapter = new ArrayAdapter<>( view.getContext(),
+                R.layout.mac_address_item, macList );
+        macAdapter.setDropDownViewResource( R.layout.mac_address_item );
+        macSpinner.setAdapter( macAdapter );
+
+        view.findViewById( R.id.bDcConnect ).setOnClickListener( this::connectClick );
+        view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
+        view.findViewById( R.id.bDcScan ).setOnClickListener( this::scanClick );
+
+        addItem( macAdapter, "00:11:22:33:FF:EE" );
+        addItem( macAdapter, "00:11:22:33:FF:ED" );
+    }
+
+    private void addItem( ArrayAdapter<String> adapter, String data ) {
+        macList.add( data );
+        adapter.notifyDataSetChanged();
+    }
+
+    public void connectClick( View view ) {
+        container.setConnected( true );
+        Navigation.findNavController( view ).navigate(
+                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+    }
+
+    public void reconnectClick( View view ) {
+        container.setConnected( true );
+        Navigation.findNavController( view ).navigate(
+                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+    }
+
+    public void scanClick( View view ) {
+        macList.clear();
+        addItem( macAdapter, "00:11:22:33:FF:EC" );
+    }
+
+    @Override
+    public BluetoothCentralCallback getCentralCallback() {
+        return null;
+    }
+
+    @Override
+    public BluetoothPeripheralCallback getPeripheralCallback() {
+        return null;
     }
 }

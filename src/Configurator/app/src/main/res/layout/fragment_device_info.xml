@@ -1,14 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.DeviceInfoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ImageView
+        android:id="@+id/ivConnected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/cd_img_connected"
+        android:src="@drawable/ic_connected"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvDiTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/f_di_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivConnected" />
+
+    <TextView
+        android:id="@+id/tvDiMacLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="70dp"
+        android:text="@string/f_di_maclabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiTitle" />
+
+    <TextView
+        android:id="@+id/tvDiMacInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/f_di_mac_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiTitle" />
+
+    <TextView
+        android:id="@+id/tvDiTotalLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/f_di_total_interactions"
+        app:layout_constraintStart_toStartOf="@+id/tvDiMacLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiMacLabel" />
+
+    <TextView
+        android:id="@+id/tvDiTotalInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="13"
+        app:layout_constraintEnd_toEndOf="@+id/tvDiMacInfo"
+        app:layout_constraintStart_toStartOf="@+id/tvDiMacInfo"
+        app:layout_constraintTop_toTopOf="@+id/tvDiTotalLabel" />
+
+    <TextView
+        android:id="@+id/tvDiCurrentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/f_di_connection_interactions"
+        app:layout_constraintStart_toStartOf="@+id/tvDiTotalLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiTotalLabel" />
+
+    <TextView
+        android:id="@+id/tvDiCurrentInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7"
+        app:layout_constraintEnd_toEndOf="@+id/tvDiTotalInfo"
+        app:layout_constraintStart_toStartOf="@+id/tvDiTotalInfo"
+        app:layout_constraintTop_toTopOf="@+id/tvDiCurrentLabel" />
+
+    <Button
+        android:id="@+id/bDiExport"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/f_di_export"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiCurrentLabel" />
+
+    <Button
+        android:id="@+id/bDiClear"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/f_di_clear"
+        app:layout_constraintEnd_toEndOf="@+id/bDiExport"
+        app:layout_constraintStart_toStartOf="@+id/bDiExport"
+        app:layout_constraintTop_toBottomOf="@+id/bDiExport" />
+
+    <Button
+        android:id="@+id/bDiDisconnect"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/f_di_disconnect"
+        app:layout_constraintEnd_toEndOf="@+id/bDiClear"
+        app:layout_constraintStart_toStartOf="@+id/bDiClear"
+        app:layout_constraintTop_toBottomOf="@+id/bDiClear" />
+</androidx.constraintlayout.widget.ConstraintLayout>

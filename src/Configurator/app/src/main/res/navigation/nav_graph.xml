@@ -38,7 +38,9 @@
         tools:layout="@layout/fragment_device_info" >
         <action
             android:id="@+id/action_deviceInfoFragment_to_deviceConnectFragment2"
-            app:destination="@id/deviceConnectFragment" />
+            app:destination="@id/deviceConnectFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/deviceConnectFragment"
@@ -47,7 +49,9 @@
         tools:layout="@layout/fragment_device_connect" >
         <action
             android:id="@+id/action_deviceConnectFragment_to_deviceInfoFragment2"
-            app:destination="@id/deviceInfoFragment" />
+            app:destination="@id/deviceInfoFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/graphFragment"
@@ -59,4 +63,24 @@
         android:name="com.github.rywilliamson.configurator.Fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <action
+        android:id="@+id/action_global_deviceInfoFragment"
+        app:destination="@id/deviceInfoFragment"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit" />
+    <action
+        android:id="@+id/action_global_deviceConnectFragment"
+        app:destination="@id/deviceConnectFragment"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit" />
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit" />
+    <action
+        android:id="@+id/action_global_graphFragment"
+        app:destination="@id/graphFragment"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit" />
 </navigation>

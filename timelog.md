@@ -279,3 +279,11 @@
 - _1 hour_: Design mockup for settings page, in connected and disconnected state.
 - _1 hour_: Design mockup for graph page, only one state required.
 - _2.5 hours_: Began to implement UI in app.
+
+### 09 Dec 2020
+
+- _1.5 hours_: Setting up global Nav Graph Directions.
+- _1.5 hours_: Start implementing fragment ui.
+- _1 hour_: Stuck on RecyclerView within fragment.
+- _1 hour_: Replace RecyclerView with Spinner.
+- _1.5 hours_: Implemented ui with connected state throughout for device fragments, also implemented bottom nav bar that accesses this state.
