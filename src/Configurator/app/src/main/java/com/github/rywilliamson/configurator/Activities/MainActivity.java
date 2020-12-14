@@ -1,28 +1,21 @@
 package com.github.rywilliamson.configurator.Activities;
 
-import android.Manifest;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.NavGraphDirections;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.github.rywilliamson.configurator.Utils.Keys;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.welie.blessed.BluetoothCentral;
@@ -30,63 +23,47 @@ import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_SERVICE_ID;
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
-
 public class MainActivity extends AppCompatActivity implements BluetoothContainer {
 
-    private BluetoothCentral central;
-    private BluetoothPeripheral BLEPeripheral;
-    private BluetoothGattCharacteristic rssiCharacteristic;
-    private BluetoothGattCharacteristic normalCharacteristic;
-
     private BottomNavigationView bottomNavigation;
-    private boolean connected;
+    private BluetoothHandler bt;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
-        central = new BluetoothCentral( this, bluetoothCentralCallback, new Handler(
-                Looper.getMainLooper() ) );
-        connected = false;
+        bt = new BluetoothHandler( this, bluetoothCentralCallback );
         bottomNavigation = findViewById( R.id.bottom_navigation );
         bottomNavigation.setOnNavigationItemSelectedListener( navigationItemSelectedListener );
     }
 
     public BluetoothCentral getCentral() {
-        return this.central;
+        return bt.getCentral();
     }
 
     public BluetoothPeripheral getPeripheral() {
-        return this.BLEPeripheral;
+        return bt.getBLEPeripheral();
     }
 
     public BluetoothGattCharacteristic getRssiCharacteristic() {
-        return this.rssiCharacteristic;
+        return bt.getRssiCharacteristic();
     }
 
-    public BluetoothGattCharacteristic getNormalCharacteristic() {
-        return this.normalCharacteristic;
+    public BluetoothGattCharacteristic getConnectionCharacteristic() {
+        return bt.getConnectionCharacteristic();
     }
 
     public boolean getConnected() {
-        return connected;
-    }
-
-    public void setConnected(boolean bool) {
-        connected = bool;
+        return bt.isConnected();
     }
 
     public void checkBLEPermissions() {
-        if ( ContextCompat.checkSelfPermission( this,
-                Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( this,
-                    new String[]{ Manifest.permission.ACCESS_FINE_LOCATION },
-                    Keys.REQUEST_FINE_LOCATION );
-        }
+        bt.checkBLEPermissions( this );
+    }
+
+    public void scan() {
+        bt.scan( this );
     }
 
     public void swapToDebug( View view ) {
@@ -97,43 +74,34 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         @Override
         public void onDiscoveredPeripheral( BluetoothPeripheral peripheral,
                 ScanResult scanResult ) {
-            central.stopScan();
-            central.connectPeripheral( peripheral, peripheralCallback );
-            getCurrentImplementer().getCentralCallback().onDiscoveredPeripheral( peripheral,
-                    scanResult );
+            Log.d( Keys.GLOBAL_CENTRAL, "Discovered Peripheral: " + peripheral.getAddress() );
+            bt.getCentral().stopScan();
+            bt.getCentral().connectPeripheral( peripheral, peripheralCallback );
+            getCurrentImplementer().getCentralCallback().onDiscoveredPeripheral( peripheral, scanResult );
         }
 
         @Override
         public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
             super.onConnectedPeripheral( peripheral );
-            BLEPeripheral = peripheral;
-            connected = true;
-            Log.d( "Central Callback", "Connection Completed" );
+            Log.d( Keys.GLOBAL_CENTRAL, "Connection Completed to: " + peripheral.getAddress() );
+            bt.onConnect( peripheral );
             getCurrentImplementer().getCentralCallback().onConnectedPeripheral( peripheral );
         }
 
         @Override
         public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
             super.onConnectionFailed( peripheral, status );
-            BLEPeripheral = null;
-            normalCharacteristic = null;
-            rssiCharacteristic = null;
-            connected = false;
-            Log.d( "Central Callback", "Connection Failed" );
-            getCurrentImplementer().getCentralCallback().onConnectionFailed( peripheral,
-                    status );
+            Log.d( Keys.GLOBAL_CENTRAL, "Connection Failed to" + peripheral.getAddress() );
+            bt.disconnect();
+            getCurrentImplementer().getCentralCallback().onConnectionFailed( peripheral, status );
         }
 
         @Override
         public void onDisconnectedPeripheral( BluetoothPeripheral peripheral, int status ) {
             super.onDisconnectedPeripheral( peripheral, status );
-            BLEPeripheral = null;
-            normalCharacteristic = null;
-            rssiCharacteristic = null;
-            connected = false;
-            Log.d( "Central Callback", "Disconnected" );
-            getCurrentImplementer().getCentralCallback().onDisconnectedPeripheral( peripheral,
-                    status );
+            Log.d( Keys.GLOBAL_CENTRAL, "Disconnected from: " + peripheral.getAddress() );
+            bt.disconnect();
+            getCurrentImplementer().getCentralCallback().onDisconnectedPeripheral( peripheral, status );
         }
     };
 
@@ -141,15 +109,8 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         @Override
         public void onServicesDiscovered( BluetoothPeripheral peripheral ) {
             super.onServicesDiscovered( peripheral );
-            for ( BluetoothGattCharacteristic characteristic : peripheral.getService(
-                    ESP_SERVICE_ID ).getCharacteristics() ) {
-                Log.d( "test", String.valueOf( characteristic.getUuid() ) );
-            }
-            rssiCharacteristic = peripheral.getCharacteristic( ESP_SERVICE_ID,
-                    RSSI_CHARACTERISTIC_ID );
-            normalCharacteristic = peripheral.getCharacteristic( ESP_SERVICE_ID,
-                    ESP_CHARACTERISTIC_ID );
-
+            Log.d( Keys.GLOBAL_CENTRAL, "Disconnected from: " + peripheral.getAddress() );
+            bt.setupServices( peripheral );
             getCurrentImplementer().getPeripheralCallback().onServicesDiscovered( peripheral );
         }
 
@@ -171,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         NavDirections action = null;
         if ( item.getItemId() == R.id.device ) {
             // Move to device
-            action = connected ?
+            action = bt.isConnected() ?
                     NavGraphDirections.actionGlobalDeviceInfoFragment() :
                     NavGraphDirections.actionGlobalDeviceConnectFragment();
         } else if ( item.getItemId() == R.id.graphs ) {
@@ -181,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
             // Move to settings
             action = NavGraphDirections.actionGlobalSettingsFragment();
         }
-        if (action != null) {
+        if ( action != null ) {
             Navigation.findNavController( this, R.id.nav_host_fragment ).navigate( action );
             return true;
         }

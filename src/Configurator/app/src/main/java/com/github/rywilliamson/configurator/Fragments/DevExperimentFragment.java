@@ -5,6 +5,12 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,13 +19,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
@@ -36,9 +35,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 
 public class DevExperimentFragment extends Fragment implements BluetoothImplementer {
@@ -191,8 +187,8 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
                 cancel();
                 return;
             }
-            rssiValues.add( new String[] {String.valueOf( counter ), String.valueOf( val )} );
-            outputTextView.setText( getResources().getString( R.string.f_dev_capturing, counter, VALUECOUNT ));
+            rssiValues.add( new String[]{ String.valueOf( counter ), String.valueOf( val ) } );
+            outputTextView.setText( getResources().getString( R.string.f_dev_capturing, counter, VALUECOUNT ) );
             counter++;
         }
     };

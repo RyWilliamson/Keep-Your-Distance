@@ -1,11 +1,6 @@
 package com.github.rywilliamson.configurator.Fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +9,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.R;
@@ -63,8 +62,7 @@ public class SettingsFragment extends Fragment {
 
         distSpinner = view.findViewById( R.id.spSDistance );
         distList = new ArrayList<>();
-        distAdapter = new ArrayAdapter<>( view.getContext(),
-                R.layout.mac_address_item, distList );
+        distAdapter = new ArrayAdapter<>( view.getContext(), R.layout.mac_address_item, distList );
         distAdapter.setDropDownViewResource( R.layout.mac_address_item );
         distSpinner.setAdapter( distAdapter );
 
@@ -85,7 +83,7 @@ public class SettingsFragment extends Fragment {
 
         update.setOnClickListener( this::updateClick );
 
-        if (container.getConnected()) {
+        if ( container.getConnected() ) {
             update.setVisibility( View.VISIBLE );
             result.setVisibility( View.INVISIBLE );
             image.setImageResource( R.drawable.ic_connected );

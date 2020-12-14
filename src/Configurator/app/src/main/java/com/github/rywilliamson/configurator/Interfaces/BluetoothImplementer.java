@@ -5,6 +5,7 @@ import com.welie.blessed.BluetoothPeripheralCallback;
 
 public interface BluetoothImplementer {
     BluetoothCentralCallback getCentralCallback();
+
     BluetoothPeripheralCallback getPeripheralCallback();
 
 }

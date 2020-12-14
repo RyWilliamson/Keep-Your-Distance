@@ -1,16 +1,15 @@
 package com.github.rywilliamson.configurator.Fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
@@ -54,17 +53,17 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
         view.findViewById( R.id.bDiDisconnect ).setOnClickListener( this::disconnectClick );
     }
 
-    public void exportClick(View view) {
+    public void exportClick( View view ) {
 
     }
 
-    public void clearClick(View view) {
-        totalInfo.setText("0");
-        currentInfo.setText("0");
+    public void clearClick( View view ) {
+        totalInfo.setText( "0" );
+        currentInfo.setText( "0" );
     }
 
-    public void disconnectClick(View view) {
-        container.setConnected( false );
+    public void disconnectClick( View view ) {
+        //container.setConnected( false );
         Navigation.findNavController( view ).navigate(
                 DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
     }

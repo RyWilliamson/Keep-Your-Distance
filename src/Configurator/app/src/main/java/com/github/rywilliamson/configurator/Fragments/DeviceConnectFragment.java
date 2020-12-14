@@ -66,13 +66,14 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
     }
 
     public void connectClick( View view ) {
-        container.setConnected( true );
-        Navigation.findNavController( view ).navigate(
-                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+        //container.setConnected( true );
+        container.scan();
+//        Navigation.findNavController( view ).navigate(
+//                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
     }
 
     public void reconnectClick( View view ) {
-        container.setConnected( true );
+        //container.setConnected( true );
         Navigation.findNavController( view ).navigate(
                 DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
     }
@@ -84,11 +85,19 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
 
     @Override
     public BluetoothCentralCallback getCentralCallback() {
-        return null;
+        return bluetoothCentralCallback;
     }
 
     @Override
     public BluetoothPeripheralCallback getPeripheralCallback() {
-        return null;
+        return peripheralCallback;
     }
+
+    private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
+
+    };
+
+    private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
+
+    };
 }

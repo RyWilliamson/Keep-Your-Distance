@@ -1,9 +1,5 @@
 package com.github.rywilliamson.configurator.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
@@ -14,6 +10,10 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.Keys;
@@ -26,9 +26,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_CHARACTERISTIC_ID;
-import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.ESP_SERVICE_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONN_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.HEARTBEAT_SERVICE_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_SERVICE_ID;
 
 public class DevActivity extends AppCompatActivity {
 
@@ -69,7 +70,7 @@ public class DevActivity extends AppCompatActivity {
         // Start Scan
         checkBLEPermissions();
         central.scanForPeripheralsWithNames( new String[]{ "ESP32" } );
-        Log.d("test", String.valueOf(central.isBluetoothEnabled()));
+        Log.d( "test", String.valueOf( central.isBluetoothEnabled() ) );
     }
 
     public void disconnectFromDevice( View view ) {
@@ -79,14 +80,14 @@ public class DevActivity extends AppCompatActivity {
     public void onRead( View view ) {
 //        Log.d("read", String.valueOf(BLEPeripheral.readCharacteristic( rssiCharcteristic )));
         notify = !notify;
-        Log.d("read", String.valueOf(notify));
-        Log.d("read", String.valueOf(BLEPeripheral.setNotify( rssiCharcteristic, notify )));
+        Log.d( "read", String.valueOf( notify ) );
+        Log.d( "read", String.valueOf( BLEPeripheral.setNotify( rssiCharcteristic, notify ) ) );
     }
 
     public void onWrite( View view ) {
         boolean written = BLEPeripheral.writeCharacteristic( normalCharacteristic, new byte[]{ vals++ },
                 WRITE_TYPE_DEFAULT );
-        Log.d("write", String.valueOf(written));
+        Log.d( "write", String.valueOf( written ) );
     }
 
     private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
@@ -136,11 +137,12 @@ public class DevActivity extends AppCompatActivity {
         @Override
         public void onServicesDiscovered( BluetoothPeripheral peripheral ) {
             super.onServicesDiscovered( peripheral );
-            for (BluetoothGattCharacteristic characteristic : peripheral.getService( ESP_SERVICE_ID ).getCharacteristics()) {
-                Log.d("test", String.valueOf( characteristic.getUuid()));
+            for ( BluetoothGattCharacteristic characteristic : peripheral.getService(
+                    HEARTBEAT_SERVICE_ID ).getCharacteristics() ) {
+                Log.d( "test", String.valueOf( characteristic.getUuid() ) );
             }
-            rssiCharcteristic = peripheral.getCharacteristic( ESP_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
-            normalCharacteristic = peripheral.getCharacteristic( ESP_SERVICE_ID, ESP_CHARACTERISTIC_ID );
+            rssiCharcteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
+            normalCharacteristic = peripheral.getCharacteristic( HEARTBEAT_SERVICE_ID, CONN_CHARACTERISTIC_ID );
         }
 
         @Override
@@ -148,8 +150,8 @@ public class DevActivity extends AppCompatActivity {
                 BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
 
-            Log.d("test", String.valueOf( value.length ));
-            int val = ByteBuffer.wrap(value).order( ByteOrder.LITTLE_ENDIAN).getInt();
+            Log.d( "test", String.valueOf( value.length ) );
+            int val = ByteBuffer.wrap( value ).order( ByteOrder.LITTLE_ENDIAN ).getInt();
             deviceCharacteristicLabel.setText( String.valueOf( val ) );
         }
     };

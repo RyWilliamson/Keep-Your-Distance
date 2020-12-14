@@ -9,10 +9,16 @@ import java.io.Serializable;
 
 public interface BluetoothContainer extends Serializable {
     BluetoothCentral getCentral();
+
     BluetoothPeripheral getPeripheral();
+
     BluetoothGattCharacteristic getRssiCharacteristic();
-    BluetoothGattCharacteristic getNormalCharacteristic();
+
+    BluetoothGattCharacteristic getConnectionCharacteristic();
+
+    void scan();
+
     void checkBLEPermissions();
+
     boolean getConnected();
-    void setConnected(boolean bool);
 }

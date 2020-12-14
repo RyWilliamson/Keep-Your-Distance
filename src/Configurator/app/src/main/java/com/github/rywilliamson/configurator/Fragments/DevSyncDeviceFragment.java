@@ -61,8 +61,7 @@ public class DevSyncDeviceFragment extends Fragment implements BluetoothImplemen
     }
 
     private void moveToExperiment( View view ) {
-        NavDirections action = DevSyncDeviceFragmentDirections.actionSyncDeviceFragmentToDevExperiment(
-                container );
+        NavDirections action = DevSyncDeviceFragmentDirections.actionSyncDeviceFragmentToDevExperiment( container );
         Navigation.findNavController( view ).navigate( action );
     }
 

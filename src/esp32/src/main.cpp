@@ -9,7 +9,7 @@
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
 int scanTime = 1;
-float measuredPower = -87.0;
+float measuredPower = -81.0;
 BLEScan *pBLEScanner;
 BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
@@ -20,7 +20,7 @@ int nullValue = 99;
 BLECharacteristic *rssiCharacteristic;
 
 float calculateDistance(int rssi, float measuredPower, float environment) {
-    return pow(10, (measuredPower - rssi) / 10 * environment);
+    return pow(10, (measuredPower - rssi) / (10 * environment));
 }
 
 class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
@@ -34,21 +34,13 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
             //screen.drawString(0, 2, lineData.c_str());
             screen.draw2x2String(0, 4, lineData.c_str());
 
-            lineData = "D: " + String(calculateDistance(rssi, measuredPower, 2), 3);
+            lineData = "D: " + String(calculateDistance(rssi, measuredPower, 3), 3);
             screen.draw2x2String(0, 6, lineData.c_str());
             foundESP = true;
         }
         //Serial.printf("Advertised Device: %s RSSI: %d \n", advertisedDevice.toString().c_str(), advertisedDevice.getRSSI());
     }
 };
-
-// class RSSICallbacks: public BLECharacteristicCallbacks {
-//     void onRead(BLECharacteristic* characteristic) {
-//         characteristic->setValue(rssi);
-//         Serial.println("To Device value is: " + String(rssi));
-//     }
-// };
-
 
 class ServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
