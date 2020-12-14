@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
             super.onConnectedPeripheral( peripheral );
             BLEPeripheral = peripheral;
+            connected = true;
             Log.d( "Central Callback", "Connection Completed" );
             getCurrentImplementer().getCentralCallback().onConnectedPeripheral( peripheral );
         }
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
             BLEPeripheral = null;
             normalCharacteristic = null;
             rssiCharacteristic = null;
+            connected = false;
             Log.d( "Central Callback", "Connection Failed" );
             getCurrentImplementer().getCentralCallback().onConnectionFailed( peripheral,
                     status );
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
             BLEPeripheral = null;
             normalCharacteristic = null;
             rssiCharacteristic = null;
+            connected = false;
             Log.d( "Central Callback", "Disconnected" );
             getCurrentImplementer().getCentralCallback().onDisconnectedPeripheral( peripheral,
                     status );

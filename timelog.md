@@ -287,3 +287,20 @@
 - _1 hour_: Stuck on RecyclerView within fragment.
 - _1 hour_: Replace RecyclerView with Spinner.
 - _1.5 hours_: Implemented ui with connected state throughout for device fragments, also implemented bottom nav bar that accesses this state.
+- _1.5 hours_: Implemented settings fragment with connected state
+
+### 10 Dec 2020
+
+- _2 hours_: Implemented graph fragment and fixed broken spinners in settings
+- _0.5 hours_: Little bit of polish
+
+## Week 12
+
+### 11 Dec 2020
+
+- _0.5 hours_: Last meeting with Jeremy for semester
+- _0.5 hours_: Typed up meeting minutes
+
+### 14 Dec 2020
+
+- _1.5 hours_: Callback design

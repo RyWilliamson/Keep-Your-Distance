@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
@@ -60,13 +61,8 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
         view.findViewById( R.id.bDcScan ).setOnClickListener( this::scanClick );
 
-        addItem( macAdapter, "00:11:22:33:FF:EE" );
-        addItem( macAdapter, "00:11:22:33:FF:ED" );
-    }
-
-    private void addItem( ArrayAdapter<String> adapter, String data ) {
-        macList.add( data );
-        adapter.notifyDataSetChanged();
+        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:EE" );
+        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:ED" );
     }
 
     public void connectClick( View view ) {
@@ -83,7 +79,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
 
     public void scanClick( View view ) {
         macList.clear();
-        addItem( macAdapter, "00:11:22:33:FF:EC" );
+        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:EC" );
     }
 
     @Override

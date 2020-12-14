@@ -38,6 +38,9 @@
     <string name="f_s_update">Update Device</string>
     <string name="f_s_result_default">ACK or NAK Result</string>
 
+    <!-- Graph Fragment -->
+    <string name="f_g_choose">Choose Graph</string>
+
     <!-- Nav Bar -->
     <string name="nav_device">Device</string>
     <string name="nav_settings">Settings</string>
