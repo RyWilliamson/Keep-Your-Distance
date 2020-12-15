@@ -314,3 +314,4 @@
 ### 15 Dec 2020
 
 - _1 hour_: Electronic ER Diagram for RSSI callback.
+- _4 hours_: Working on database implementation within Android
