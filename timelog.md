@@ -315,4 +315,4 @@
 
 - _1 hour_: Electronic ER Diagram for RSSI callback.
 - _4 hours_: Working on database implementation within Android.
-- _x hours_: Needed to switch to using LiveData for async database calls as Android (rightfully) rejects making database calls on the UI thread.
+- _4 hours_: Needed to switch to using LiveData for async database calls as Android (rightfully) rejects making database calls on the UI thread.
