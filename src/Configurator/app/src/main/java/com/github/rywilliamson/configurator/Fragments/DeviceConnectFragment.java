@@ -1,6 +1,8 @@
 package com.github.rywilliamson.configurator.Fragments;
 
+import android.bluetooth.le.ScanResult;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,10 @@ import androidx.navigation.Navigation;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.Keys;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
 import java.util.ArrayList;
@@ -61,26 +65,25 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
         view.findViewById( R.id.bDcScan ).setOnClickListener( this::scanClick );
 
-        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:EE" );
-        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:ED" );
+//        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:EE" );
+//        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:ED" );
     }
 
     public void connectClick( View view ) {
-        //container.setConnected( true );
-        container.scan();
-//        Navigation.findNavController( view ).navigate(
-//                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+        if ( macList != null && !macList.isEmpty() ) {
+            container.directConnect( macSpinner.getSelectedItem().toString() );
+        }
     }
 
     public void reconnectClick( View view ) {
         //container.setConnected( true );
-        Navigation.findNavController( view ).navigate(
-                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+//        Navigation.findNavController( view ).navigate(
+//                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
     }
 
     public void scanClick( View view ) {
         macList.clear();
-        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:EC" );
+        container.scan();
     }
 
     @Override
@@ -94,7 +97,18 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
     }
 
     private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
+        @Override
+        public void onDiscoveredPeripheral( BluetoothPeripheral peripheral, ScanResult scanResult ) {
+            Log.d( Keys.CONNECTION_CENTRAL, "Adding item for: " + peripheral.getAddress() );
+            SpinnerUtils.addItem( macList, macAdapter, peripheral.getAddress() );
+        }
 
+        @Override
+        public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
+            Log.d( Keys.CONNECTION_CENTRAL, "Connected! Switching View to Device Info" );
+            Navigation.findNavController( DeviceConnectFragment.this.getView() ).navigate(
+                    DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+        }
     };
 
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {

@@ -13,6 +13,10 @@ import androidx.core.content.ContextCompat;
 import com.welie.blessed.BluetoothCentral;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
+import com.welie.blessed.BluetoothPeripheralCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONN_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.HEARTBEAT_SERVICE_ID;
@@ -25,11 +29,14 @@ public class BluetoothHandler {
     private BluetoothPeripheral BLEPeripheral;
     private BluetoothGattCharacteristic rssiCharacteristic;
     private BluetoothGattCharacteristic connectionCharacteristic;
+    private final List<BluetoothPeripheral> scannedPeripherals;
     private boolean connected;
+    private final int scanTimeout = 3000; // Milliseconds
 
     public BluetoothHandler( Activity activity, BluetoothCentralCallback callback ) {
         central = new BluetoothCentral( activity, callback, new Handler(
                 Looper.getMainLooper() ) );
+        scannedPeripherals = new ArrayList<>();
     }
 
     public void checkBLEPermissions( Activity activity ) {
@@ -62,14 +69,28 @@ public class BluetoothHandler {
         return connectionCharacteristic;
     }
 
-    public void scan(Activity activity) {
-        checkBLEPermissions(activity);
+    public void scan( Activity activity ) {
+        checkBLEPermissions( activity );
+        scannedPeripherals.clear();
         central.scanForPeripheralsWithNames( new String[]{ "ESP32" } );
+        new Handler( Looper.getMainLooper() ).postDelayed( central::stopScan, scanTimeout );
+    }
+
+    public boolean addPeripheral( BluetoothPeripheral peripheral ) {
+        if ( scannedPeripherals.contains( peripheral ) ) {
+            return false;
+        }
+        scannedPeripherals.add( peripheral );
+        return true;
     }
 
     public void onConnect( BluetoothPeripheral peripheral ) {
         this.BLEPeripheral = peripheral;
         connected = true;
+    }
+
+    public void directConnect( String UUID, BluetoothPeripheralCallback callback ) {
+        central.connectPeripheral( central.getPeripheral( UUID ), callback );
     }
 
     public void disconnect() {
@@ -80,7 +101,15 @@ public class BluetoothHandler {
     }
 
     public void setupServices( BluetoothPeripheral peripheral ) {
-        this.rssiCharacteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
-        this.connectionCharacteristic = peripheral.getCharacteristic( HEARTBEAT_SERVICE_ID, CONN_CHARACTERISTIC_ID );
+        if ( verifyServices( peripheral ) ) {
+            this.rssiCharacteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
+            this.connectionCharacteristic = peripheral.getCharacteristic( HEARTBEAT_SERVICE_ID,
+                    CONN_CHARACTERISTIC_ID );
+        }
+    }
+
+    private boolean verifyServices( BluetoothPeripheral peripheral ) {
+        // Can only implement this once device is working with ALL services
+        return true;
     }
 }

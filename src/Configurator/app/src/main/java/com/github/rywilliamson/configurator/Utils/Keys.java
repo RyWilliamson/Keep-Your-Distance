@@ -9,4 +9,7 @@ public class Keys {
 
     // Debug Tags
     public static final String GLOBAL_CENTRAL = "Global Central Callback";
+    public static final String GLOBAL_PERIPHERAL = "Global Periph Callback";
+    public static final String CONNECTION_CENTRAL = "Conn Central Callback";
+    public static final String CONNECTION_PERIPHERAL = "Conn Periph Callback";
 }

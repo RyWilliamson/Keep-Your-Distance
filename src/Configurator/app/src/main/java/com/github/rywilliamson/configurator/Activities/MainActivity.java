@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         bt.scan( this );
     }
 
+    public void directConnect( String UUID ) {
+        bt.directConnect( UUID, peripheralCallback );
+    }
+
     public void swapToDebug( View view ) {
         startActivity( new Intent( this, DevActivity.class ) );
     }
@@ -74,10 +78,10 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         @Override
         public void onDiscoveredPeripheral( BluetoothPeripheral peripheral,
                 ScanResult scanResult ) {
-            Log.d( Keys.GLOBAL_CENTRAL, "Discovered Peripheral: " + peripheral.getAddress() );
-            bt.getCentral().stopScan();
-            bt.getCentral().connectPeripheral( peripheral, peripheralCallback );
-            getCurrentImplementer().getCentralCallback().onDiscoveredPeripheral( peripheral, scanResult );
+            if ( bt.addPeripheral( peripheral ) ) {
+                Log.d( Keys.GLOBAL_CENTRAL, "Discovered Peripheral: " + peripheral.getAddress() );
+                getCurrentImplementer().getCentralCallback().onDiscoveredPeripheral( peripheral, scanResult );
+            }
         }
 
         @Override
@@ -103,13 +107,20 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
             bt.disconnect();
             getCurrentImplementer().getCentralCallback().onDisconnectedPeripheral( peripheral, status );
         }
+
+        @Override
+        public void onScanFailed( int errorCode ) {
+            super.onScanFailed( errorCode );
+            Log.d( Keys.GLOBAL_CENTRAL, "Scan failed with error code: " + errorCode );
+            getCurrentImplementer().getCentralCallback().onScanFailed( errorCode );
+        }
     };
 
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
         @Override
         public void onServicesDiscovered( BluetoothPeripheral peripheral ) {
             super.onServicesDiscovered( peripheral );
-            Log.d( Keys.GLOBAL_CENTRAL, "Disconnected from: " + peripheral.getAddress() );
+            Log.d( Keys.GLOBAL_PERIPHERAL, "Discovered " + peripheral.getServices() );
             bt.setupServices( peripheral );
             getCurrentImplementer().getPeripheralCallback().onServicesDiscovered( peripheral );
         }
@@ -118,8 +129,9 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         public void onCharacteristicUpdate( BluetoothPeripheral peripheral, byte[] value,
                 BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
-            getCurrentImplementer().getPeripheralCallback().onCharacteristicUpdate( peripheral,
-                    value, characteristic, status );
+            Log.d( Keys.GLOBAL_PERIPHERAL, "Updating " + characteristic.getUuid() );
+            getCurrentImplementer().getPeripheralCallback().onCharacteristicUpdate( peripheral, value, characteristic,
+                    status );
         }
     };
 

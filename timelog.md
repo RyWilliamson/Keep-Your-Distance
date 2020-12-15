@@ -307,3 +307,6 @@
 - _1 hour_: Restructure code to allow for easier and more readable implementation.
 - _0.5 hours_: Add in service and characteristics.
 - _1.5 hours_: Refactored connection code on both device and app.
+- _2 hours_: Started implementing global and connect fragment callbacks.
+- _0.5 hours_: Throwing away repeat scans within the same timeout duration.
+- _1 hour_: Paper ER Diagram for RSSI callback.

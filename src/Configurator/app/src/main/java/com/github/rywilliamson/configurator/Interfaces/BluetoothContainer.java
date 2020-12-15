@@ -16,6 +16,8 @@ public interface BluetoothContainer extends Serializable {
 
     BluetoothGattCharacteristic getConnectionCharacteristic();
 
+    void directConnect(String UUID);
+
     void scan();
 
     void checkBLEPermissions();
