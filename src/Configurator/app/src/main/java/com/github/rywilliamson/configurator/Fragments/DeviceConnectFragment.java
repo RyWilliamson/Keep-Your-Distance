@@ -14,8 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.github.rywilliamson.configurator.Database.Entity.Device;
+import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.DatabaseContainer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.Keys;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
@@ -32,6 +35,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
     private ArrayAdapter<String> macAdapter;
     private List<String> macList;
     private BluetoothContainer container;
+    private DatabaseContainer dbcontainer;
 
     public DeviceConnectFragment() {
         // Required empty public constructor
@@ -53,6 +57,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         super.onViewCreated( view, savedInstanceState );
 
         container = (BluetoothContainer) getActivity();
+        dbcontainer = (DatabaseContainer) getActivity();
 
         macSpinner = view.findViewById( R.id.spDcMacs );
         macList = new ArrayList<>();
@@ -64,9 +69,6 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         view.findViewById( R.id.bDcConnect ).setOnClickListener( this::connectClick );
         view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
         view.findViewById( R.id.bDcScan ).setOnClickListener( this::scanClick );
-
-//        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:EE" );
-//        SpinnerUtils.addItem( macList, macAdapter, "00:11:22:33:FF:ED" );
     }
 
     public void connectClick( View view ) {
@@ -75,10 +77,13 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         }
     }
 
+    private int temp = 1;
+
     public void reconnectClick( View view ) {
         //container.setConnected( true );
 //        Navigation.findNavController( view ).navigate(
 //                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+        dbcontainer.getDatabaseViewModel().insert(new Device(String.valueOf( temp++ ), "name", 0));
     }
 
     public void scanClick( View view ) {

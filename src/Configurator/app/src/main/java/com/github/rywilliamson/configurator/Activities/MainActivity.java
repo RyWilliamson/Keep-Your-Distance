@@ -8,11 +8,14 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.DatabaseContainer;
 import com.github.rywilliamson.configurator.NavGraphDirections;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
@@ -23,19 +26,29 @@ import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
-public class MainActivity extends AppCompatActivity implements BluetoothContainer {
+public class MainActivity extends AppCompatActivity implements BluetoothContainer, DatabaseContainer {
 
     private BottomNavigationView bottomNavigation;
     private BluetoothHandler bt;
+    private DatabaseViewModel dbViewModel;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
+        dbViewModel = new ViewModelProvider( this ).get( DatabaseViewModel.class );
         bt = new BluetoothHandler( this, bluetoothCentralCallback );
         bottomNavigation = findViewById( R.id.bottom_navigation );
         bottomNavigation.setOnNavigationItemSelectedListener( navigationItemSelectedListener );
+
+        dbViewModel.getAllDevices().observe( this, devices -> {
+            Log.d(Keys.DB_DEVICE_ALL, String.valueOf( devices ) );
+        } );
+    }
+
+    public DatabaseViewModel getDatabaseViewModel() {
+        return dbViewModel;
     }
 
     public BluetoothCentral getCentral() {

@@ -1,5 +1,6 @@
 package com.github.rywilliamson.configurator.Database.DAO;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,8 +14,8 @@ import java.util.List;
 @Dao
 public interface DeviceDao {
 
-    @Query( "Select * from device" )
-    List<Device> getDeviceList();
+    @Query( "SELECT * FROM device" )
+    LiveData<List<Device>> getDeviceList();
 
     @Insert
     void insertDevice( Device device );

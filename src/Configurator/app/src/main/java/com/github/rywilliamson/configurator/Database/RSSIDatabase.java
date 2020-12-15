@@ -13,18 +13,28 @@ import com.github.rywilliamson.configurator.Database.Entity.Device;
 import com.github.rywilliamson.configurator.Database.Entity.Interaction;
 import com.github.rywilliamson.configurator.Database.Entity.RSSI;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Database( entities = { Device.class, Interaction.class, RSSI.class }, exportSchema = false, version = 1 )
 public abstract class RSSIDatabase extends RoomDatabase {
     private static final String DB_NAME = "rssi_db";
     private static RSSIDatabase instance;
+    private static final int NO_THREADS = 4;
+    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool( NO_THREADS );
 
+    // Uses Singleton pattern
     public static synchronized RSSIDatabase getInstance( Context context ) {
         if ( instance == null ) {
-            instance = Room.databaseBuilder(
-                    context.getApplicationContext(),
-                    RSSIDatabase.class,
-                    DB_NAME
-                ).fallbackToDestructiveMigration().build();
+
+            // Threading lock
+            synchronized ( RSSIDatabase.class ) {
+                // Data race check
+                if (instance == null) {
+                    instance = Room.databaseBuilder( context.getApplicationContext(), RSSIDatabase.class, DB_NAME )
+                            .fallbackToDestructiveMigration().build();
+                }
+            }
         }
         return instance;
     }
