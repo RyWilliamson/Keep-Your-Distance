@@ -310,3 +310,7 @@
 - _2 hours_: Started implementing global and connect fragment callbacks.
 - _0.5 hours_: Throwing away repeat scans within the same timeout duration.
 - _1 hour_: Paper ER Diagram for RSSI callback.
+
+### 15 Dec 2020
+
+- _1 hour_: Electronic ER Diagram for RSSI callback.
