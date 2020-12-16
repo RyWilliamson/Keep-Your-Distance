@@ -25,9 +25,28 @@ public class DeviceRepository {
         return mAllDevices;
     }
 
-    public void insert(Device device) {
-        RSSIDatabase.databaseWriteExecutor.execute(() -> {
-            mDeviceDao.insertDevice( device );
+    public Device getDevice( String id ) {
+        return mDeviceDao.getDeviceByID( id );
+    }
+
+    public void insert( Device device ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
+            Device qDevice = mDeviceDao.getDeviceByID( device.macAddress );
+            if ( qDevice == null ) {
+                mDeviceDao.insertDevice( device );
+            } else {
+                qDevice.times_connected++;
+                mDeviceDao.updateDevice( qDevice );
+            }
+        } );
+    }
+
+    public void insertScanned( Device device ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
+            Device qDevice = mDeviceDao.getDeviceByID( device.macAddress );
+            if ( qDevice == null ) {
+                mDeviceDao.insertDevice( device );
+            }
         } );
     }
 

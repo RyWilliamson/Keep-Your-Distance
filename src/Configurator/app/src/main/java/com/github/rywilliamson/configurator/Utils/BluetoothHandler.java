@@ -3,6 +3,8 @@ package com.github.rywilliamson.configurator.Utils;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,6 +32,7 @@ public class BluetoothHandler {
     private BluetoothGattCharacteristic rssiCharacteristic;
     private BluetoothGattCharacteristic connectionCharacteristic;
     private final List<BluetoothPeripheral> scannedPeripherals;
+    private SharedPreferences prefs;
     private boolean connected;
     private final int scanTimeout = 3000; // Milliseconds
 
@@ -37,6 +40,7 @@ public class BluetoothHandler {
         central = new BluetoothCentral( activity, callback, new Handler(
                 Looper.getMainLooper() ) );
         scannedPeripherals = new ArrayList<>();
+        prefs = activity.getSharedPreferences( Keys.PREFS, Context.MODE_PRIVATE );
     }
 
     public void checkBLEPermissions( Activity activity ) {
@@ -48,6 +52,10 @@ public class BluetoothHandler {
         }
     }
 
+
+    public String getPrevMac() {
+        return prefs.getString( Keys.PREV_MAC, "" );
+    }
 
     public BluetoothCentral getCentral() {
         return central;
@@ -85,6 +93,7 @@ public class BluetoothHandler {
     }
 
     public void onConnect( BluetoothPeripheral peripheral ) {
+        this.prefs.edit().putString( Keys.PREV_MAC, peripheral.getAddress() ).apply();
         this.BLEPeripheral = peripheral;
         connected = true;
     }

@@ -15,7 +15,7 @@ public class RSSIRepository {
     private final RSSIDao mRSSIDao;
     private final LiveData<List<RSSI>> mAllRSSI;
 
-    public RSSIRepository( Application application) {
+    public RSSIRepository( Application application ) {
         RSSIDatabase db = RSSIDatabase.getInstance( application );
         mRSSIDao = db.rssiDao();
         mAllRSSI = mRSSIDao.getRSSIList();
@@ -25,8 +25,8 @@ public class RSSIRepository {
         return mAllRSSI;
     }
 
-    public void insert(RSSI rssi) {
-        RSSIDatabase.databaseWriteExecutor.execute(() -> {
+    public void insert( RSSI rssi ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
             mRSSIDao.insertRSSI( rssi );
         } );
     }

@@ -21,6 +21,7 @@ public class DatabaseViewModel extends AndroidViewModel {
     private final RSSIRepository mRSSIRepository;
 
     private final LiveData<List<Device>> mAllDevices;
+
     private final LiveData<List<Interaction>> mAllInteractions;
     private final LiveData<List<RSSI>> mAllRSSI;
 
@@ -35,27 +36,39 @@ public class DatabaseViewModel extends AndroidViewModel {
         mAllRSSI = mRSSIRepository.getAllRSSI();
     }
 
+    // Reads for Device
     public LiveData<List<Device>> getAllDevices() {
         return mAllDevices;
     }
 
+    public Device getDevice( String id ) {
+        return mDeviceRepository.getDevice( id );
+    }
+
+    // Reads for Interactions
     public LiveData<List<Interaction>> getAllInteractions() {
         return mAllInteractions;
     }
 
+    // Reads for RSSI
     public LiveData<List<RSSI>> getAllRSSI() {
         return mAllRSSI;
     }
 
-    public void insert(Device device) {
+    // Writes for
+    public void insert( Device device ) {
         mDeviceRepository.insert( device );
     }
 
-    public void insert(Interaction interaction) {
+    public void insertScanned(Device device) {
+        mDeviceRepository.insertScanned( device );
+    }
+
+    public void insert( Interaction interaction ) {
         mInteractionRepository.insert( interaction );
     }
 
-    public void insert(RSSI rssi) {
+    public void insert( RSSI rssi ) {
         mRSSIRepository.insert( rssi );
     }
 }

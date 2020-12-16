@@ -8,6 +8,8 @@ import com.welie.blessed.BluetoothPeripheral;
 import java.io.Serializable;
 
 public interface BluetoothContainer extends Serializable {
+    String getPrevMac();
+
     BluetoothCentral getCentral();
 
     BluetoothPeripheral getPeripheral();
@@ -16,7 +18,9 @@ public interface BluetoothContainer extends Serializable {
 
     BluetoothGattCharacteristic getConnectionCharacteristic();
 
-    void directConnect(String UUID);
+    void directConnect( String UUID );
+
+    void disconnect();
 
     void scan();
 

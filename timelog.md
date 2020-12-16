@@ -315,4 +315,10 @@
 
 - _1 hour_: Electronic ER Diagram for RSSI callback.
 - _4 hours_: Working on database implementation within Android.
-- _4 hours_: Needed to switch to using LiveData for async database calls as Android (rightfully) rejects making database calls on the UI thread.
+- _4 hours_: Needed to switch to using LiveData, Repositories, and a ViewModel for async database calls as Android (rightfully) rejects making database calls on the UI thread.
+
+### 16 Dec 2020
+
+- _1.5 hours_: Figuring out non-observable queries (queries with variable runtime parameters).
+- _0.5 hours_: toString methods for database entities for my sanity.
+- _3 hours_: Working on implementing some callback functionality and also integrating the Shared Preferences system to store the previous mac address.

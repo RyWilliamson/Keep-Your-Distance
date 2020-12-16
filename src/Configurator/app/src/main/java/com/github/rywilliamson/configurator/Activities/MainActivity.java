@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
@@ -43,12 +44,16 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         bottomNavigation.setOnNavigationItemSelectedListener( navigationItemSelectedListener );
 
         dbViewModel.getAllDevices().observe( this, devices -> {
-            Log.d(Keys.DB_DEVICE_ALL, String.valueOf( devices ) );
+            Log.d( Keys.DB_DEVICE_ALL, String.valueOf( devices ) );
         } );
     }
 
     public DatabaseViewModel getDatabaseViewModel() {
         return dbViewModel;
+    }
+
+    public String getPrevMac() {
+        return bt.getPrevMac();
     }
 
     public BluetoothCentral getCentral() {
@@ -83,14 +88,19 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         bt.directConnect( UUID, peripheralCallback );
     }
 
+    public void disconnect() {
+        bt.getCentral().cancelConnection( bt.getBLEPeripheral() );
+        bt.disconnect();
+    }
+
     public void swapToDebug( View view ) {
         startActivity( new Intent( this, DevActivity.class ) );
     }
 
     private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
         @Override
-        public void onDiscoveredPeripheral( BluetoothPeripheral peripheral,
-                ScanResult scanResult ) {
+        public void onDiscoveredPeripheral( @NonNull BluetoothPeripheral peripheral,
+                @NonNull ScanResult scanResult ) {
             if ( bt.addPeripheral( peripheral ) ) {
                 Log.d( Keys.GLOBAL_CENTRAL, "Discovered Peripheral: " + peripheral.getAddress() );
                 getCurrentImplementer().getCentralCallback().onDiscoveredPeripheral( peripheral, scanResult );
@@ -98,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         }
 
         @Override
-        public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
+        public void onConnectedPeripheral( @NonNull BluetoothPeripheral peripheral ) {
             super.onConnectedPeripheral( peripheral );
             Log.d( Keys.GLOBAL_CENTRAL, "Connection Completed to: " + peripheral.getAddress() );
             bt.onConnect( peripheral );
@@ -106,15 +116,15 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         }
 
         @Override
-        public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
+        public void onConnectionFailed( @NonNull BluetoothPeripheral peripheral, int status ) {
             super.onConnectionFailed( peripheral, status );
-            Log.d( Keys.GLOBAL_CENTRAL, "Connection Failed to" + peripheral.getAddress() );
+            Log.d( Keys.GLOBAL_CENTRAL, "Connection Failed to " + peripheral.getAddress() );
             bt.disconnect();
             getCurrentImplementer().getCentralCallback().onConnectionFailed( peripheral, status );
         }
 
         @Override
-        public void onDisconnectedPeripheral( BluetoothPeripheral peripheral, int status ) {
+        public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
             super.onDisconnectedPeripheral( peripheral, status );
             Log.d( Keys.GLOBAL_CENTRAL, "Disconnected from: " + peripheral.getAddress() );
             bt.disconnect();
@@ -131,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
 
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
         @Override
-        public void onServicesDiscovered( BluetoothPeripheral peripheral ) {
+        public void onServicesDiscovered( @NonNull BluetoothPeripheral peripheral ) {
             super.onServicesDiscovered( peripheral );
             Log.d( Keys.GLOBAL_PERIPHERAL, "Discovered " + peripheral.getServices() );
             bt.setupServices( peripheral );
@@ -139,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         }
 
         @Override
-        public void onCharacteristicUpdate( BluetoothPeripheral peripheral, byte[] value,
-                BluetoothGattCharacteristic characteristic, int status ) {
+        public void onCharacteristicUpdate( @NonNull BluetoothPeripheral peripheral, @NonNull byte[] value,
+                @NonNull BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
             Log.d( Keys.GLOBAL_PERIPHERAL, "Updating " + characteristic.getUuid() );
             getCurrentImplementer().getPeripheralCallback().onCharacteristicUpdate( peripheral, value, characteristic,

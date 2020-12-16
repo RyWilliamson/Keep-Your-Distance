@@ -64,6 +64,7 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
 
     public void disconnectClick( View view ) {
         //container.setConnected( false );
+        container.disconnect();
         Navigation.findNavController( view ).navigate(
                 DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
     }

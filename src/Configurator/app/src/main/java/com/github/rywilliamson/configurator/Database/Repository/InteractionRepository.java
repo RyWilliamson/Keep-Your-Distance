@@ -15,7 +15,7 @@ public class InteractionRepository {
     private final InteractionDao mInteractionDao;
     private final LiveData<List<Interaction>> mAllInteractions;
 
-    public InteractionRepository( Application application) {
+    public InteractionRepository( Application application ) {
         RSSIDatabase db = RSSIDatabase.getInstance( application );
         mInteractionDao = db.interactionDao();
         mAllInteractions = mInteractionDao.getInteractionList();
@@ -25,8 +25,8 @@ public class InteractionRepository {
         return mAllInteractions;
     }
 
-    public void insert(Interaction interaction) {
-        RSSIDatabase.databaseWriteExecutor.execute(() -> {
+    public void insert( Interaction interaction ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
             mInteractionDao.insertInteraction( interaction );
         } );
     }

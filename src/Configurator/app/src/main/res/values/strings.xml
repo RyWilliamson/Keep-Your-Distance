@@ -49,4 +49,9 @@
     <!-- All Fragments -->
     <string name="cd_img_connected">Image showing that ESP32 device is connected.</string>
     <string name="cd_img_not_connected">Image showing that ESP32 device is not connected.</string>
+
+    <!-- All Toasts -->
+    <string name="toast_no_connect">Could not connect.</string>
+    <string name="toast_scan_fail">Error: Scan failed, please retry</string>
+
 </resources>

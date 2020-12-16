@@ -22,6 +22,7 @@ public abstract class RSSIDatabase extends RoomDatabase {
     private static RSSIDatabase instance;
     private static final int NO_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool( NO_THREADS );
+    public static final ExecutorService databaseGetExecutor = Executors.newSingleThreadExecutor();
 
     // Uses Singleton pattern
     public static synchronized RSSIDatabase getInstance( Context context ) {
@@ -30,7 +31,7 @@ public abstract class RSSIDatabase extends RoomDatabase {
             // Threading lock
             synchronized ( RSSIDatabase.class ) {
                 // Data race check
-                if (instance == null) {
+                if ( instance == null ) {
                     instance = Room.databaseBuilder( context.getApplicationContext(), RSSIDatabase.class, DB_NAME )
                             .fallbackToDestructiveMigration().build();
                 }
@@ -40,6 +41,8 @@ public abstract class RSSIDatabase extends RoomDatabase {
     }
 
     public abstract DeviceDao deviceDao();
+
     public abstract InteractionDao interactionDao();
+
     public abstract RSSIDao rssiDao();
 }

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.Entity.Device;
-import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.Interfaces.DatabaseContainer;
@@ -31,6 +32,7 @@ import java.util.List;
 
 public class DeviceConnectFragment extends Fragment implements BluetoothImplementer {
 
+    private TextView prevMac;
     private Spinner macSpinner;
     private ArrayAdapter<String> macAdapter;
     private List<String> macList;
@@ -66,6 +68,9 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         macAdapter.setDropDownViewResource( R.layout.mac_address_item );
         macSpinner.setAdapter( macAdapter );
 
+        prevMac = (TextView) view.findViewById( R.id.tvDcMacText );
+        prevMac.setText( container.getPrevMac() );
+
         view.findViewById( R.id.bDcConnect ).setOnClickListener( this::connectClick );
         view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
         view.findViewById( R.id.bDcScan ).setOnClickListener( this::scanClick );
@@ -77,13 +82,15 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         }
     }
 
-    private int temp = 1;
-
     public void reconnectClick( View view ) {
-        //container.setConnected( true );
-//        Navigation.findNavController( view ).navigate(
-//                DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
-        dbcontainer.getDatabaseViewModel().insert(new Device(String.valueOf( temp++ ), "name", 0));
+        String mac = prevMac.getText().toString();
+        if ( !mac.equals( "" ) ) {
+            container.directConnect( mac );
+        }
+//        RSSIDatabase.databaseGetExecutor.execute( () -> {
+//            Device device = dbcontainer.getDatabaseViewModel().getDevice( "1" );
+//            Log.d( "test", device.toString() );
+//        } );
     }
 
     public void scanClick( View view ) {
@@ -103,16 +110,36 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
 
     private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
         @Override
-        public void onDiscoveredPeripheral( BluetoothPeripheral peripheral, ScanResult scanResult ) {
+        public void onDiscoveredPeripheral( BluetoothPeripheral peripheral, @NonNull ScanResult scanResult ) {
             Log.d( Keys.CONNECTION_CENTRAL, "Adding item for: " + peripheral.getAddress() );
             SpinnerUtils.addItem( macList, macAdapter, peripheral.getAddress() );
         }
 
         @Override
-        public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
+        public void onConnectedPeripheral( @NonNull BluetoothPeripheral peripheral ) {
             Log.d( Keys.CONNECTION_CENTRAL, "Connected! Switching View to Device Info" );
+            String mac = peripheral.getAddress();
+            dbcontainer.getDatabaseViewModel().insert( new Device( mac, mac, 1 ) );
             Navigation.findNavController( DeviceConnectFragment.this.getView() ).navigate(
                     DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
+        }
+
+        @Override
+        public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
+            Log.d( Keys.CONNECTION_CENTRAL, "Not Connected to " + peripheral.getAddress() );
+            Toast.makeText(getContext(), R.string.toast_no_connect, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onScanFailed( int errorCode ) {
+            super.onScanFailed( errorCode );
+            Log.d( Keys.CONNECTION_CENTRAL, "Scan Failed with error code: " + errorCode);
+            Toast.makeText(getContext(), R.string.toast_scan_fail, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
+
         }
     };
 
