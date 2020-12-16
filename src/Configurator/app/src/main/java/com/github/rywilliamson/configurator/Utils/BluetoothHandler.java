@@ -102,7 +102,7 @@ public class BluetoothHandler {
         central.connectPeripheral( central.getPeripheral( UUID ), callback );
     }
 
-    public void disconnect() {
+    public void clearForDisconnect() {
         this.BLEPeripheral = null;
         this.rssiCharacteristic = null;
         this.connectionCharacteristic = null;

@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
 
     public void disconnect() {
         bt.getCentral().cancelConnection( bt.getBLEPeripheral() );
-        bt.disconnect();
     }
 
     public void swapToDebug( View view ) {
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         public void onConnectionFailed( @NonNull BluetoothPeripheral peripheral, int status ) {
             super.onConnectionFailed( peripheral, status );
             Log.d( Keys.GLOBAL_CENTRAL, "Connection Failed to " + peripheral.getAddress() );
-            bt.disconnect();
+            bt.clearForDisconnect();
             getCurrentImplementer().getCentralCallback().onConnectionFailed( peripheral, status );
         }
 
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
             super.onDisconnectedPeripheral( peripheral, status );
             Log.d( Keys.GLOBAL_CENTRAL, "Disconnected from: " + peripheral.getAddress() );
-            bt.disconnect();
+            bt.clearForDisconnect();
             getCurrentImplementer().getCentralCallback().onDisconnectedPeripheral( peripheral, status );
         }
 
