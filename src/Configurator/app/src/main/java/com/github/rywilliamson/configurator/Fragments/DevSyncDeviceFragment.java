@@ -12,9 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
@@ -24,7 +25,8 @@ import static android.view.View.VISIBLE;
 
 public class DevSyncDeviceFragment extends Fragment implements BluetoothImplementer {
 
-    private BluetoothContainer container;
+    private BackendContainer container;
+    private BluetoothHandler bt;
 
     private Button syncButton;
     private Button experimentButton;
@@ -36,7 +38,8 @@ public class DevSyncDeviceFragment extends Fragment implements BluetoothImplemen
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        container = (BluetoothContainer) getActivity();
+        container = (BackendContainer) getActivity();
+        bt = container.getBluetoothHandler();
     }
 
     @Override
@@ -56,8 +59,8 @@ public class DevSyncDeviceFragment extends Fragment implements BluetoothImplemen
     }
 
     private void connectToDevice( View view ) {
-        container.checkBLEPermissions();
-        container.getCentral().scanForPeripheralsWithNames( new String[]{ "ESP32" } );
+        bt.checkBLEPermissions( this.getActivity() );
+        bt.getCentral().scanForPeripheralsWithNames( new String[]{ "ESP32" } );
     }
 
     private void moveToExperiment( View view ) {

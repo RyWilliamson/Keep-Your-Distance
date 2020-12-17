@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
-    private BluetoothContainer container;
+    private BackendContainer container;
     private Button update;
     private TextView result;
 
@@ -42,7 +42,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        container = (BluetoothContainer) getActivity();
+        container = (BackendContainer) getActivity();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class SettingsFragment extends Fragment {
 
         update.setOnClickListener( this::updateClick );
 
-        if ( container.getConnected() ) {
+        if ( container.getBluetoothHandler().isConnected() ) {
             update.setVisibility( View.VISIBLE );
             result.setVisibility( View.INVISIBLE );
             image.setImageResource( R.drawable.ic_connected );
