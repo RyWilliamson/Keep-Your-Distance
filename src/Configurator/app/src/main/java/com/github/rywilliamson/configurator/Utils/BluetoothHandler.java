@@ -35,7 +35,7 @@ public class BluetoothHandler {
     private BluetoothGattCharacteristic connectionCharacteristic;
     private final List<BluetoothPeripheral> scannedPeripherals;
     private final SharedPreferences prefs;
-    private final HashMap<String, Date> interactionTimeMap;
+    private final HashMap<String, InteractionTimeout> interactionTimeMap;
     private boolean connected;
     private final int SCAN_TIMEOUT = 3000; // Milliseconds
     private final int INTERACTION_TIMEOUT = 3000; // Milliseconds
@@ -134,29 +134,31 @@ public class BluetoothHandler {
         return true;
     }
 
-    public Date insertStartTimeAndGet(String sender, String receiver, Date startTime) {
-        String key = sender+receiver;
-        if (!interactionTimeMap.containsKey( key )) {
-            interactionTimeMap.put(key, startTime);
+    public Date insertStartTimeAndGet( String sender, String receiver, Date startTime ) {
+        String key = sender + receiver;
+        if ( !interactionTimeMap.containsKey( key ) ) {
+            interactionTimeMap.put( key, new InteractionTimeout( this, key, startTime, INTERACTION_TIMEOUT ) );
+        } else {
+            interactionTimeMap.get( key ).setLapsed( false );
         }
-        return interactionTimeMap.get( key );
+        return interactionTimeMap.get( key ).getStartTime();
     }
 
-    public void removeStartTime(String key) {
-
+    public void removeStartTime( String key ) {
+        interactionTimeMap.remove( key );
     }
 
     public void setProfilePrefs() {
-        prefs.edit().putInt(Keys.MEASURED_POWER, -81).apply();
-        prefs.edit().putInt(Keys.ENV_VAR, 3).apply();
+        prefs.edit().putInt( Keys.MEASURED_POWER, -81 ).apply();
+        prefs.edit().putInt( Keys.ENV_VAR, 3 ).apply();
     }
 
     // Distance in metres
-    public float calculateDistance(int rssi) {
+    public float calculateDistance( int rssi ) {
         //return pow(10, (measuredPower - rssi) / (10 * environment));
         int mp = getMeasuredPower();
         int ev = getEnvironmentVar();
-        return (float) Math.pow(10.0, (mp - rssi) / (10.0 * ev));
+        return (float) Math.pow( 10.0, ( mp - rssi ) / ( 10.0 * ev ) );
     }
 
     public int getMeasuredPower() {

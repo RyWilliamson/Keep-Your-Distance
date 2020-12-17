@@ -9,14 +9,14 @@ public class InteractionTimeout {
 
     private final String key;
     private final Handler runHandler = new Handler();
-    private final Date startTIme;
+    private final Date startTime;
     private boolean lapsed;
     private final int runTime; // Milliseconds
     private final WeakReference<BluetoothHandler> handler;
 
-    public InteractionTimeout(BluetoothHandler handler, String key, Date startTime, int runTime) {
+    public InteractionTimeout( BluetoothHandler handler, String key, Date startTime, int runTime ) {
         this.key = key;
-        this.startTIme = startTime;
+        this.startTime = startTime;
         this.runTime = runTime;
         this.handler = new WeakReference<>( handler );
         lapsed = false;
@@ -27,10 +27,10 @@ public class InteractionTimeout {
         @Override
         public void run() {
             // Potential race condition here - rare occurrence
-            if (handler.get() == null) {
+            if ( handler.get() == null ) {
                 return;
             }
-            if (lapsed) {
+            if ( lapsed ) {
                 handler.get().removeStartTime( key );
             } else {
                 lapsed = true;
@@ -39,4 +39,11 @@ public class InteractionTimeout {
         }
     };
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setLapsed( boolean lapsed ) {
+        this.lapsed = lapsed;
+    }
 }
