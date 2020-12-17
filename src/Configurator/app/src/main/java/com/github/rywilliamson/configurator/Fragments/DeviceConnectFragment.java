@@ -16,11 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.Entity.Device;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
-import com.github.rywilliamson.configurator.Interfaces.DatabaseContainer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.github.rywilliamson.configurator.Utils.Keys;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 import com.welie.blessed.BluetoothCentralCallback;
@@ -36,8 +37,9 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
     private Spinner macSpinner;
     private ArrayAdapter<String> macAdapter;
     private List<String> macList;
-    private BluetoothContainer container;
-    private DatabaseContainer dbcontainer;
+    private BackendContainer container;
+    private BluetoothHandler bt;
+    private DatabaseViewModel db;
 
     public DeviceConnectFragment() {
         // Required empty public constructor
@@ -58,8 +60,9 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
     public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
 
-        container = (BluetoothContainer) getActivity();
-        dbcontainer = (DatabaseContainer) getActivity();
+        container = (BackendContainer) getActivity();
+        bt = container.getBluetoothHandler();
+        db = container.getDatabaseViewModel();
 
         macSpinner = view.findViewById( R.id.spDcMacs );
         macList = new ArrayList<>();
@@ -69,7 +72,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         macSpinner.setAdapter( macAdapter );
 
         prevMac = (TextView) view.findViewById( R.id.tvDcMacText );
-        prevMac.setText( container.getPrevMac() );
+        prevMac.setText( bt.getPrevMac() );
 
         view.findViewById( R.id.bDcConnect ).setOnClickListener( this::connectClick );
         view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
@@ -119,7 +122,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         public void onConnectedPeripheral( @NonNull BluetoothPeripheral peripheral ) {
             Log.d( Keys.CONNECTION_CENTRAL, "Connected! Switching View to Device Info" );
             String mac = peripheral.getAddress();
-            dbcontainer.getDatabaseViewModel().insert( new Device( mac, mac, 1 ) );
+            db.insert( new Device( mac, mac, 1 ) );
             Navigation.findNavController( DeviceConnectFragment.this.getView() ).navigate(
                     DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
         }

@@ -32,7 +32,7 @@ public class BluetoothHandler {
     private BluetoothGattCharacteristic rssiCharacteristic;
     private BluetoothGattCharacteristic connectionCharacteristic;
     private final List<BluetoothPeripheral> scannedPeripherals;
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
     private boolean connected;
     private final int scanTimeout = 3000; // Milliseconds
 
@@ -100,6 +100,10 @@ public class BluetoothHandler {
 
     public void directConnect( String UUID, BluetoothPeripheralCallback callback ) {
         central.connectPeripheral( central.getPeripheral( UUID ), callback );
+    }
+
+    public void disconnect() {
+        central.cancelConnection( BLEPeripheral );
     }
 
     public void clearForDisconnect() {

@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 
@@ -24,7 +24,7 @@ public class GraphFragment extends Fragment {
     private Spinner graphSpinner;
     private ArrayAdapter<String> graphAdapter;
     private List<String> graphList;
-    private BluetoothContainer container;
+    private BackendContainer container;
 
     public GraphFragment() {
         // Required empty public constructor
@@ -33,7 +33,7 @@ public class GraphFragment extends Fragment {
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        container = (BluetoothContainer) getActivity();
+        container = (BackendContainer) getActivity();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GraphFragment extends Fragment {
         SpinnerUtils.addItem( graphList, graphAdapter, "Total Interactions" );
         SpinnerUtils.addItem( graphList, graphAdapter, "Interactions Over Time" );
 
-        if ( container.getConnected() ) {
+        if ( container.getBluetoothHandler().isConnected() ) {
             image.setImageResource( R.drawable.ic_connected );
         } else {
             image.setImageResource( R.drawable.ic_not_connected );

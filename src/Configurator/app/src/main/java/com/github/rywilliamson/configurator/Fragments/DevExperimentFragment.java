@@ -20,9 +20,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.github.rywilliamson.configurator.Utils.Keys;
 import com.opencsv.CSVWriter;
 import com.welie.blessed.BluetoothCentralCallback;
@@ -43,7 +44,8 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
     private Button interactButton;
     private TextView outputTextView;
 
-    private BluetoothContainer container;
+    private BackendContainer container;
+    private BluetoothHandler bt;
     private List<String[]> rssiValues;
     private boolean capturing;
     private int counter;
@@ -63,6 +65,7 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
     public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
         container = DevExperimentFragmentArgs.fromBundle( getArguments() ).getContainer();
+        bt = container.getBluetoothHandler();
     }
 
     @Override
@@ -105,13 +108,13 @@ public class DevExperimentFragment extends Fragment implements BluetoothImplemen
         counter = 0;
         capturing = true;
         interactButton.setText( R.string.f_dev_cancel );
-        container.getPeripheral().setNotify( container.getRssiCharacteristic(), true );
+        bt.getBLEPeripheral().setNotify( bt.getRssiCharacteristic(), true );
     }
 
     private void cancel() {
         capturing = false;
         interactButton.setText( R.string.f_dev_begin );
-        container.getPeripheral().setNotify( container.getRssiCharacteristic(), false );
+        bt.getBLEPeripheral().setNotify( bt.getRssiCharacteristic(), false );
     }
 
     private void writeCSV() {

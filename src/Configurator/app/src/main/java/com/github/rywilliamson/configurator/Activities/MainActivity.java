@@ -14,20 +14,18 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
-import com.github.rywilliamson.configurator.Interfaces.DatabaseContainer;
 import com.github.rywilliamson.configurator.NavGraphDirections;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.github.rywilliamson.configurator.Utils.Keys;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.welie.blessed.BluetoothCentral;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
-public class MainActivity extends AppCompatActivity implements BluetoothContainer, DatabaseContainer {
+public class MainActivity extends AppCompatActivity implements BackendContainer {
 
     private BottomNavigationView bottomNavigation;
     private BluetoothHandler bt;
@@ -52,33 +50,7 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
         return dbViewModel;
     }
 
-    public String getPrevMac() {
-        return bt.getPrevMac();
-    }
-
-    public BluetoothCentral getCentral() {
-        return bt.getCentral();
-    }
-
-    public BluetoothPeripheral getPeripheral() {
-        return bt.getBLEPeripheral();
-    }
-
-    public BluetoothGattCharacteristic getRssiCharacteristic() {
-        return bt.getRssiCharacteristic();
-    }
-
-    public BluetoothGattCharacteristic getConnectionCharacteristic() {
-        return bt.getConnectionCharacteristic();
-    }
-
-    public boolean getConnected() {
-        return bt.isConnected();
-    }
-
-    public void checkBLEPermissions() {
-        bt.checkBLEPermissions( this );
-    }
+    public BluetoothHandler getBluetoothHandler() {return bt;}
 
     public void scan() {
         bt.scan( this );
@@ -86,10 +58,6 @@ public class MainActivity extends AppCompatActivity implements BluetoothContaine
 
     public void directConnect( String UUID ) {
         bt.directConnect( UUID, peripheralCallback );
-    }
-
-    public void disconnect() {
-        bt.getCentral().cancelConnection( bt.getBLEPeripheral() );
     }
 
     public void swapToDebug( View view ) {

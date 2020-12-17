@@ -11,15 +11,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Interfaces.BluetoothContainer;
+import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
+import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
 public class DeviceInfoFragment extends Fragment implements BluetoothImplementer {
 
-    private BluetoothContainer container;
+    private BackendContainer container;
 
     private TextView totalInfo;
     private TextView currentInfo;
@@ -31,7 +33,7 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        container = (BluetoothContainer) getActivity();
+        container = (BackendContainer) getActivity();
     }
 
     @Override
@@ -64,7 +66,7 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
 
     public void disconnectClick( View view ) {
         //container.setConnected( false );
-        container.disconnect();
+        container.getBluetoothHandler().disconnect();
         Navigation.findNavController( view ).navigate(
                 DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
     }
