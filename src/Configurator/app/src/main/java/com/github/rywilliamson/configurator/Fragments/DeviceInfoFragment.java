@@ -1,5 +1,6 @@
 package com.github.rywilliamson.configurator.Fragments;
 
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
 public class DeviceInfoFragment extends Fragment implements BluetoothImplementer {
@@ -73,11 +75,19 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
 
     @Override
     public BluetoothCentralCallback getCentralCallback() {
-        return null;
+        return centralCallback;
     }
 
     @Override
     public BluetoothPeripheralCallback getPeripheralCallback() {
-        return null;
+        return peripheralCallback;
     }
+
+    private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
+
+    };
+
+    private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
+
+    };
 }

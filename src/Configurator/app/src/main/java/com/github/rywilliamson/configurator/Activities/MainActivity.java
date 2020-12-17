@@ -14,6 +14,9 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.Database.Entity.Device;
+import com.github.rywilliamson.configurator.Database.Entity.Interaction;
+import com.github.rywilliamson.configurator.Database.Entity.RSSI;
 import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.NavGraphDirections;
@@ -24,6 +27,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements BackendContainer {
 
@@ -50,7 +58,9 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
         return dbViewModel;
     }
 
-    public BluetoothHandler getBluetoothHandler() {return bt;}
+    public BluetoothHandler getBluetoothHandler() {
+        return bt;
+    }
 
     public void scan() {
         bt.scan( this );
@@ -119,7 +129,33 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
         public void onCharacteristicUpdate( @NonNull BluetoothPeripheral peripheral, @NonNull byte[] value,
                 @NonNull BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
-            Log.d( Keys.GLOBAL_PERIPHERAL, "Updating " + characteristic.getUuid() );
+            String[] data = new String( value, StandardCharsets.UTF_8 ).split( "," );
+            Log.d( Keys.GLOBAL_PERIPHERAL, "Received value: " + Arrays.toString( data ) );
+            Date endTime = Calendar.getInstance().getTime();
+
+            if ( data.length != 2 ) {
+                // Do not return ACK result
+                return;
+            }
+
+            // TODO return ACK result to device.
+
+            // Process mac address to add : characters back in.
+            if ( data[0].length() != 12 ) {
+                // Do not return ACK result
+                return;
+            }
+            data[0] = data[0].replaceAll( "(.{2})", "$1:" );
+            data[0] = data[0].substring( 0, data[0].length() - 1 );
+
+            // Database Calls
+            dbViewModel.insertScanned( new Device( data[0], data[0], 0 ) );
+            Date startTime = bt.insertStartTimeAndGet( data[0], peripheral.getAddress(), endTime );
+            int rssi = Integer.parseInt( data[1] );
+            dbViewModel.insert(
+                    new RSSI( data[0], peripheral.getAddress(), startTime, endTime, rssi, bt.calculateDistance( rssi ),
+                            bt.getMeasuredPower(), bt.getEnvironmentVar() ), true );
+
             getCurrentImplementer().getPeripheralCallback().onCharacteristicUpdate( peripheral, value, characteristic,
                     status );
         }

@@ -322,3 +322,12 @@
 - _1.5 hours_: Figuring out non-observable queries (queries with variable runtime parameters).
 - _0.5 hours_: toString methods for database entities for my sanity.
 - _3 hours_: Working on implementing some callback functionality and also integrating the Shared Preferences system to store the previous mac address.
+- _1 hour_: Refactoring code.
+- _0.5 hours_: Creating algorithm to send both mac address and rssi in a single characteristic without hitting byte limit.
+- _0.5 hours_: Implementing this algorithm on the device side.
+- _1 hour_: Implementing this algorithm on the app side.
+
+### 17 Dec 2020
+
+- _4 hours_: Adding RSSI functionality to database, involved handling timeout waiting and start time caching.
+- _3 hours_: Trying to add a timeout to the interactions so the interactions end.

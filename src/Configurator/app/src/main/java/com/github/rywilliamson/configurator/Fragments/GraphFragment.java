@@ -13,13 +13,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
+import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheralCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphFragment extends Fragment {
+public class GraphFragment extends Fragment implements BluetoothImplementer {
 
     private Spinner graphSpinner;
     private ArrayAdapter<String> graphAdapter;
@@ -66,4 +69,22 @@ public class GraphFragment extends Fragment {
             image.setImageResource( R.drawable.ic_not_connected );
         }
     }
+
+    @Override
+    public BluetoothCentralCallback getCentralCallback() {
+        return centralCallback;
+    }
+
+    @Override
+    public BluetoothPeripheralCallback getPeripheralCallback() {
+        return peripheralCallback;
+    }
+
+    private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
+
+    };
+
+    private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
+
+    };
 }

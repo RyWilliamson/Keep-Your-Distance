@@ -2,9 +2,11 @@ package com.github.rywilliamson.configurator.Utils;
 
 public class Keys {
 
-    // Shared Preferences
+    // Shared Preference Keys
     public static final String PREFS = "Prefs";
     public static final String PREV_MAC = "Prev Mac";
+    public static final String MEASURED_POWER = "Measured Power";
+    public static final String ENV_VAR = "Environment Var";
 
     // Permissions
     public static final int REQUEST_ENABLE_BT = 1;

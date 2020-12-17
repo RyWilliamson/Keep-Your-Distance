@@ -12,6 +12,7 @@ import com.github.rywilliamson.configurator.Database.Repository.DeviceRepository
 import com.github.rywilliamson.configurator.Database.Repository.InteractionRepository;
 import com.github.rywilliamson.configurator.Database.Repository.RSSIRepository;
 
+import java.util.Date;
 import java.util.List;
 
 public class DatabaseViewModel extends AndroidViewModel {
@@ -50,9 +51,17 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mAllInteractions;
     }
 
+    public Interaction getInteraction(String sender, String receiver, Date start) {
+        return mInteractionRepository.getInteractionByID( sender, receiver, start );
+    }
+
     // Reads for RSSI
     public LiveData<List<RSSI>> getAllRSSI() {
         return mAllRSSI;
+    }
+
+    public RSSI getRSSI(Interaction interaction, Date timestamp) {
+        return mRSSIRepository.getRSSIByID( interaction, timestamp );
     }
 
     // Writes for
@@ -68,7 +77,11 @@ public class DatabaseViewModel extends AndroidViewModel {
         mInteractionRepository.insert( interaction );
     }
 
-    public void insert( RSSI rssi ) {
-        mRSSIRepository.insert( rssi );
+    public void insert( RSSI rssi, boolean linked ) {
+        if (linked) {
+            mRSSIRepository.insert( rssi, mInteractionRepository );
+        } else {
+            mRSSIRepository.insert( rssi );
+        }
     }
 }

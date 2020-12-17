@@ -15,6 +15,7 @@ BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
 uint8_t data = 5;
 int rssi = 0;
+String mac;
 int nullValue = 99;
 
 BLECharacteristic *rssiCharacteristic;
@@ -23,12 +24,18 @@ float calculateDistance(int rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / (10 * environment));
 }
 
+String combineMacRSSI(int rssi, String mac) {
+    mac.replace(":", "");
+    return mac + String(",") + String(rssi);
+}
+
 class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
         // Only an inital check - bad for security long-term
         if (advertisedDevice.getName() == "ESP32") {
             rssi = advertisedDevice.getRSSI();
-            rssiCharacteristic->setValue(rssi);
+            mac = advertisedDevice.getAddress().toString().c_str();
+            rssiCharacteristic->setValue(combineMacRSSI(rssi, mac).c_str());
             rssiCharacteristic->notify();
             String lineData = "ESP: " + String(rssi);
             //screen.drawString(0, 2, lineData.c_str());

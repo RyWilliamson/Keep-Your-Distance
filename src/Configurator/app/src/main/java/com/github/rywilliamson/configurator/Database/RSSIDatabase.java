@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.github.rywilliamson.configurator.Database.DAO.DeviceDao;
 import com.github.rywilliamson.configurator.Database.DAO.InteractionDao;
@@ -17,6 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database( entities = { Device.class, Interaction.class, RSSI.class }, exportSchema = false, version = 1 )
+@TypeConverters( Converters.class )
 public abstract class RSSIDatabase extends RoomDatabase {
     private static final String DB_NAME = "rssi_db";
     private static RSSIDatabase instance;

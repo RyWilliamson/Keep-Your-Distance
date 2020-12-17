@@ -18,6 +18,8 @@ import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONN_CHARACTERISTIC_ID;
@@ -33,14 +35,18 @@ public class BluetoothHandler {
     private BluetoothGattCharacteristic connectionCharacteristic;
     private final List<BluetoothPeripheral> scannedPeripherals;
     private final SharedPreferences prefs;
+    private final HashMap<String, Date> interactionTimeMap;
     private boolean connected;
-    private final int scanTimeout = 3000; // Milliseconds
+    private final int SCAN_TIMEOUT = 3000; // Milliseconds
+    private final int INTERACTION_TIMEOUT = 3000; // Milliseconds
 
     public BluetoothHandler( Activity activity, BluetoothCentralCallback callback ) {
         central = new BluetoothCentral( activity, callback, new Handler(
                 Looper.getMainLooper() ) );
         scannedPeripherals = new ArrayList<>();
         prefs = activity.getSharedPreferences( Keys.PREFS, Context.MODE_PRIVATE );
+        interactionTimeMap = new HashMap<>();
+        setProfilePrefs();
     }
 
     public void checkBLEPermissions( Activity activity ) {
@@ -51,7 +57,6 @@ public class BluetoothHandler {
                     Keys.REQUEST_FINE_LOCATION );
         }
     }
-
 
     public String getPrevMac() {
         return prefs.getString( Keys.PREV_MAC, "" );
@@ -81,7 +86,7 @@ public class BluetoothHandler {
         checkBLEPermissions( activity );
         scannedPeripherals.clear();
         central.scanForPeripheralsWithNames( new String[]{ "ESP32" } );
-        new Handler( Looper.getMainLooper() ).postDelayed( central::stopScan, scanTimeout );
+        new Handler( Looper.getMainLooper() ).postDelayed( central::stopScan, SCAN_TIMEOUT );
     }
 
     public boolean addPeripheral( BluetoothPeripheral peripheral ) {
@@ -103,6 +108,7 @@ public class BluetoothHandler {
     }
 
     public void disconnect() {
+        this.BLEPeripheral.setNotify( rssiCharacteristic, false );
         central.cancelConnection( BLEPeripheral );
     }
 
@@ -118,11 +124,46 @@ public class BluetoothHandler {
             this.rssiCharacteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
             this.connectionCharacteristic = peripheral.getCharacteristic( HEARTBEAT_SERVICE_ID,
                     CONN_CHARACTERISTIC_ID );
+
+            this.BLEPeripheral.setNotify( rssiCharacteristic, true );
         }
     }
 
     private boolean verifyServices( BluetoothPeripheral peripheral ) {
         // Can only implement this once device is working with ALL services
         return true;
+    }
+
+    public Date insertStartTimeAndGet(String sender, String receiver, Date startTime) {
+        String key = sender+receiver;
+        if (!interactionTimeMap.containsKey( key )) {
+            interactionTimeMap.put(key, startTime);
+        }
+        return interactionTimeMap.get( key );
+    }
+
+    public void removeStartTime(String key) {
+
+    }
+
+    public void setProfilePrefs() {
+        prefs.edit().putInt(Keys.MEASURED_POWER, -81).apply();
+        prefs.edit().putInt(Keys.ENV_VAR, 3).apply();
+    }
+
+    // Distance in metres
+    public float calculateDistance(int rssi) {
+        //return pow(10, (measuredPower - rssi) / (10 * environment));
+        int mp = getMeasuredPower();
+        int ev = getEnvironmentVar();
+        return (float) Math.pow(10.0, (mp - rssi) / (10.0 * ev));
+    }
+
+    public int getMeasuredPower() {
+        return prefs.getInt( Keys.MEASURED_POWER, -81 );
+    }
+
+    public int getEnvironmentVar() {
+        return prefs.getInt( Keys.ENV_VAR, 3 );
     }
 }

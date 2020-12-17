@@ -130,14 +130,14 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         @Override
         public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
             Log.d( Keys.CONNECTION_CENTRAL, "Not Connected to " + peripheral.getAddress() );
-            Toast.makeText(getContext(), R.string.toast_no_connect, Toast.LENGTH_SHORT).show();
+            Toast.makeText( getContext(), R.string.toast_no_connect, Toast.LENGTH_SHORT ).show();
         }
 
         @Override
         public void onScanFailed( int errorCode ) {
             super.onScanFailed( errorCode );
-            Log.d( Keys.CONNECTION_CENTRAL, "Scan Failed with error code: " + errorCode);
-            Toast.makeText(getContext(), R.string.toast_scan_fail, Toast.LENGTH_LONG).show();
+            Log.d( Keys.CONNECTION_CENTRAL, "Scan Failed with error code: " + errorCode );
+            Toast.makeText( getContext(), R.string.toast_scan_fail, Toast.LENGTH_LONG ).show();
         }
 
         @Override
@@ -147,6 +147,5 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
     };
 
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
-
     };
 }

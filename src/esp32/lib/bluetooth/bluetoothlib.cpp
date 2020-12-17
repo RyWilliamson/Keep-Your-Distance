@@ -10,6 +10,7 @@
 
 #define CHARA_CONNECT_UUID      "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define CHARA_RSSI_UUID         "3f237eb3-99b4-4bbd-9475-f2e7b39ac899"
+#define CHARA_MAC_UUID          "80ba50ee-e010-4d75-b568-99de8adb10e4"
 #define CHARA_ADV_UUID          "c74f40df-d464-4dea-818c-13e7914f332a"
 
 BLECharacteristic * constructBLEServer(String name, BLEServerCallbacks* servercb,BLEDescriptor* descriptor, 

@@ -15,13 +15,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
+import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheralCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements BluetoothImplementer {
 
     private BackendContainer container;
     private Button update;
@@ -98,4 +101,22 @@ public class SettingsFragment extends Fragment {
     public void updateClick( View view ) {
         result.setVisibility( View.VISIBLE );
     }
+
+    @Override
+    public BluetoothCentralCallback getCentralCallback() {
+        return centralCallback;
+    }
+
+    @Override
+    public BluetoothPeripheralCallback getPeripheralCallback() {
+        return peripheralCallback;
+    }
+
+    private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
+
+    };
+
+    private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
+
+    };
 }

@@ -9,12 +9,16 @@ import androidx.room.Update;
 
 import com.github.rywilliamson.configurator.Database.Entity.Interaction;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
 public interface InteractionDao {
     @Query( "SELECT * FROM interaction" )
     LiveData<List<Interaction>> getInteractionList();
+
+    @Query( "SELECT * FROM interaction WHERE sender = :sender AND receiver = :receiver AND start_time = :start" )
+    Interaction getInteractionByID(String sender, String receiver, Date start);
 
     @Insert
     void insertInteraction( Interaction interaction );
