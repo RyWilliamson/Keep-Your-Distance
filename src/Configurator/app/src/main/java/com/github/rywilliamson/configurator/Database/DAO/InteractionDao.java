@@ -31,4 +31,7 @@ public interface InteractionDao {
 
     @Delete
     void deleteInteraction( Interaction interaction );
+
+    @Query( "DELETE FROM interaction WHERE receiver = :receiver" )
+    void deleteInteractionByReceiver( String receiver );
 }

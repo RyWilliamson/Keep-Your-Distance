@@ -28,4 +28,7 @@ public interface RSSIDao {
 
     @Delete
     void deleteRSSI( RSSI rssi );
+
+    @Query( "DELETE FROM rssi WHERE receiver_ref = :receiver" )
+    void deleteRSSIByReceiver( String receiver );
 }

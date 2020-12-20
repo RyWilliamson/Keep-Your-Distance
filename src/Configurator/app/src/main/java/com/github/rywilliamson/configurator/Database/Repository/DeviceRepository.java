@@ -50,4 +50,10 @@ public class DeviceRepository {
         } );
     }
 
+    public void deleteByMac( String receiver ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
+            mDeviceDao.deleteDeviceByMac( receiver );
+        } );
+    }
+
 }

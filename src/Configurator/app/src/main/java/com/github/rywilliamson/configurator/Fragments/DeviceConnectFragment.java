@@ -117,8 +117,8 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         @Override
         public void onConnectedPeripheral( @NonNull BluetoothPeripheral peripheral ) {
             Log.d( Keys.CONNECTION_CENTRAL, "Connected! Switching View to Device Info" );
-            String mac = peripheral.getAddress();
-            db.insert( new Device( mac, mac, 1 ) );
+//            String mac = peripheral.getAddress();
+//            db.insert( new Device( mac, mac, 1 ) );
             Navigation.findNavController( DeviceConnectFragment.this.getView() ).navigate(
                     DeviceConnectFragmentDirections.actionDeviceConnectFragmentToDeviceInfoFragment2() );
         }

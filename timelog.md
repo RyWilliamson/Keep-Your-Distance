@@ -340,3 +340,8 @@
 
 - _0.5 hours_: Added ethics approval pdfs and sorted out the main readme a bit.
 - _1.5 hours_: Getting the device info page characteristic update callback functioning.
+
+### 20 Dec 2020
+
+- _0.5 hours_: Fixing small bug on device causing ble notification of null value.
+- _1 hours_: Implementing clear button in device info page.

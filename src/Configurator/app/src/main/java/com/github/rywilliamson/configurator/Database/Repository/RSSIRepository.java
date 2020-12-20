@@ -51,4 +51,10 @@ public class RSSIRepository {
         } );
     }
 
+    public void deleteByReceiver( String receiver ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
+            mRSSIDao.deleteRSSIByReceiver( receiver );
+        } );
+    }
+
 }

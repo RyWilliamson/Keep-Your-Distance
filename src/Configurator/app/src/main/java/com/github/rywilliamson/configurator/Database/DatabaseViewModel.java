@@ -99,4 +99,11 @@ public class DatabaseViewModel extends AndroidViewModel {
             mRSSIRepository.insert( rssi );
         }
     }
+
+    // Deletes
+    public void clearReceiver( String receiver ) {
+        mRSSIRepository.deleteByReceiver( receiver );
+        mInteractionRepository.deleteByReceiver( receiver );
+        mDeviceRepository.deleteByMac( receiver );
+    }
 }

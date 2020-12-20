@@ -58,4 +58,10 @@ public class InteractionRepository {
         }
     }
 
+    public void deleteByReceiver( String receiver ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
+            mInteractionDao.deleteInteractionByReceiver( receiver );
+        } );
+    }
+
 }

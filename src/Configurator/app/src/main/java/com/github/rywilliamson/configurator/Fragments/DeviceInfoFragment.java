@@ -32,6 +32,7 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
 
     private int oldCount = 0;
     private int curCount;
+    private boolean clearing = false;
 
     public DeviceInfoFragment() {
         // Required empty public constructor
@@ -80,12 +81,17 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
     }
 
     public void exportClick( View view ) {
+        // Later
 
     }
 
     public void clearClick( View view ) {
         currentInfo.setText( "0" );
         totalInfo.setText( "0" );
+        oldCount = 0;
+        curCount = 0;
+        clearing = true;
+        bt.disconnect();
     }
 
     public void disconnectClick( View view ) {
@@ -105,6 +111,18 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
     private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
         @Override
         public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
+            if (!clearing) {
+                Navigation.findNavController( DeviceInfoFragment.this.getView() ).navigate(
+                        DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
+            } else {
+                clearing = false;
+                db.clearReceiver( peripheral.getAddress() );
+                container.directConnect( peripheral.getAddress() );
+            }
+        }
+
+        @Override
+        public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
             Navigation.findNavController( DeviceInfoFragment.this.getView() ).navigate(
                     DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
         }

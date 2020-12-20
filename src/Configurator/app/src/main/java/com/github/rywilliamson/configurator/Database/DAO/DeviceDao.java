@@ -29,4 +29,7 @@ public interface DeviceDao {
 
     @Delete
     void deleteDevice( Device device );
+
+    @Query( "DELETE FROM Device WHERE mac_address = :receiver" )
+    void deleteDeviceByMac( String receiver );
 }

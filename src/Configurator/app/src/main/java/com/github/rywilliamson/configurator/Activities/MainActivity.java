@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
             super.onConnectedPeripheral( peripheral );
             Log.d( Keys.GLOBAL_CENTRAL, "Connection Completed to: " + peripheral.getAddress() );
             bt.onConnect( peripheral );
+            String mac = peripheral.getAddress();
+            dbViewModel.insert( new Device( mac, mac, 1 ) );
             dbViewModel.setInteractionCountReceiver( peripheral.getAddress() );
             getCurrentImplementer().getCentralCallback().onConnectedPeripheral( peripheral );
         }

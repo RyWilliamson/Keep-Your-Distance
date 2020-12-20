@@ -102,8 +102,8 @@ void loop() {
     if (!foundESP) {
         clear2x2Line(&screen, 4);
         clear2x2Line(&screen, 6);
-        rssiCharacteristic->setValue(nullValue);
-        rssiCharacteristic->notify();
+        // rssiCharacteristic->setValue(nullValue);
+        // rssiCharacteristic->notify();
     }
     foundESP = false;
     //delay(200);

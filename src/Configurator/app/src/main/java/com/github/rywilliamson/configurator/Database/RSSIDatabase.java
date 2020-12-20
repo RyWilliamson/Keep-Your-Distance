@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 public abstract class RSSIDatabase extends RoomDatabase {
     private static final String DB_NAME = "rssi_db";
     private static RSSIDatabase instance;
-    private static final int NO_THREADS = 4;
+    private static final int NO_THREADS = 1;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool( NO_THREADS );
     public static final ExecutorService databaseGetExecutor = Executors.newSingleThreadExecutor();
 

@@ -117,6 +117,10 @@ public class BluetoothHandler {
         this.rssiCharacteristic = null;
         this.connectionCharacteristic = null;
         this.connected = false;
+        clearMap();
+    }
+
+    private void clearMap() {
         interactionTimeMap.clear();
     }
 
