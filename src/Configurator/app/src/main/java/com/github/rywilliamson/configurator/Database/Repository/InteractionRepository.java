@@ -16,15 +16,25 @@ public class InteractionRepository {
 
     private final InteractionDao mInteractionDao;
     private final LiveData<List<Interaction>> mAllInteractions;
+    private LiveData<Integer> mInteractionCount;
 
     public InteractionRepository( Application application ) {
         RSSIDatabase db = RSSIDatabase.getInstance( application );
         mInteractionDao = db.interactionDao();
         mAllInteractions = mInteractionDao.getInteractionList();
+        mInteractionCount = mInteractionDao.getInteractionCountForReceiver( "" );
     }
 
     public LiveData<List<Interaction>> getAllInteractions() {
         return mAllInteractions;
+    }
+
+    public LiveData<Integer> getInteractionCount() {
+        return mInteractionCount;
+    }
+
+    public void setInteractionCountReceiver(String receiver) {
+        mInteractionCount = mInteractionDao.getInteractionCountForReceiver( receiver );
     }
 
     public Interaction getInteractionByID( String sender, String receiver, Date start ) {

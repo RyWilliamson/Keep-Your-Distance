@@ -331,3 +331,12 @@
 
 - _4 hours_: Adding RSSI functionality to database, involved handling timeout waiting and start time caching.
 - _3 hours_: Trying to add a timeout to the interactions so the interactions end.
+
+### 18 Dec 2020
+
+- _0 hours_: Break day :)
+
+### 19 Dec 2020
+
+- _0.5 hours_: Added ethics approval pdfs and sorted out the main readme a bit.
+- _1.5 hours_: Getting the device info page characteristic update callback functioning.

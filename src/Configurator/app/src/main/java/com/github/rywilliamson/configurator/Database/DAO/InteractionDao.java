@@ -20,6 +20,9 @@ public interface InteractionDao {
     @Query( "SELECT * FROM interaction WHERE sender = :sender AND receiver = :receiver AND start_time = :start" )
     Interaction getInteractionByID(String sender, String receiver, Date start);
 
+    @Query ("SELECT COUNT(receiver) FROM interaction WHERE receiver = :receiver")
+    LiveData<Integer> getInteractionCountForReceiver(String receiver);
+
     @Insert
     void insertInteraction( Interaction interaction );
 

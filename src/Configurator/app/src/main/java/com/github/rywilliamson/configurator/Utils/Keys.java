@@ -21,4 +21,5 @@ public class Keys {
     public static final String CONNECTION_PERIPHERAL = "Conn Periph Callback";
 
     public static final String DB_DEVICE_ALL = "All Device Callback";
+    public static final String DB_INTERACTION_COUNT = "Interact Count Callback";
 }

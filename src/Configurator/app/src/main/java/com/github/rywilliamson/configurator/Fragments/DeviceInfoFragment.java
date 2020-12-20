@@ -1,6 +1,5 @@
 package com.github.rywilliamson.configurator.Fragments;
 
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +27,12 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
     private TextView totalInfo;
     private TextView currentInfo;
 
+    private DatabaseViewModel db;
+    private BluetoothHandler bt;
+
+    private int oldCount = 0;
+    private int curCount;
+
     public DeviceInfoFragment() {
         // Required empty public constructor
     }
@@ -36,6 +41,9 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         container = (BackendContainer) getActivity();
+
+        bt = container.getBluetoothHandler();
+        db = container.getDatabaseViewModel();
     }
 
     @Override
@@ -51,10 +59,24 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
 
         totalInfo = view.findViewById( R.id.tvDiTotalInfo );
         currentInfo = view.findViewById( R.id.tvDiCurrentInfo );
+        curCount = -1;
+
+        ( (TextView) view.findViewById( R.id.tvDiMacInfo ) ).setText( bt.getBLEPeripheral().getAddress() );
 
         view.findViewById( R.id.bDiExport ).setOnClickListener( this::exportClick );
         view.findViewById( R.id.bDiClear ).setOnClickListener( this::clearClick );
         view.findViewById( R.id.bDiDisconnect ).setOnClickListener( this::disconnectClick );
+
+        db.setInteractionCountReceiver( bt.getBLEPeripheral().getAddress() );
+        db.getConnectedInteractionCount().observe( getActivity(), count -> {
+            if ( oldCount != count ) {
+                totalInfo.setText( String.valueOf( count ) );
+                currentInfo.setText( String.valueOf( ++curCount ) );
+                oldCount = count;
+            }
+        } );
+
+
     }
 
     public void exportClick( View view ) {
@@ -62,15 +84,12 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
     }
 
     public void clearClick( View view ) {
-        totalInfo.setText( "0" );
         currentInfo.setText( "0" );
+        totalInfo.setText( "0" );
     }
 
     public void disconnectClick( View view ) {
-        //container.setConnected( false );
         container.getBluetoothHandler().disconnect();
-        Navigation.findNavController( view ).navigate(
-                DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
     }
 
     @Override
@@ -84,7 +103,11 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
     }
 
     private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
-
+        @Override
+        public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
+            Navigation.findNavController( DeviceInfoFragment.this.getView() ).navigate(
+                    DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
+        }
     };
 
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {

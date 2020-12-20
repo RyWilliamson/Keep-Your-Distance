@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
             super.onConnectedPeripheral( peripheral );
             Log.d( Keys.GLOBAL_CENTRAL, "Connection Completed to: " + peripheral.getAddress() );
             bt.onConnect( peripheral );
+            dbViewModel.setInteractionCountReceiver( peripheral.getAddress() );
             getCurrentImplementer().getCentralCallback().onConnectedPeripheral( peripheral );
         }
 
@@ -147,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
             }
             data[0] = data[0].replaceAll( "(.{2})", "$1:" );
             data[0] = data[0].substring( 0, data[0].length() - 1 );
+            data[0] = data[0].toUpperCase();
 
             // Database Calls
             dbViewModel.insertScanned( new Device( data[0], data[0], 0 ) );

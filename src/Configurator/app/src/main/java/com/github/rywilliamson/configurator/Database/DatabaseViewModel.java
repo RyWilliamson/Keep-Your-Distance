@@ -24,6 +24,8 @@ public class DatabaseViewModel extends AndroidViewModel {
     private final LiveData<List<Device>> mAllDevices;
 
     private final LiveData<List<Interaction>> mAllInteractions;
+    private LiveData<Integer> mInteractionCount;
+
     private final LiveData<List<RSSI>> mAllRSSI;
 
     public DatabaseViewModel( Application application ) {
@@ -35,6 +37,8 @@ public class DatabaseViewModel extends AndroidViewModel {
         mAllDevices = mDeviceRepository.getAllDevices();
         mAllInteractions = mInteractionRepository.getAllInteractions();
         mAllRSSI = mRSSIRepository.getAllRSSI();
+        mInteractionRepository.setInteractionCountReceiver( "" );
+        mInteractionCount = mInteractionRepository.getInteractionCount();
     }
 
     // Reads for Device
@@ -55,6 +59,10 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mInteractionRepository.getInteractionByID( sender, receiver, start );
     }
 
+    public LiveData<Integer> getConnectedInteractionCount() {
+        return mInteractionCount;
+    }
+
     // Reads for RSSI
     public LiveData<List<RSSI>> getAllRSSI() {
         return mAllRSSI;
@@ -64,7 +72,7 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mRSSIRepository.getRSSIByID( interaction, timestamp );
     }
 
-    // Writes for
+    // Writes for Device
     public void insert( Device device ) {
         mDeviceRepository.insert( device );
     }
@@ -73,10 +81,17 @@ public class DatabaseViewModel extends AndroidViewModel {
         mDeviceRepository.insertScanned( device );
     }
 
+    // Writes for Insert
     public void insert( Interaction interaction ) {
         mInteractionRepository.insert( interaction );
     }
 
+    public void setInteractionCountReceiver(String receiver) {
+        mInteractionRepository.setInteractionCountReceiver( receiver );
+        mInteractionCount = mInteractionRepository.getInteractionCount();
+    }
+
+    // Writes for RSSI
     public void insert( RSSI rssi, boolean linked ) {
         if (linked) {
             mRSSIRepository.insert( rssi, mInteractionRepository );

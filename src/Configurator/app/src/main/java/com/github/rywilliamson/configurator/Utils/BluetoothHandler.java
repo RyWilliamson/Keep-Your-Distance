@@ -117,6 +117,7 @@ public class BluetoothHandler {
         this.rssiCharacteristic = null;
         this.connectionCharacteristic = null;
         this.connected = false;
+        interactionTimeMap.clear();
     }
 
     public void setupServices( BluetoothPeripheral peripheral ) {

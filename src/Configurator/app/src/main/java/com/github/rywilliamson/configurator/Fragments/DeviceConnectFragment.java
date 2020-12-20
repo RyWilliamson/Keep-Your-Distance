@@ -90,10 +90,6 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         if ( !mac.equals( "" ) ) {
             container.directConnect( mac );
         }
-//        RSSIDatabase.databaseGetExecutor.execute( () -> {
-//            Device device = dbcontainer.getDatabaseViewModel().getDevice( "1" );
-//            Log.d( "test", device.toString() );
-//        } );
     }
 
     public void scanClick( View view ) {
