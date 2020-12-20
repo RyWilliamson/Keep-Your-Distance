@@ -66,8 +66,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
 
         macSpinner = view.findViewById( R.id.spDcMacs );
         macList = new ArrayList<>();
-        macAdapter = new ArrayAdapter<>( view.getContext(),
-                R.layout.mac_address_item, macList );
+        macAdapter = new ArrayAdapter<>( view.getContext(), R.layout.mac_address_item, macList );
         macAdapter.setDropDownViewResource( R.layout.mac_address_item );
         macSpinner.setAdapter( macAdapter );
 

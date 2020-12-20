@@ -19,6 +19,7 @@ import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
     private BackendContainer container;
     private Button update;
     private TextView result;
+    private ImageView image;
 
     private Spinner distSpinner;
     private ArrayAdapter<String> distAdapter;
@@ -61,7 +63,7 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
 
         update = view.findViewById( R.id.bSUpdate );
         result = view.findViewById( R.id.tvSResult );
-        ImageView image = view.findViewById( R.id.ivConnected );
+        image = view.findViewById( R.id.ivConnected );
 
         distSpinner = view.findViewById( R.id.spSDistance );
         distList = new ArrayList<>();
@@ -87,19 +89,20 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
         update.setOnClickListener( this::updateClick );
 
         if ( container.getBluetoothHandler().isConnected() ) {
-            update.setVisibility( View.VISIBLE );
-            result.setVisibility( View.INVISIBLE );
-            image.setImageResource( R.drawable.ic_connected );
-
+            updateComponents( View.VISIBLE, View.INVISIBLE, R.drawable.ic_connected );
         } else {
-            update.setVisibility( View.GONE );
-            result.setVisibility( View.GONE );
-            image.setImageResource( R.drawable.ic_not_connected );
+            updateComponents( View.GONE, View.GONE, R.drawable.ic_not_connected );
         }
     }
 
     public void updateClick( View view ) {
         result.setVisibility( View.VISIBLE );
+    }
+
+    private void updateComponents( final int updateVal, final int resultVal, final int icon ) {
+        update.setVisibility( updateVal );
+        result.setVisibility( resultVal );
+        image.setImageResource( icon );
     }
 
     @Override
@@ -113,7 +116,15 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
     }
 
     private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
+        @Override
+        public void onConnectedPeripheral( @NonNull BluetoothPeripheral peripheral ) {
+            updateComponents( View.VISIBLE, View.INVISIBLE, R.drawable.ic_connected );
+        }
 
+        @Override
+        public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
+            updateComponents( View.GONE, View.GONE, R.drawable.ic_not_connected );
+        }
     };
 
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {

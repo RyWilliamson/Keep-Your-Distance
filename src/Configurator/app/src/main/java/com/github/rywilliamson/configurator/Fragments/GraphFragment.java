@@ -17,6 +17,7 @@ import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 import com.welie.blessed.BluetoothCentralCallback;
+import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class GraphFragment extends Fragment implements BluetoothImplementer {
     private ArrayAdapter<String> graphAdapter;
     private List<String> graphList;
     private BackendContainer container;
+
+    private ImageView image;
 
     public GraphFragment() {
         // Required empty public constructor
@@ -50,7 +53,7 @@ public class GraphFragment extends Fragment implements BluetoothImplementer {
     public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
 
-        ImageView image = view.findViewById( R.id.ivConnected );
+        image = view.findViewById( R.id.ivConnected );
 
         graphSpinner = view.findViewById( R.id.spGSelector );
         graphList = new ArrayList<>();
@@ -81,7 +84,15 @@ public class GraphFragment extends Fragment implements BluetoothImplementer {
     }
 
     private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
+        @Override
+        public void onConnectedPeripheral( @NonNull BluetoothPeripheral peripheral ) {
+            image.setImageResource( R.drawable.ic_connected );
+        }
 
+        @Override
+        public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
+            image.setImageResource( R.drawable.ic_not_connected );
+        }
     };
 
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {

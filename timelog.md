@@ -345,3 +345,4 @@
 
 - _0.5 hours_: Fixing small bug on device causing ble notification of null value.
 - _1 hours_: Implementing clear button in device info page.
+- _1 hours_: Implement Graph and Settings BLE callbacks.

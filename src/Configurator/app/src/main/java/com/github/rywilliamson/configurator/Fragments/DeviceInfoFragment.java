@@ -122,7 +122,7 @@ public class DeviceInfoFragment extends Fragment implements BluetoothImplementer
         }
 
         @Override
-        public void onConnectionFailed( BluetoothPeripheral peripheral, int status ) {
+        public void onConnectionFailed( @NonNull BluetoothPeripheral peripheral, int status ) {
             Navigation.findNavController( DeviceInfoFragment.this.getView() ).navigate(
                     DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
         }
