@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
             super.onServicesDiscovered( peripheral );
             Log.d( Keys.GLOBAL_PERIPHERAL, "Discovered " + peripheral.getServices() );
             bt.setupServices( peripheral );
+            bt.sendConfig();
             getCurrentImplementer().getPeripheralCallback().onServicesDiscovered( peripheral );
         }
 

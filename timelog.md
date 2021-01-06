@@ -346,3 +346,16 @@
 - _0.5 hours_: Fixing small bug on device causing ble notification of null value.
 - _1 hours_: Implementing clear button in device info page.
 - _1 hours_: Implement Graph and Settings BLE callbacks.
+
+### 21 Dec 2020
+
+- _0.5 hours_: Setting up profile prefs enum with values.
+- _3 hours_: Begin Implementation of settings on Android side.
+
+### 06 Jan 2021
+
+- _1 hour_: Got profile spinner to work with profile enums and shared preferences.
+- _0.5 hours_: Got distance spinner working similarly.
+- _2 hours_: Trying to get config data to send from Android app to ESP32.
+- _1.5 hours_: Got measured power and environment variable transferring and read correctly.
+- _2 hours_: Dealt with problems converting bytes to float on the ESP32.

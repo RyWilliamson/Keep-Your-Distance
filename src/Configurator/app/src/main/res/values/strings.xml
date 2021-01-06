@@ -37,6 +37,8 @@
     <string name="f_s_profile">Profile</string>
     <string name="f_s_update">Update Device</string>
     <string name="f_s_result_default">ACK or NAK Result</string>
+    <string name="f_s_result_synced">Synced</string>
+    <string name="f_s_result_not_synced">Not Synced</string>
 
     <!-- Graph Fragment -->
     <string name="f_g_choose">Choose Graph</string>

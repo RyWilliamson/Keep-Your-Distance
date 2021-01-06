@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -17,11 +18,15 @@ import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_SERVICE_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONN_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.HEARTBEAT_SERVICE_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.RSSI_CHARACTERISTIC_ID;
@@ -33,8 +38,10 @@ public class BluetoothHandler {
     private BluetoothPeripheral BLEPeripheral;
     private BluetoothGattCharacteristic rssiCharacteristic;
     private BluetoothGattCharacteristic connectionCharacteristic;
+    private BluetoothGattCharacteristic configCharacteristic;
     private final List<BluetoothPeripheral> scannedPeripherals;
     private final SharedPreferences prefs;
+    private Profile.ProfileEnum profile;
     private final HashMap<String, InteractionTimeout> interactionTimeMap;
     private boolean connected;
     private final int SCAN_TIMEOUT = 3000; // Milliseconds
@@ -46,7 +53,7 @@ public class BluetoothHandler {
         scannedPeripherals = new ArrayList<>();
         prefs = activity.getSharedPreferences( Keys.PREFS, Context.MODE_PRIVATE );
         interactionTimeMap = new HashMap<>();
-        setProfilePrefs();
+        this.profile = Profile.getFromPreferences( activity );
     }
 
     public void checkBLEPermissions( Activity activity ) {
@@ -80,6 +87,10 @@ public class BluetoothHandler {
 
     public BluetoothGattCharacteristic getConnectionCharacteristic() {
         return connectionCharacteristic;
+    }
+
+    public BluetoothGattCharacteristic getConfigCharacteristic() {
+        return configCharacteristic;
     }
 
     public void scan( Activity activity ) {
@@ -124,11 +135,21 @@ public class BluetoothHandler {
         interactionTimeMap.clear();
     }
 
+    public void sendConfig() {
+        ByteBuffer packetBuffer = ByteBuffer.allocate( 12 );
+        packetBuffer.putFloat( getDistance() );
+        packetBuffer.putInt( getMeasuredPower() );
+        packetBuffer.putInt( getEnvironmentVar() );
+        boolean written = BLEPeripheral.writeCharacteristic( configCharacteristic, packetBuffer.array(),
+                WRITE_TYPE_DEFAULT );
+    }
+
     public void setupServices( BluetoothPeripheral peripheral ) {
         if ( verifyServices( peripheral ) ) {
             this.rssiCharacteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
             this.connectionCharacteristic = peripheral.getCharacteristic( HEARTBEAT_SERVICE_ID,
                     CONN_CHARACTERISTIC_ID );
+            this.configCharacteristic = peripheral.getCharacteristic( CONFIG_SERVICE_ID, CONFIG_CHARACTERISTIC_ID );
 
             this.BLEPeripheral.setNotify( rssiCharacteristic, true );
         }
@@ -153,9 +174,13 @@ public class BluetoothHandler {
         interactionTimeMap.remove( key );
     }
 
-    public void setProfilePrefs() {
-        prefs.edit().putInt( Keys.MEASURED_POWER, -81 ).apply();
-        prefs.edit().putInt( Keys.ENV_VAR, 3 ).apply();
+    public void setProfile( Activity activity, Profile.ProfileEnum prof ) {
+        profile = prof;
+        Profile.setProfilePreference( activity, profile );
+    }
+
+    public void setDistance( float distance ) {
+        prefs.edit().putFloat( Keys.DISTANCE, distance ).apply();
     }
 
     // Distance in metres
@@ -167,10 +192,18 @@ public class BluetoothHandler {
     }
 
     public int getMeasuredPower() {
-        return prefs.getInt( Keys.MEASURED_POWER, -81 );
+        return profile.getMeasuredPower();
     }
 
     public int getEnvironmentVar() {
-        return prefs.getInt( Keys.ENV_VAR, 3 );
+        return profile.getEnvironmentVar();
+    }
+
+    public float getDistance() {
+        return prefs.getFloat( Keys.DISTANCE, (float) 1.0 );
+    }
+
+    public Profile.ProfileEnum getProfile() {
+        return profile;
     }
 }

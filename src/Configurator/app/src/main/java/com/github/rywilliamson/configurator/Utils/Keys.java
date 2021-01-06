@@ -5,8 +5,8 @@ public class Keys {
     // Shared Preference Keys
     public static final String PREFS = "Prefs";
     public static final String PREV_MAC = "Prev Mac";
-    public static final String MEASURED_POWER = "Measured Power";
-    public static final String ENV_VAR = "Environment Var";
+    public static final String PROFILE_NAME = "Profile Name";
+    public static final String DISTANCE = "Distance";
 
     // Permissions
     public static final int REQUEST_ENABLE_BT = 1;

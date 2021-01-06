@@ -9,7 +9,9 @@
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
 int scanTime = 1;
-float measuredPower = -81.0;
+int measured_power = -81;
+int environment = 3;
+float distance = 1.5;
 BLEScan *pBLEScanner;
 BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
@@ -41,7 +43,7 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
             //screen.drawString(0, 2, lineData.c_str());
             screen.draw2x2String(0, 4, lineData.c_str());
 
-            lineData = "D: " + String(calculateDistance(rssi, measuredPower, 3), 3);
+            lineData = "D: " + String(calculateDistance(rssi, measured_power, environment), 3);
             screen.draw2x2String(0, 6, lineData.c_str());
             foundESP = true;
         }
@@ -75,12 +77,26 @@ class CharacteristicCallbacks: public BLECharacteristicCallbacks {
     }
 };
 
+class ConfigCallbacks: public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic* characteristic) {
+        // Should be a 12 byte array, first 4 bytes are distance float, next 4 is measured power, final 4 is environment variable
+        uint8_t* vals = characteristic->getData();
+        int distance_bytes = (*(vals + 0) << 24) | (*(vals+1) << 16) | (*(vals+2) << 8) | *(vals + 3);
+        memcpy(&distance, &distance_bytes, 4);
+        measured_power = (*(vals+4) << 24) | (*(vals+5) << 16) | (*(vals+6) << 8) | *(vals+7);
+        environment = (*(vals+8) << 24) | (*(vals+9) << 16) | (*(vals+10) << 8) | *(vals+11);
+        Serial.println("Config Data is: " + String(distance));
+        Serial.println("Config Data is: " + String(measured_power));
+        Serial.println("Config Data is: " + String(environment));
+    }
+};
+
 void setup() {
     Serial.begin(115200);
     screen.begin();
     screen.setFont(u8x8_font_chroma48medium8_r);
 
-    rssiCharacteristic = constructBLEServer("ESP32", new ServerCallbacks, new BLE2902(), new CharacteristicCallbacks, new RSSICallbacks);
+    rssiCharacteristic = constructBLEServer("ESP32", new ServerCallbacks, new BLE2902(), new CharacteristicCallbacks, new RSSICallbacks, new ConfigCallbacks);
     pBLEAdvertiser = startBLEAdvertising();
     pBLEScanner = startBLEScanning(new AdvertisedDeviceCallbacks);
 }

@@ -70,7 +70,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
         macAdapter.setDropDownViewResource( R.layout.mac_address_item );
         macSpinner.setAdapter( macAdapter );
 
-        prevMac = (TextView) view.findViewById( R.id.tvDcMacText );
+        prevMac = view.findViewById( R.id.tvDcMacText );
         prevMac.setText( bt.getPrevMac() );
 
         view.findViewById( R.id.bDcConnect ).setOnClickListener( this::connectClick );
