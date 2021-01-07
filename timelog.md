@@ -359,3 +359,9 @@
 - _2 hours_: Trying to get config data to send from Android app to ESP32.
 - _1.5 hours_: Got measured power and environment variable transferring and read correctly.
 - _2 hours_: Dealt with problems converting bytes to float on the ESP32.
+- _1.5 hours_: Weird issue with not having multiple notifications be able to work concurrently.
+
+### 07 Jan 2021
+
+- _0.5 hours_: Figured out the above issue was to do with the Arduino code not correctly setting descriptors as I was trying to reuse the same descriptor object rather than creating new ones through the BLE2902 template.
+- _0.5 hours_: Got the settings screen to display if it is Synced or Not Synced.

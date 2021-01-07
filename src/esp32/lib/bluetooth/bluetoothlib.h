@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include <BLEUtils.h>
 
-BLECharacteristic * constructBLEServer(String name, BLEServerCallbacks* servercb, BLEDescriptor* descriptor, 
-    BLECharacteristicCallbacks* callbacks, BLECharacteristicCallbacks* rssicb, BLECharacteristicCallbacks* configcb);
+void constructBLEServer(String name, BLEServerCallbacks* servercb, BLECharacteristicCallbacks* callbacks, 
+    BLECharacteristicCallbacks* rssicb, BLECharacteristicCallbacks* configcb);
+BLECharacteristic * getRSSICharacteristic();
+BLECharacteristic * getConfigACKCharacteristic();
 BLEAdvertising * startBLEAdvertising();
 BLEAdvertising * startJustESPAdvertising();
 BLEScan * startBLEScanning(BLEAdvertisedDeviceCallbacks* callbacks);

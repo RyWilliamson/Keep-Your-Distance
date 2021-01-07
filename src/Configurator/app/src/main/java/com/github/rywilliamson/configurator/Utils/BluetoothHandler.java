@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_ACK_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_SERVICE_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONN_CHARACTERISTIC_ID;
@@ -39,11 +40,13 @@ public class BluetoothHandler {
     private BluetoothGattCharacteristic rssiCharacteristic;
     private BluetoothGattCharacteristic connectionCharacteristic;
     private BluetoothGattCharacteristic configCharacteristic;
+    private BluetoothGattCharacteristic configACKCharacteristic;
     private final List<BluetoothPeripheral> scannedPeripherals;
     private final SharedPreferences prefs;
     private Profile.ProfileEnum profile;
     private final HashMap<String, InteractionTimeout> interactionTimeMap;
     private boolean connected;
+    private boolean synced;
     private final int SCAN_TIMEOUT = 3000; // Milliseconds
     private final int INTERACTION_TIMEOUT = 3000; // Milliseconds
 
@@ -93,6 +96,10 @@ public class BluetoothHandler {
         return configCharacteristic;
     }
 
+    public BluetoothGattCharacteristic getConfigACKCharacteristic() {
+        return configACKCharacteristic;
+    }
+
     public void scan( Activity activity ) {
         checkBLEPermissions( activity );
         scannedPeripherals.clear();
@@ -120,6 +127,7 @@ public class BluetoothHandler {
 
     public void disconnect() {
         this.BLEPeripheral.setNotify( rssiCharacteristic, false );
+        this.BLEPeripheral.setNotify( configACKCharacteristic, false );
         central.cancelConnection( BLEPeripheral );
     }
 
@@ -127,6 +135,8 @@ public class BluetoothHandler {
         this.BLEPeripheral = null;
         this.rssiCharacteristic = null;
         this.connectionCharacteristic = null;
+        this.configCharacteristic = null;
+        this.configACKCharacteristic = null;
         this.connected = false;
         clearMap();
     }
@@ -142,6 +152,7 @@ public class BluetoothHandler {
         packetBuffer.putInt( getEnvironmentVar() );
         boolean written = BLEPeripheral.writeCharacteristic( configCharacteristic, packetBuffer.array(),
                 WRITE_TYPE_DEFAULT );
+        setSynced( written );
     }
 
     public void setupServices( BluetoothPeripheral peripheral ) {
@@ -150,8 +161,11 @@ public class BluetoothHandler {
             this.connectionCharacteristic = peripheral.getCharacteristic( HEARTBEAT_SERVICE_ID,
                     CONN_CHARACTERISTIC_ID );
             this.configCharacteristic = peripheral.getCharacteristic( CONFIG_SERVICE_ID, CONFIG_CHARACTERISTIC_ID );
+            this.configACKCharacteristic = peripheral.getCharacteristic( CONFIG_SERVICE_ID,
+                    CONFIG_ACK_CHARACTERISTIC_ID );
 
             this.BLEPeripheral.setNotify( rssiCharacteristic, true );
+            this.BLEPeripheral.setNotify( configACKCharacteristic, true );
         }
     }
 
@@ -205,5 +219,13 @@ public class BluetoothHandler {
 
     public Profile.ProfileEnum getProfile() {
         return profile;
+    }
+
+    public boolean isSynced() {
+        return synced;
+    }
+
+    public void setSynced( boolean synced ) {
+        this.synced = synced;
     }
 }

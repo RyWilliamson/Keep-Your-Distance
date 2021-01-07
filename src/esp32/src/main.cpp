@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <U8x8lib.h>
 #include <BLEAdvertisedDevice.h>
-#include <BLE2902.h>
 
 #include "bluetoothlib.h"
 #include "common.h"
@@ -21,6 +20,7 @@ String mac;
 int nullValue = 99;
 
 BLECharacteristic *rssiCharacteristic;
+BLECharacteristic *configACKCharacteristic;
 
 float calculateDistance(int rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / (10 * environment));
@@ -88,6 +88,9 @@ class ConfigCallbacks: public BLECharacteristicCallbacks {
         Serial.println("Config Data is: " + String(distance));
         Serial.println("Config Data is: " + String(measured_power));
         Serial.println("Config Data is: " + String(environment));
+
+        configACKCharacteristic->setValue("ACK");
+        configACKCharacteristic->notify();
     }
 };
 
@@ -96,7 +99,9 @@ void setup() {
     screen.begin();
     screen.setFont(u8x8_font_chroma48medium8_r);
 
-    rssiCharacteristic = constructBLEServer("ESP32", new ServerCallbacks, new BLE2902(), new CharacteristicCallbacks, new RSSICallbacks, new ConfigCallbacks);
+    constructBLEServer("ESP32", new ServerCallbacks, new CharacteristicCallbacks, new RSSICallbacks, new ConfigCallbacks);
+    rssiCharacteristic = getRSSICharacteristic();
+    configACKCharacteristic = getConfigACKCharacteristic();
     pBLEAdvertiser = startBLEAdvertising();
     pBLEScanner = startBLEScanning(new AdvertisedDeviceCallbacks);
 }

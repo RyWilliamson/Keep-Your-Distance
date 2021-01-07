@@ -2,6 +2,7 @@ package com.github.rywilliamson.configurator.Fragments;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,6 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
     private ArrayAdapter<String> profileAdapter;
     private List<String> profileList;
     private boolean profileInitFlag;
-
-    private boolean synced = true;
 
     private BluetoothHandler bt;
 
@@ -138,15 +137,20 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
 
         update.setOnClickListener( this::updateClick );
 
+        if (bt.isSynced()) {
+            alertSynced();
+        } else {
+            alertNotSynced();
+        }
+
         if ( container.getBluetoothHandler().isConnected() ) {
-            updateComponents( View.VISIBLE, View.INVISIBLE, R.drawable.ic_connected );
+            updateComponents( View.VISIBLE, View.VISIBLE, R.drawable.ic_connected );
         } else {
             updateComponents( View.GONE, View.GONE, R.drawable.ic_not_connected );
         }
     }
 
     public void updateClick( View view ) {
-        // result.setVisibility( View.VISIBLE );
         bt.sendConfig();
     }
 
@@ -157,17 +161,13 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
     }
 
     private void alertNotSynced() {
-        if (synced) {
-            synced = false;
-            result.setText(R.string.f_s_result_not_synced);
-        }
+        bt.setSynced( false );
+        result.setText(R.string.f_s_result_not_synced);
     }
 
     private void alertSynced() {
-        if (!synced) {
-            synced = true;
-            result.setText(R.string.f_s_result_not_synced);
-        }
+        //bt.setSynced( true ); Don't need to setSynced here since it is done in sendConfig within bthandler.
+        result.setText(R.string.f_s_result_synced);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
         @Override
         public void onCharacteristicUpdate( @NonNull BluetoothPeripheral peripheral, @NonNull byte[] value,
                 @NonNull BluetoothGattCharacteristic characteristic, int status ) {
-            if (characteristic == bt.getConfigCharacteristic()) {
+            if (characteristic == bt.getConfigACKCharacteristic()) {
                 alertSynced();
             }
         }
