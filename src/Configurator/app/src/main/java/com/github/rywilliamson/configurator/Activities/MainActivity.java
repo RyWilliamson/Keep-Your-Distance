@@ -183,7 +183,13 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
 
         // Database Calls
         dbViewModel.insertScanned( new Device( mac, mac, 0 ) );
-        Date startTime = bt.insertStartTimeAndGet( mac, peripheral.getAddress(), endTime );
+        Date startTime;
+        if (isBulk) {
+            startTime = bt.insertBulkStartTimeAndGet( mac, peripheral.getAddress(), endTime );
+        } else {
+            startTime = bt.insertStartTimeAndGet( mac, peripheral.getAddress(), endTime );
+        }
+
         dbViewModel.insert(
                 new RSSI( mac, peripheral.getAddress(), startTime, endTime, rssi,
                         bt.calculateDistance( rssi ),

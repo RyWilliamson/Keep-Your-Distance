@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -48,7 +47,8 @@ public class BluetoothHandler {
     private final List<BluetoothPeripheral> scannedPeripherals;
     private final SharedPreferences prefs;
     private Profile.ProfileEnum profile;
-    private final HashMap<String, InteractionTimeout> interactionTimeMap;
+    private final HashMap<String, TimeoutData> interactionTimeMap;
+    private final HashMap<String, TimeoutData> bulkTimeMap;
     private boolean connected;
     private boolean synced;
     private final int SCAN_TIMEOUT = 3000; // Milliseconds
@@ -60,6 +60,7 @@ public class BluetoothHandler {
         scannedPeripherals = new ArrayList<>();
         prefs = activity.getSharedPreferences( Keys.PREFS, Context.MODE_PRIVATE );
         interactionTimeMap = new HashMap<>();
+        bulkTimeMap = new HashMap<>();
         this.profile = Profile.getFromPreferences( activity );
     }
 
@@ -157,6 +158,7 @@ public class BluetoothHandler {
 
     private void clearMap() {
         interactionTimeMap.clear();
+        bulkTimeMap.clear();
     }
 
     public void sendConfig() {
@@ -169,7 +171,7 @@ public class BluetoothHandler {
         setSynced( written );
     }
 
-    public void sendBulkACK(String message) {
+    public void sendBulkACK( String message ) {
         BLEPeripheral.writeCharacteristic( bulkACKCharacteristic, message.getBytes(), WRITE_TYPE_DEFAULT );
     }
 
@@ -196,13 +198,22 @@ public class BluetoothHandler {
     }
 
     public Date insertStartTimeAndGet( String sender, String receiver, Date startTime ) {
+        return insertStartTimeHelper( interactionTimeMap, sender, receiver, startTime );
+    }
+
+    public Date insertBulkStartTimeAndGet( String sender, String receiver, Date startTime ) {
+        return insertStartTimeHelper( bulkTimeMap, sender, receiver, startTime );
+    }
+
+    private Date insertStartTimeHelper( HashMap<String, TimeoutData> map, String sender, String receiver,
+            Date startTime ) {
         String key = sender + receiver;
-        if ( !interactionTimeMap.containsKey( key ) ) {
-            interactionTimeMap.put( key, new InteractionTimeout( this, key, startTime, INTERACTION_TIMEOUT ) );
+        if ( !map.containsKey( key ) ) {
+            map.put( key, new TimeoutData( this, startTime, startTime ) );
         } else {
-            interactionTimeMap.get( key ).setLapsed( false );
+            map.get( key ).updateTime( startTime );
         }
-        return interactionTimeMap.get( key ).getStartTime();
+        return map.get( key ).getStartTime();
     }
 
     public void removeStartTime( String key ) {

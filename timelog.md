@@ -380,3 +380,4 @@
 - _2.5 hours_: Working to fully implement bulk transfer.
 - _1.5 hours_: Bulk transfer is in reverse order - implementing a circular queue to solve this.
 - _1 hour_: Implemented circular queue.
+- _1 hour_: Rewrote timeout code in a completely new way so that it can work with bulk rssi transfer - it is also more efficient overall.
