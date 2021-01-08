@@ -379,3 +379,4 @@
 - _0.5 hours_: Refactored the RSSI packet receiving code on the Android side.
 - _2.5 hours_: Working to fully implement bulk transfer.
 - _1.5 hours_: Bulk transfer is in reverse order - implementing a circular queue to solve this.
+- _1 hour_: Implemented circular queue.

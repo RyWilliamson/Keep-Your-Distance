@@ -21,11 +21,12 @@ BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
 
 // RSSI Data
-#define MAXLOG 100
+#define MAXLOG 600 // 10 minutes worth at 1 interaction per second.
 uint8_t rssiLog[MAXLOG][17] = {};
 //int logIndex = -1;
 int frontLogIndex = -1; // Removes from here
 int rearLogIndex = -1; // Adds to here
+bool logWasEmpty;
 int rssi = 0;
 String mac;
 int nullValue = 99; // This was for testing purposes - can probably be removed.
@@ -39,11 +40,6 @@ BLECharacteristic *configACKCharacteristic;
 float calculateDistance(int rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / (10 * environment));
 }
-
-// String combineMacRSSI(int rssi, String mac) {
-//     mac.replace(":", "");
-//     return mac + String(",") + String(rssi);
-// }
 
 void addToLog(uint8_t* packet) {
     if ((frontLogIndex == 0 && rearLogIndex == MAXLOG - 1) ||
@@ -59,10 +55,29 @@ void addToLog(uint8_t* packet) {
         rearLogIndex++;
     }
     memcpy(rssiLog[rearLogIndex], packet, 17);
+    Serial.println("Rear Log Index is at " + String(rearLogIndex));
 }
 
 void popFromLog(uint8_t* destination) {
+    if (frontLogIndex == -1) {
+        Serial.println("Log Empty");
+        logWasEmpty = true;
+        return;
+    }
+    logWasEmpty = false;
 
+    memcpy(destination, rssiLog[frontLogIndex], 17);
+    memset(rssiLog[frontLogIndex], 0, 17);
+
+    if (frontLogIndex == rearLogIndex) {
+        frontLogIndex = -1;
+        rearLogIndex = -1;
+    } else if (frontLogIndex == MAXLOG - 1) {
+        frontLogIndex = 0;
+    } else {
+        frontLogIndex++;
+    }
+    Serial.println("Front Log Index is at " + String(frontLogIndex));
 }
 
 void setupPacket(uint8_t* packet, int rssi, String mac) {
@@ -88,22 +103,20 @@ void setupBulkPacket(int rssi, String mac, unsigned long timestamp) {
 }
 
 void sendBulkPacket() {
-    // Step 1 - if logIndex is 0 return
-    // Step 2 - send packet over bulkRSSICharacteristic from rssiLog at position logIndex
-    // Step 3 - clear memory at that position in the rssiLog
-    // Step 4 - decrement logIndex
-    if (logIndex >= 0) {
-        Serial.println("Transfer index " + String(logIndex));
+    // Step 1 - if log was not empty grab the value from circular queue.
+    // Step 2 - Update time offset so the app knows when the interaction occurred.
+    // Step 3 - send packet over bulkRSSICharacteristic from rssiLog at position logIndex
+    // Step 4 - clear memory at that position in the rssiLog
+    // Step 5 - decrement logIndex
+    uint8_t packet[17] = {};
+    popFromLog(packet);
+    if (!logWasEmpty) {
         unsigned long newTime;
-        memcpy(&newTime, &rssiLog[logIndex][13], 4);
+        memcpy(&newTime, &packet[13], 4);
         newTime = millis() - newTime;
-        memcpy(&rssiLog[logIndex][13], &newTime, 4);
-        bulkCharacteristic->setValue(rssiLog[logIndex], 17);
+        memcpy(&packet[13], &newTime, 4);
+        bulkCharacteristic->setValue(packet, 17);
         bulkCharacteristic->notify();
-        memset(rssiLog[logIndex], 0, 17);
-        logIndex--;
-    } else {
-        Serial.println("Log Empty");
     }
 }
 
@@ -119,13 +132,7 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
                 rssiCharacteristic->setValue(packet, 13);
                 rssiCharacteristic->notify();
             } else {
-                if (logIndex+1 == MAXLOG) {
-                    
-                } else {
-                    logIndex++;
-                    setupBulkPacket(rssi, mac, millis());
-                    Serial.println("Log Index is at " + String(logIndex));
-                }
+                setupBulkPacket(rssi, mac, millis());
             }
             String lineData = "ESP: " + String(rssi);
             //screen.drawString(0, 2, lineData.c_str());
