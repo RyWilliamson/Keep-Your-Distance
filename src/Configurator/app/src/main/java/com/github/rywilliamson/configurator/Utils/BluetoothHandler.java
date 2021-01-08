@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.bluetooth.BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.BULK_ACK_CHARACTERISTIC_ID;
+import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.BULK_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_ACK_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_CHARACTERISTIC_ID;
 import static com.github.rywilliamson.configurator.Utils.CustomCharacteristics.CONFIG_SERVICE_ID;
@@ -38,6 +40,8 @@ public class BluetoothHandler {
     private final BluetoothCentral central;
     private BluetoothPeripheral BLEPeripheral;
     private BluetoothGattCharacteristic rssiCharacteristic;
+    private BluetoothGattCharacteristic bulkCharacteristic;
+    private BluetoothGattCharacteristic bulkACKCharacteristic;
     private BluetoothGattCharacteristic connectionCharacteristic;
     private BluetoothGattCharacteristic configCharacteristic;
     private BluetoothGattCharacteristic configACKCharacteristic;
@@ -88,6 +92,14 @@ public class BluetoothHandler {
         return rssiCharacteristic;
     }
 
+    public BluetoothGattCharacteristic getBulkCharacteristic() {
+        return bulkCharacteristic;
+    }
+
+    public BluetoothGattCharacteristic getBulkACKCharacteristic() {
+        return bulkACKCharacteristic;
+    }
+
     public BluetoothGattCharacteristic getConnectionCharacteristic() {
         return connectionCharacteristic;
     }
@@ -134,6 +146,8 @@ public class BluetoothHandler {
     public void clearForDisconnect() {
         this.BLEPeripheral = null;
         this.rssiCharacteristic = null;
+        this.bulkCharacteristic = null;
+        this.bulkACKCharacteristic = null;
         this.connectionCharacteristic = null;
         this.configCharacteristic = null;
         this.configACKCharacteristic = null;
@@ -155,9 +169,15 @@ public class BluetoothHandler {
         setSynced( written );
     }
 
+    public void sendBulkACK(String message) {
+        BLEPeripheral.writeCharacteristic( bulkACKCharacteristic, message.getBytes(), WRITE_TYPE_DEFAULT );
+    }
+
     public void setupServices( BluetoothPeripheral peripheral ) {
         if ( verifyServices( peripheral ) ) {
             this.rssiCharacteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, RSSI_CHARACTERISTIC_ID );
+            this.bulkCharacteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, BULK_CHARACTERISTIC_ID );
+            this.bulkACKCharacteristic = peripheral.getCharacteristic( RSSI_SERVICE_ID, BULK_ACK_CHARACTERISTIC_ID );
             this.connectionCharacteristic = peripheral.getCharacteristic( HEARTBEAT_SERVICE_ID,
                     CONN_CHARACTERISTIC_ID );
             this.configCharacteristic = peripheral.getCharacteristic( CONFIG_SERVICE_ID, CONFIG_CHARACTERISTIC_ID );
@@ -165,6 +185,7 @@ public class BluetoothHandler {
                     CONFIG_ACK_CHARACTERISTIC_ID );
 
             this.BLEPeripheral.setNotify( rssiCharacteristic, true );
+            this.BLEPeripheral.setNotify( bulkCharacteristic, true );
             this.BLEPeripheral.setNotify( configACKCharacteristic, true );
         }
     }

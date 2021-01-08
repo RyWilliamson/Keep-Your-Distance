@@ -166,7 +166,7 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
     }
 
     private void alertSynced() {
-        //bt.setSynced( true ); Don't need to setSynced here since it is done in sendConfig within bthandler.
+        // Don't need to setSynced here since it is done in sendConfig within bthandler.
         result.setText(R.string.f_s_result_synced);
     }
 
@@ -199,6 +199,12 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
             if (characteristic == bt.getConfigACKCharacteristic()) {
                 alertSynced();
             }
+        }
+
+        @Override
+        public void onCharacteristicWrite( BluetoothPeripheral peripheral, byte[] value,
+                BluetoothGattCharacteristic characteristic, int status ) {
+            super.onCharacteristicWrite( peripheral, value, characteristic, status );
         }
     };
 }

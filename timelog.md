@@ -365,3 +365,17 @@
 
 - _0.5 hours_: Figured out the above issue was to do with the Arduino code not correctly setting descriptors as I was trying to reuse the same descriptor object rather than creating new ones through the BLE2902 template.
 - _0.5 hours_: Got the settings screen to display if it is Synced or Not Synced.
+- _1 hour_: Refactoring arduino code.
+- _0.5 hours_: Reading up on link layer of BLE, realised that implementing my own ACKs us not necessary as this is handled in the link layer - similar for data redundancy checks.
+- _0.5 hours_: Trying to understand write responses on the arduino side - these are working on Android side from the Blessed library.
+- _1.5 hours_: Started implementing bulk rssi transfer - still do need ack here since arduino ble library doesn't expose a callback that works in response to the acknowledgement.
+- _1 hour_: Research on how to handle the timestamps for the bulk rssi transfer as I can't rely on the Android app like I do for regular transfers.
+
+### 08 Jan 2021
+
+- _0.5 hours_: More research on timing solutions for esp32.
+- _2.5 hours_: Rewriting RSSI packet on Arduino side in preparation for adding bulk rssi storage and transfer.
+- _0.5 hours_: Writing the bulk packet transfer on Arduino side.
+- _0.5 hours_: Refactored the RSSI packet receiving code on the Android side.
+- _2.5 hours_: Working to fully implement bulk transfer.
+- _1.5 hours_: Bulk transfer is in reverse order - implementing a circular queue to solve this.

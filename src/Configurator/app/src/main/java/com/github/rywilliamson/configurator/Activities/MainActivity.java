@@ -15,7 +15,6 @@ import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.Entity.Device;
-import com.github.rywilliamson.configurator.Database.Entity.Interaction;
 import com.github.rywilliamson.configurator.Database.Entity.RSSI;
 import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
@@ -28,6 +27,8 @@ import com.welie.blessed.BluetoothCentralCallback;
 import com.welie.blessed.BluetoothPeripheral;
 import com.welie.blessed.BluetoothPeripheralCallback;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
             Log.d( Keys.GLOBAL_PERIPHERAL, "Discovered " + peripheral.getServices() );
             bt.setupServices( peripheral );
             bt.sendConfig();
+            bt.sendBulkACK( "Init" );
             getCurrentImplementer().getPeripheralCallback().onServicesDiscovered( peripheral );
         }
 
@@ -133,41 +135,61 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
         public void onCharacteristicUpdate( @NonNull BluetoothPeripheral peripheral, @NonNull byte[] value,
                 @NonNull BluetoothGattCharacteristic characteristic, int status ) {
             super.onCharacteristicUpdate( peripheral, value, characteristic, status );
-            if (characteristic == bt.getRssiCharacteristic()) {
-                String[] data = new String( value, StandardCharsets.UTF_8 ).split( "," );
-                Log.d( Keys.GLOBAL_PERIPHERAL, "Received value: " + Arrays.toString( data ) );
-                Date endTime = Calendar.getInstance().getTime();
-
-                if ( data.length != 2 ) {
-                    // Do not return ACK result
-                    return;
-                }
-
-                // TODO return ACK result to device.
-
-                // Process mac address to add : characters back in.
-                if ( data[0].length() != 12 ) {
-                    // Do not return ACK result
-                    return;
-                }
-                data[0] = data[0].replaceAll( "(.{2})", "$1:" );
-                data[0] = data[0].substring( 0, data[0].length() - 1 );
-                data[0] = data[0].toUpperCase();
-
-                // Database Calls
-                dbViewModel.insertScanned( new Device( data[0], data[0], 0 ) );
-                Date startTime = bt.insertStartTimeAndGet( data[0], peripheral.getAddress(), endTime );
-                int rssi = Integer.parseInt( data[1] );
-                dbViewModel.insert(
-                        new RSSI( data[0], peripheral.getAddress(), startTime, endTime, rssi,
-                                bt.calculateDistance( rssi ),
-                                bt.getMeasuredPower(), bt.getEnvironmentVar() ), true );
+            if ( characteristic == bt.getRssiCharacteristic() ) {
+                handleIncomingRSSI( value, peripheral );
+            } else if ( characteristic == bt.getBulkCharacteristic() ) {
+                handleBulkRSSI( value, peripheral );
             }
 
             getCurrentImplementer().getPeripheralCallback().onCharacteristicUpdate( peripheral, value, characteristic,
                     status );
         }
     };
+
+    private void handleIncomingRSSI( @NonNull byte[] value, @NonNull BluetoothPeripheral peripheral ) {
+        if ( value.length != 13 ) {
+            Log.d( Keys.GLOBAL_PERIPHERAL, "Incorrect packet length " + value.length );
+            return;
+        }
+        insertRSSI( value, peripheral, false );
+
+    }
+
+    private void handleBulkRSSI( @NonNull byte[] value, @NonNull BluetoothPeripheral peripheral ) {
+        if ( value.length != 17 ) {
+            Log.d( Keys.GLOBAL_PERIPHERAL, "Incorrect bulk packet length " + value.length );
+            return;
+        }
+        insertRSSI( value, peripheral, true );
+        bt.sendBulkACK( "ACK" );
+    }
+
+    private void insertRSSI( byte[] value, BluetoothPeripheral peripheral, boolean isBulk ) {
+        String mac = new String( Arrays.copyOfRange( value, 0, 12 ), StandardCharsets.UTF_8 );
+        int rssi = value[12];
+        Date endTime = Calendar.getInstance().getTime();
+        if ( isBulk ) {
+            ByteBuffer buffer = ByteBuffer.allocate( 4 ).order( ByteOrder.LITTLE_ENDIAN ).put( value, 13, 4 );
+            buffer.rewind();
+            long offset = buffer.getInt();
+            endTime = new Date( endTime.getTime() - offset );
+        }
+
+        Log.d( Keys.GLOBAL_PERIPHERAL, "Received value: " + mac + " " + rssi + " " + endTime );
+
+        mac = mac.replaceAll( "(.{2})", "$1:" );
+        mac = mac.substring( 0, mac.length() - 1 );
+        mac = mac.toUpperCase();
+
+        // Database Calls
+        dbViewModel.insertScanned( new Device( mac, mac, 0 ) );
+        Date startTime = bt.insertStartTimeAndGet( mac, peripheral.getAddress(), endTime );
+        dbViewModel.insert(
+                new RSSI( mac, peripheral.getAddress(), startTime, endTime, rssi,
+                        bt.calculateDistance( rssi ),
+                        bt.getMeasuredPower(), bt.getEnvironmentVar() ), true );
+
+    }
 
     private BluetoothImplementer getCurrentImplementer() {
         return (BluetoothImplementer) getSupportFragmentManager().findFragmentById(
