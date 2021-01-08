@@ -13,11 +13,9 @@ public class CustomCharacteristics {
 
     // Heartbeat Characteristics
     public static final UUID CONN_CHARACTERISTIC_ID = UUID.fromString( "beb5483e-36e1-4688-b7f5-ea07361b26a8" );
-    public static final UUID PING_CHARACTERISTIC_ID = UUID.fromString( "f1155870-fddd-4db6-b8e0-d395ac8d0ecd" );
 
     // RSSI Characteristics
     public static final UUID RSSI_CHARACTERISTIC_ID = UUID.fromString( "3f237eb3-99b4-4bbd-9475-f2e7b39ac899" );
-    public static final UUID RSSI_ACK_CHARACTERISTIC_ID = UUID.fromString( "e8cca30a-e4bf-4cf6-96f9-23b77c61e153" );
     public static final UUID BULK_CHARACTERISTIC_ID = UUID.fromString( "930b4bb6-42b0-4be9-9272-04662bfce45a" );
     public static final UUID BULK_ACK_CHARACTERISTIC_ID = UUID.fromString( "b017e190-8d1e-4438-b33a-0d584bac7523" );
 
