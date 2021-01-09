@@ -169,6 +169,7 @@ class ConfigCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic* characteristic) {
         // Should be a 12 byte array, first 4 bytes are distance float, next 4 is measured power, final 4 is environment variable
         uint8_t* vals = characteristic->getData();
+        printByteArrayAsHex(vals, 12);
         int distance_bytes = (*(vals + 0) << 24) | (*(vals+1) << 16) | (*(vals+2) << 8) | *(vals + 3);
         memcpy(&distance, &distance_bytes, 4);
         measured_power = (*(vals+4) << 24) | (*(vals+5) << 16) | (*(vals+6) << 8) | *(vals+7);

@@ -381,3 +381,8 @@
 - _1.5 hours_: Bulk transfer is in reverse order - implementing a circular queue to solve this.
 - _1 hour_: Implemented circular queue.
 - _1 hour_: Rewrote timeout code in a completely new way so that it can work with bulk rssi transfer - it is also more efficient overall.
+- _2 hours_: Updated callback design spec and diagram, also started creating some packet diagrams.
+
+### 09 Jan 2021
+
+- _1.5 hours_: Final packet diagram - config packet - also implemented a function on device common library to print byte array as hex string.
