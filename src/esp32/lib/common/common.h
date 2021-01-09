@@ -3,6 +3,8 @@
 
 void clearLine(U8X8_SSD1306_128X64_NONAME_SW_I2C *screen, int line);
 void clear2x2Line(U8X8_SSD1306_128X64_NONAME_SW_I2C *screen, int line);
+void notification(U8X8_SSD1306_128X64_NONAME_SW_I2C *screen, bool state);
+void setupTile();
 
 void printByteArrayAsHex(uint8_t* arr, int length);
 

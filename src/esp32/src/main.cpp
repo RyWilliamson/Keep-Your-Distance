@@ -8,10 +8,11 @@
 // Screen
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
-// Config Data
+// Config Data Defaults
 int measured_power = -81;
 int environment = 3;
 float distance = 1.5;
+int target_rssi = -86;
 
 // BLE Data
 int scanTime = 1;
@@ -23,15 +24,11 @@ bool foundESP = false;
 // RSSI Data
 #define MAXLOG 600 // 10 minutes worth at 1 interaction per second.
 uint8_t rssiLog[MAXLOG][17] = {};
-//int logIndex = -1;
 int frontLogIndex = -1; // Removes from here
 int rearLogIndex = -1; // Adds to here
 bool logWasEmpty;
 int rssi = 0;
 String mac;
-int nullValue = 99; // This was for testing purposes - can probably be removed.
-
-
 
 BLECharacteristic *rssiCharacteristic;
 BLECharacteristic *bulkCharacteristic;
@@ -39,6 +36,14 @@ BLECharacteristic *configACKCharacteristic;
 
 float calculateDistance(int rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / (10 * environment));
+}
+
+int calculateTargetRSSI(float distance, float measuredPower, int environment) {
+    return measuredPower - 10 * environment * log10f(distance);
+}
+
+int logLength() {
+    return abs(frontLogIndex - rearLogIndex);
 }
 
 void addToLog(uint8_t* packet) {
@@ -56,6 +61,7 @@ void addToLog(uint8_t* packet) {
     }
     memcpy(rssiLog[rearLogIndex], packet, 17);
     Serial.println("Rear Log Index is at " + String(rearLogIndex));
+    screen.draw2x2String(0, 0, String(logLength()).c_str());
 }
 
 void popFromLog(uint8_t* destination) {
@@ -78,6 +84,7 @@ void popFromLog(uint8_t* destination) {
         frontLogIndex++;
     }
     Serial.println("Front Log Index is at " + String(frontLogIndex));
+    screen.draw2x2String(0, 0, String(logLength()).c_str());
 }
 
 void setupPacket(uint8_t* packet, int rssi, String mac) {
@@ -98,7 +105,6 @@ void setupBulkPacket(int rssi, String mac, unsigned long timestamp) {
     memcpy(&data_arr, mac.c_str(), 12);
     data_arr[12] = rssi_byte;
     memcpy(&data_arr[13], &timestamp, 4);
-    //memcpy(packet, &data_arr, 17);
     addToLog(data_arr);
 }
 
@@ -134,12 +140,13 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
             } else {
                 setupBulkPacket(rssi, mac, millis());
             }
-            String lineData = "ESP: " + String(rssi);
-            //screen.drawString(0, 2, lineData.c_str());
-            screen.draw2x2String(0, 4, lineData.c_str());
+            
+            if (rssi >= target_rssi) {
+                notification(&screen, true);
+            } else {
+                notification(&screen, false);
+            }
 
-            lineData = "D: " + String(calculateDistance(rssi, measured_power, environment), 3);
-            screen.draw2x2String(0, 6, lineData.c_str());
             foundESP = true;
         }
     }
@@ -174,9 +181,8 @@ class ConfigCallbacks: public BLECharacteristicCallbacks {
         memcpy(&distance, &distance_bytes, 4);
         measured_power = (*(vals+4) << 24) | (*(vals+5) << 16) | (*(vals+6) << 8) | *(vals+7);
         environment = (*(vals+8) << 24) | (*(vals+9) << 16) | (*(vals+10) << 8) | *(vals+11);
-        Serial.println("Config Data is: " + String(distance));
-        Serial.println("Config Data is: " + String(measured_power));
-        Serial.println("Config Data is: " + String(environment));
+        target_rssi = calculateTargetRSSI(distance, measured_power, environment);
+        Serial.println("Config Data is: " + String(distance) + " " + String(measured_power) + " " + String(environment) + " " + String(target_rssi));
 
         configACKCharacteristic->setValue("ACK");
         configACKCharacteristic->notify();
@@ -199,6 +205,8 @@ void setup() {
     Serial.begin(115200);
     screen.begin();
     screen.setFont(u8x8_font_chroma48medium8_r);
+    screen.draw2x2String(0, 0, "0");
+    setupTile();
 
     constructBLEServer("ESP32");
     rssiCharacteristic = getRSSICharacteristic();
@@ -211,16 +219,14 @@ void setup() {
 void loop() {
     //screen.drawString(0, 0, "Advertising...");
     //screen.drawString(0, 1, "Scanning...");
-    screen.draw2x2String(0, 0, "Advert..");
-    screen.draw2x2String(0, 2, "Scan..");
+    // screen.draw2x2String(0, 0, "Advert..");
+    // screen.draw2x2String(0, 2, "Scan..");
 
     BLEScanResults foundDevices = pBLEScanner->start(scanTime, false); // Blocks until done
     //Serial.print("Devices found: ");
     //Serial.println(foundDevices.getCount());
     //Serial.println("Scan done!");
     pBLEScanner->clearResults();   // delete results fromBLEScan buffer to release memory
-
-    clear2x2Line(&screen, 2);
 
     if (!foundESP) {
         clear2x2Line(&screen, 4);

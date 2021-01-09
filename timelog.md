@@ -386,3 +386,6 @@
 ### 09 Jan 2021
 
 - _1.5 hours_: Final packet diagram - config packet - also implemented a function on device common library to print byte array as hex string.
+- _1 hour_: Reversed the distance calculation formula to be able to calculate a target rssi to use from the config distance provided.
+- _2 hours_: Working on partial screen filling as there is no default function for this in U8x8.
+- _0.5 hours_: Finished on-device notification via screen - function separated out so can be expanded for other forms of feedback.
