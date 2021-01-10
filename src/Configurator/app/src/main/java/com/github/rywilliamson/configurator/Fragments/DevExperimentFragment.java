@@ -20,8 +20,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.github.rywilliamson.configurator.Utils.Keys;
@@ -38,13 +38,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DevExperimentFragment extends Fragment implements BluetoothImplementer {
+public class DevExperimentFragment extends Fragment implements IBluetoothImplementer {
 
     private Button backButton;
     private Button interactButton;
     private TextView outputTextView;
 
-    private BackendContainer container;
+    private IBackendContainer container;
     private BluetoothHandler bt;
     private List<String[]> rssiValues;
     private boolean capturing;

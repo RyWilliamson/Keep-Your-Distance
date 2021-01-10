@@ -2,7 +2,6 @@ package com.github.rywilliamson.configurator.Fragments;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.github.rywilliamson.configurator.Utils.Profile;
@@ -30,9 +29,9 @@ import com.welie.blessed.BluetoothPeripheralCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsFragment extends Fragment implements BluetoothImplementer {
+public class SettingsFragment extends Fragment implements IBluetoothImplementer {
 
-    private BackendContainer container;
+    private IBackendContainer container;
     private Button update;
     private TextView result;
     private ImageView image;
@@ -56,7 +55,7 @@ public class SettingsFragment extends Fragment implements BluetoothImplementer {
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        container = (BackendContainer) getActivity();
+        container = (IBackendContainer) getActivity();
         bt = container.getBluetoothHandler();
     }
 

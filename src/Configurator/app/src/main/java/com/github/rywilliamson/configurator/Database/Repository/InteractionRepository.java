@@ -41,6 +41,10 @@ public class InteractionRepository {
         return mInteractionDao.getInteractionByID( sender, receiver, start );
     }
 
+    public Integer getInteractionCountByDate(String receiver, Date start, Date end) {
+        return mInteractionDao.getInteractionCountByDate( receiver, start, end );
+    }
+
     public void insert( Interaction interaction ) {
         RSSIDatabase.databaseWriteExecutor.execute( () -> {
             insertHelper( interaction );

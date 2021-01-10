@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Configurator</string>
+    <string name="app_name">Keep Your Distance! Configurator</string>
     <!-- Dev Sync Device Fragment -->
     <string name="f_sync_connect">Connect to ESP32</string>
     <string name="f_sync_experiment">Move to Experiment</string>
@@ -42,6 +42,8 @@
 
     <!-- Graph Fragment -->
     <string name="f_g_choose">Choose Graph</string>
+    <string name="f_g_weekly">Daily Interactions by Weekday</string>
+    <string name="f_g_total">All Interactions by Weekday</string>
 
     <!-- Nav Bar -->
     <string name="nav_device">Device</string>
@@ -55,5 +57,7 @@
     <!-- All Toasts -->
     <string name="toast_no_connect">Could not connect.</string>
     <string name="toast_scan_fail">Error: Scan failed, please retry</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

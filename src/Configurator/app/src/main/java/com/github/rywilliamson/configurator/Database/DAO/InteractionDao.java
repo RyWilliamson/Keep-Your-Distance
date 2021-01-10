@@ -5,8 +5,10 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.TypeConverters;
 import androidx.room.Update;
 
+import com.github.rywilliamson.configurator.Database.Converters;
 import com.github.rywilliamson.configurator.Database.Entity.Interaction;
 
 import java.util.Date;
@@ -18,10 +20,14 @@ public interface InteractionDao {
     LiveData<List<Interaction>> getInteractionList();
 
     @Query( "SELECT * FROM interaction WHERE sender = :sender AND receiver = :receiver AND start_time = :start" )
-    Interaction getInteractionByID(String sender, String receiver, Date start);
+    Interaction getInteractionByID( String sender, String receiver, Date start );
 
-    @Query ("SELECT COUNT(receiver) FROM interaction WHERE receiver = :receiver")
-    LiveData<Integer> getInteractionCountForReceiver(String receiver);
+    @Query( "SELECT COUNT(receiver) FROM interaction WHERE receiver = :receiver" )
+    LiveData<Integer> getInteractionCountForReceiver( String receiver );
+
+    @TypeConverters( Converters.class )
+    @Query( "SELECT COUNT(receiver) FROM interaction WHERE receiver = :receiver AND start_time > :start AND start_time < :end" )
+    Integer getInteractionCountByDate( String receiver, Date start, Date end );
 
     @Insert
     void insertInteraction( Interaction interaction );

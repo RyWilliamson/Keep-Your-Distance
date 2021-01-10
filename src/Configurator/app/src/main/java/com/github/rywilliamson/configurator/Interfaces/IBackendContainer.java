@@ -5,7 +5,7 @@ import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 
 import java.io.Serializable;
 
-public interface BackendContainer extends Serializable {
+public interface IBackendContainer extends Serializable {
 
     BluetoothHandler getBluetoothHandler();
 

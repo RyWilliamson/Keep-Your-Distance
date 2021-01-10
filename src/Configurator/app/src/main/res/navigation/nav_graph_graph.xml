@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_graph"
+    app:startDestination="@id/weeklyInteractionsFragment">
+
+    <fragment
+        android:id="@+id/weeklyInteractionsFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.WeeklyInteractionsFragment"
+        android:label="fragment_weekly_interactions"
+        tools:layout="@layout/fragment_weekly_interactions" />
+    <fragment
+        android:id="@+id/totalInteractionFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.TotalInteractionFragment"
+        android:label="fragment_total_interaction"
+        tools:layout="@layout/fragment_total_interaction" />
+    <action
+        android:id="@+id/action_global_weeklyInteractionsFragment"
+        app:destination="@id/weeklyInteractionsFragment"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_global_totalInteractionFragment"
+        app:destination="@id/totalInteractionFragment"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <fragment
+        android:id="@+id/interactionsOverTimeFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.InteractionsOverTimeFragment"
+        android:label="fragment_interactions_over_time"
+        tools:layout="@layout/fragment_interactions_over_time" />
+    <action
+        android:id="@+id/action_global_interactionsOverTimeFragment"
+        app:destination="@id/interactionsOverTimeFragment"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+</navigation>

@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.welie.blessed.BluetoothCentralCallback;
@@ -23,9 +23,9 @@ import com.welie.blessed.BluetoothPeripheralCallback;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class DevSyncDeviceFragment extends Fragment implements BluetoothImplementer {
+public class DevSyncDeviceFragment extends Fragment implements IBluetoothImplementer {
 
-    private BackendContainer container;
+    private IBackendContainer container;
     private BluetoothHandler bt;
 
     private Button syncButton;
@@ -38,7 +38,7 @@ public class DevSyncDeviceFragment extends Fragment implements BluetoothImplemen
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        container = (BackendContainer) getActivity();
+        container = (IBackendContainer) getActivity();
         bt = container.getBluetoothHandler();
     }
 

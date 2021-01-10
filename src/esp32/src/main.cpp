@@ -34,6 +34,7 @@ BLECharacteristic *rssiCharacteristic;
 BLECharacteristic *bulkCharacteristic;
 BLECharacteristic *configACKCharacteristic;
 
+// Path loss model of free space propogation.
 float calculateDistance(int rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / (10 * environment));
 }
@@ -132,17 +133,17 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
         if (advertisedDevice.getName() == "ESP32") {
             rssi = advertisedDevice.getRSSI();
             mac = advertisedDevice.getAddress().toString().c_str();
-            if (connected) {
-                uint8_t packet[13] = {};
-                setupPacket(packet, rssi, mac);
-                rssiCharacteristic->setValue(packet, 13);
-                rssiCharacteristic->notify();
-            } else {
-                setupBulkPacket(rssi, mac, millis());
-            }
             
             if (rssi >= target_rssi) {
                 notification(&screen, true);
+                if (connected) {
+                    uint8_t packet[13] = {};
+                    setupPacket(packet, rssi, mac);
+                    rssiCharacteristic->setValue(packet, 13);
+                    rssiCharacteristic->notify();
+                } else {
+                    setupBulkPacket(rssi, mac, millis());
+                }
             } else {
                 notification(&screen, false);
             }

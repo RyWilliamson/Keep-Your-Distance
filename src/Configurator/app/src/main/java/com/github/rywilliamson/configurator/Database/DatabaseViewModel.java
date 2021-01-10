@@ -59,6 +59,10 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mInteractionRepository.getInteractionByID( sender, receiver, start );
     }
 
+    public Integer getInteractionCountByDate(String id, Date start, Date end) {
+        return mInteractionRepository.getInteractionCountByDate( id, start, end );
+    }
+
     public LiveData<Integer> getConnectedInteractionCount() {
         return mInteractionCount;
     }

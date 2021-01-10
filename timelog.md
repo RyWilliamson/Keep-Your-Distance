@@ -389,3 +389,13 @@
 - _1 hour_: Reversed the distance calculation formula to be able to calculate a target rssi to use from the config distance provided.
 - _2 hours_: Working on partial screen filling as there is no default function for this in U8x8.
 - _0.5 hours_: Finished on-device notification via screen - function separated out so can be expanded for other forms of feedback.
+- _0.5 hours_: Implementing nested fragment switching - allows for switching between graphs in graph view.
+- _1.5 hours_: Exploring options for charting libraries in Android.
+- _2 hours_: Learning MPAndroidChart.
+
+### 10 Jan 2021
+
+- _1.5 hours_: Weekly histogram implemented with test data - not yet with real data.
+- _1 hour_: Tweaking style of histogram.
+- _0.5 hours_: Fixed arduino code so that it only transmits on a correct interaction.
+- _2 hours_: Finished weekly histogram interaction with real data.

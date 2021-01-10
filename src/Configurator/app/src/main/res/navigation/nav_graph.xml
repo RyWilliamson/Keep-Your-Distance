@@ -22,7 +22,7 @@
         android:label="fragment_dev_experiment"
         tools:layout="@layout/fragment_dev_experiment" >
         <argument android:name="container"
-            app:argType="com.github.rywilliamson.configurator.Interfaces.BackendContainer" />
+            app:argType="com.github.rywilliamson.configurator.Interfaces.IBackendContainer" />
         <action
             android:id="@+id/action_devExperimentFragment_to_syncDeviceFragment"
             app:destination="@id/syncDeviceFragment" >

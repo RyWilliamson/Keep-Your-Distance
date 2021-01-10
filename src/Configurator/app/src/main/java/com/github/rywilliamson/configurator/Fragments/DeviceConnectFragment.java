@@ -17,9 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
-import com.github.rywilliamson.configurator.Database.Entity.Device;
-import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 import com.github.rywilliamson.configurator.Utils.Keys;
@@ -31,13 +30,13 @@ import com.welie.blessed.BluetoothPeripheralCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceConnectFragment extends Fragment implements BluetoothImplementer {
+public class DeviceConnectFragment extends Fragment implements IBluetoothImplementer {
 
     private TextView prevMac;
     private Spinner macSpinner;
     private ArrayAdapter<String> macAdapter;
     private List<String> macList;
-    private BackendContainer container;
+    private IBackendContainer container;
     private BluetoothHandler bt;
     private DatabaseViewModel db;
 
@@ -60,7 +59,7 @@ public class DeviceConnectFragment extends Fragment implements BluetoothImplemen
     public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
 
-        container = (BackendContainer) getActivity();
+        container = (IBackendContainer) getActivity();
         bt = container.getBluetoothHandler();
         db = container.getDatabaseViewModel();
 

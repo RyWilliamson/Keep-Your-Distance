@@ -16,8 +16,8 @@ import androidx.navigation.Navigation;
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.Entity.Device;
 import com.github.rywilliamson.configurator.Database.Entity.RSSI;
-import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
 import com.github.rywilliamson.configurator.NavGraphDirections;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements BackendContainer {
+public class MainActivity extends AppCompatActivity implements IBackendContainer {
 
     private BottomNavigationView bottomNavigation;
     private BluetoothHandler bt;
@@ -197,8 +197,8 @@ public class MainActivity extends AppCompatActivity implements BackendContainer 
 
     }
 
-    private BluetoothImplementer getCurrentImplementer() {
-        return (BluetoothImplementer) getSupportFragmentManager().findFragmentById(
+    private IBluetoothImplementer getCurrentImplementer() {
+        return (IBluetoothImplementer) getSupportFragmentManager().findFragmentById(
                 R.id.nav_host_fragment ).getChildFragmentManager().getFragments().get( 0 );
     }
 

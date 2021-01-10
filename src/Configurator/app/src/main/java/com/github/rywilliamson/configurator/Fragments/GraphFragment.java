@@ -1,9 +1,11 @@
 package com.github.rywilliamson.configurator.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -11,9 +13,13 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Interfaces.BackendContainer;
-import com.github.rywilliamson.configurator.Interfaces.BluetoothImplementer;
+import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
+import com.github.rywilliamson.configurator.NavGraphGraphDirections;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
 import com.welie.blessed.BluetoothCentralCallback;
@@ -23,12 +29,16 @@ import com.welie.blessed.BluetoothPeripheralCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphFragment extends Fragment implements BluetoothImplementer {
+import static com.github.rywilliamson.configurator.Utils.Keys.GRAPH_SPINNER;
+
+public class GraphFragment extends Fragment implements IBluetoothImplementer {
 
     private Spinner graphSpinner;
     private ArrayAdapter<String> graphAdapter;
     private List<String> graphList;
-    private BackendContainer container;
+    private IBackendContainer container;
+    private DatabaseViewModel dbViewModel;
+    private boolean graphInitFlag;
 
     private ImageView image;
 
@@ -39,7 +49,8 @@ public class GraphFragment extends Fragment implements BluetoothImplementer {
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        container = (BackendContainer) getActivity();
+        container = (IBackendContainer) getActivity();
+        dbViewModel = container.getDatabaseViewModel();
     }
 
     @Override
@@ -65,6 +76,39 @@ public class GraphFragment extends Fragment implements BluetoothImplementer {
         SpinnerUtils.addItem( graphList, graphAdapter, "Weekly Interactions" );
         SpinnerUtils.addItem( graphList, graphAdapter, "Total Interactions" );
         SpinnerUtils.addItem( graphList, graphAdapter, "Interactions Over Time" );
+
+        graphInitFlag = true;
+        graphSpinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected( AdapterView<?> parent, View view, int position, long id ) {
+                if ( graphInitFlag ) {
+                    graphInitFlag = false;
+                    return;
+                }
+
+                NavDirections action = null;
+                switch (position) {
+                    case 0:
+                        action = NavGraphGraphDirections.actionGlobalWeeklyInteractionsFragment();
+                        break;
+                    case 1:
+                        action = NavGraphGraphDirections.actionGlobalTotalInteractionFragment();
+                        break;
+                    case 2:
+                        action = NavGraphGraphDirections.actionGlobalInteractionsOverTimeFragment();
+                        break;
+                    default:
+                        Log.d(GRAPH_SPINNER, "Invalid fragment selection - something went very wrong.");
+                        return;
+                }
+                Navigation.findNavController( getActivity(), R.id.GraphNavigator ).navigate( action );
+            }
+
+            @Override
+            public void onNothingSelected( AdapterView<?> parent ) {
+                // Do Nothing
+            }
+        } );
 
         if ( container.getBluetoothHandler().isConnected() ) {
             image.setImageResource( R.drawable.ic_connected );
