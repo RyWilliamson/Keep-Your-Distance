@@ -100,13 +100,12 @@ public class WeeklyInteractionsFragment extends Fragment {
         chart.getAxisRight().setEnabled( false );
         yAxis.setDrawGridLines( false );
         yAxis.setTextSize( 18f );
-
         yAxis.setEnabled( false );
 
         chart.setExtraBottomOffset( 10 );
         chart.getLegend().setEnabled( false );
         chart.setDescription( desc );
-        requireActivity().runOnUiThread( () -> chart.animateXY( 1000, 1000 ) );
+        requireActivity().runOnUiThread( () -> chart.animateXY( 0, 1000 ) );
         yAxis.setAxisMinimum( 0f );
         chart.invalidate();
     }
