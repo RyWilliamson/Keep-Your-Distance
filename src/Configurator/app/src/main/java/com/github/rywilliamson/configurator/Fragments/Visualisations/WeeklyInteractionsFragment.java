@@ -38,6 +38,8 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
 
     private ArrayList<String> xLabels;
     private BarChart chart;
+    private BarData data;
+    private boolean first;
 
     private DatabaseViewModel db;
 
@@ -63,21 +65,16 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
     @Override
     public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        first = true;
         String mac = WeeklyInteractionsFragmentArgs.fromBundle( getArguments() ).getDeviceMac();
         chart = view.findViewById( R.id.chart );
+        data = new BarData();
+        chart.setData( data );
         if ( mac.equals( "" ) ) {
             ( (GraphFragment) getParentFragment().getParentFragment() ).childReady();
             return;
         }
-        if ( !mac.equals( "FF:FF:FF:FF:FF:FF" ) ) {
-            RSSIDatabase.databaseGetExecutor.execute( () -> {
-                ArrayList<BarDataSet> dataSet = getDataSet( mac );
-                setupChart( dataSet );
-            } );
-        } else {
-            ArrayList<BarDataSet> dataSet = getTestDataSet();
-            setupChart( dataSet );
-        }
+        updateData( mac );
     }
 
     public void updateData( String mac ) {
@@ -88,30 +85,20 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
             } else {
                 dataSet = getTestDataSet();
             }
-            if ( chart.getBarData() == null ) {
+            if ( first ) {
                 setupChart( dataSet );
+                first = false;
             } else {
-                BarData data = chart.getBarData();
-                data.clearValues();
-                for ( BarDataSet curSet : dataSet ) {
-                    data.addDataSet( curSet );
-                }
-                data.setValueTextSize( 18f );
-                data.setValueFormatter( new IndexAxisValueFormatter() {
-                    @Override
-                    public String getFormattedValue( float value ) {
-                        return String.valueOf( (int) value );
-                    }
-                } );
-                chart.notifyDataSetChanged();
-                requireActivity().runOnUiThread( () -> chart.animateXY( 0, 1000 ) );
-                chart.invalidate();
+                setupData( dataSet );
             }
         } );
     }
 
-    private void setupChart( ArrayList<BarDataSet> dataSet ) {
-        BarData data = new BarData( dataSet.toArray( new BarDataSet[dataSet.size()] ) );
+    private void setupData( ArrayList<BarDataSet> dataSet ) {
+        data.clearValues();
+        for ( BarDataSet curSet : dataSet ) {
+            data.addDataSet( curSet );
+        }
         data.setValueTextSize( 18f );
         data.setValueFormatter( new IndexAxisValueFormatter() {
             @Override
@@ -119,16 +106,19 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
                 return String.valueOf( (int) value );
             }
         } );
+        chart.getXAxis().setValueFormatter( new IndexAxisValueFormatter( xLabels ) );
+        chart.notifyDataSetChanged();
+        requireActivity().runOnUiThread( () -> chart.animateXY( 0, 1000 ) );
+        chart.invalidate();
+    }
 
+    private void setupChart( ArrayList<BarDataSet> dataSet ) {
         XAxis xAxis = chart.getXAxis();
         YAxis yAxis = chart.getAxisLeft();
 
         Description desc = new Description();
         desc.setEnabled( false );
 
-        chart.setData( data );
-
-        xAxis.setValueFormatter( new IndexAxisValueFormatter( xLabels ) );
         xAxis.setPosition( XAxis.XAxisPosition.BOTTOM );
         xAxis.setDrawGridLines( false );
         xAxis.setTextSize( 18f );
@@ -137,24 +127,14 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
         yAxis.setDrawGridLines( false );
         yAxis.setTextSize( 18f );
         yAxis.setEnabled( false );
+        yAxis.setAxisMinimum( 0f );
 
         chart.setExtraBottomOffset( 10 );
         chart.getLegend().setEnabled( false );
         chart.setDescription( desc );
+        setupData( dataSet );
         requireActivity().runOnUiThread( () -> chart.animateXY( 0, 1000 ) );
-        yAxis.setAxisMinimum( 0f );
         chart.invalidate();
-    }
-
-    public void getTestXAxisValues() {
-        xLabels = new ArrayList<>();
-        xLabels.add( "Mon" );
-        xLabels.add( "Tue" );
-        xLabels.add( "Wed" );
-        xLabels.add( "Thu" );
-        xLabels.add( "Fri" );
-        xLabels.add( "Sat" );
-        xLabels.add( "Sun" );
     }
 
     public ArrayList<BarDataSet> getDataSet( String mac ) {
@@ -202,5 +182,16 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
         dataSets.add( barDataSet1 );
         getTestXAxisValues();
         return dataSets;
+    }
+
+    public void getTestXAxisValues() {
+        xLabels = new ArrayList<>();
+        xLabels.add( "Mon" );
+        xLabels.add( "Tue" );
+        xLabels.add( "Wed" );
+        xLabels.add( "Thu" );
+        xLabels.add( "Fri" );
+        xLabels.add( "Sat" );
+        xLabels.add( "Sun" );
     }
 }

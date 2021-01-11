@@ -407,3 +407,4 @@
 - _3 hours_: Trying to solve an async bug where the graph doesn't draw when you enter the page but only after a selection is made.
 - _0.5 hours_: Fix x axis labels.
 - _0.5 hours_: Allow graph update on change of device selection - this entire area of code needs serious refactoring.
+- _0.5 hours_: Refactor graph and fix labels.

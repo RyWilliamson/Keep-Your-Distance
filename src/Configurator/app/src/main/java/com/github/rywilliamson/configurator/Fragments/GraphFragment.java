@@ -67,12 +67,8 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState ) {
-
-
         // Inflate the layout for this fragment
-        View view = inflater.inflate( R.layout.fragment_graph, container, false );
-
-        return view;
+        return inflater.inflate( R.layout.fragment_graph, container, false );
     }
 
     @Override
@@ -201,9 +197,7 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     };
 
     public void childReady() {
-        RSSIDatabase.databaseGetExecutor.execute( () -> {
-            getCurrentImplementer().updateData( deviceList.get( 0 ).macAddress );
-        } );
+        getCurrentImplementer().updateData( deviceList.get( 0 ).macAddress );
     }
 
     private IGraphImplementer getCurrentImplementer() {
