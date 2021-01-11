@@ -43,6 +43,10 @@ int calculateTargetRSSI(float distance, float measuredPower, int environment) {
     return measuredPower - 10 * environment * log10f(distance);
 }
 
+void notify(bool value) {
+    notification(&screen, value);
+}
+
 int logLength() {
     return abs(frontLogIndex - rearLogIndex);
 }
@@ -135,7 +139,7 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
             mac = advertisedDevice.getAddress().toString().c_str();
             
             if (rssi >= target_rssi) {
-                notification(&screen, true);
+                notify(true);
                 if (connected) {
                     uint8_t packet[13] = {};
                     setupPacket(packet, rssi, mac);
@@ -145,7 +149,7 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
                     setupBulkPacket(rssi, mac, millis());
                 }
             } else {
-                notification(&screen, false);
+                notify(false);
             }
 
             foundESP = true;

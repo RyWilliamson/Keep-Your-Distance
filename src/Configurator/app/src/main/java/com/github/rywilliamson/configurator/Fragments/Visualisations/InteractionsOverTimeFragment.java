@@ -8,10 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
 import com.github.rywilliamson.configurator.Interfaces.IGraphImplementer;
 import com.github.rywilliamson.configurator.R;
 
+import java.util.ArrayList;
+
 public class InteractionsOverTimeFragment extends Fragment implements IGraphImplementer {
+
+    private ArrayList<String> xLabels;
+
+    private BarChart chart;
+    private BarData data;
+    private boolean first;
 
     public InteractionsOverTimeFragment() {
         // Required empty public constructor

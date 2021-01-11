@@ -332,6 +332,8 @@
 - _4 hours_: Adding RSSI functionality to database, involved handling timeout waiting and start time caching.
 - _3 hours_: Trying to add a timeout to the interactions so the interactions end.
 
+## Winter Break Weeks
+
 ### 18 Dec 2020
 
 - _0 hours_: Break day :)
@@ -401,6 +403,8 @@
 - _2 hours_: Finished weekly histogram interaction with real data.
 - _1 hour_: Adding ability to choose device that you want graphs for - allows for decoupling it from connection logic and just lets it use database information.
 - _2 hours_: Making this new device spinner use the alias system in preparation for a more full-on move to this system.
+
+# Week 13
 
 ### 11 Jan 2021
 
