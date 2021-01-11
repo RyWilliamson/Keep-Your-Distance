@@ -42,6 +42,7 @@
 
     <!-- Graph Fragment -->
     <string name="f_g_choose">Choose Graph</string>
+    <string name="f_g_device">Choose Device</string>
     <string name="f_g_weekly">Daily Interactions by Weekday</string>
     <string name="f_g_total">All Interactions by Weekday</string>
 

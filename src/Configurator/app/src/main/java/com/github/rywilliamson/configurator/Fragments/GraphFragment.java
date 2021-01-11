@@ -13,12 +13,15 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.Database.Entity.Device;
+import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
+import com.github.rywilliamson.configurator.Interfaces.IGraphImplementer;
 import com.github.rywilliamson.configurator.NavGraphGraphDirections;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.SpinnerUtils;
@@ -36,11 +39,18 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     private Spinner graphSpinner;
     private ArrayAdapter<String> graphAdapter;
     private List<String> graphList;
+
+    private Spinner deviceSpinner;
+    private ArrayAdapter<Device> deviceAdapter;
+    private List<Device> deviceList;
+    private final Device fakeDevice = new Device( "FF:FF:FF:FF:FF:FF", "None", 0 );
+
     private IBackendContainer container;
     private DatabaseViewModel dbViewModel;
     private boolean graphInitFlag;
 
     private ImageView image;
+    private IGraphImplementer current;
 
     public GraphFragment() {
         // Required empty public constructor
@@ -56,8 +66,12 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState ) {
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate( R.layout.fragment_graph, container, false );
+        View view = inflater.inflate( R.layout.fragment_graph, container, false );
+
+        return view;
     }
 
     @Override
@@ -65,6 +79,22 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
         super.onViewCreated( view, savedInstanceState );
 
         image = view.findViewById( R.id.ivConnected );
+
+        deviceList = new ArrayList<>();
+        RSSIDatabase.databaseGetExecutor.execute( () -> {
+            List<Device> devices = dbViewModel.getUsedDevices();
+            deviceList.addAll( devices );
+            deviceList.add( fakeDevice );
+
+            getActivity().runOnUiThread( () -> {
+                deviceSpinner = view.findViewById( R.id.spDSelector );
+                deviceAdapter = new ArrayAdapter<>( view.getContext(), R.layout.mac_address_item, deviceList );
+                deviceAdapter.setDropDownViewResource( R.layout.mac_address_item );
+                deviceAdapter.notifyDataSetChanged();
+                deviceSpinner.setAdapter( deviceAdapter );
+            } );
+
+        } );
 
         graphSpinner = view.findViewById( R.id.spGSelector );
         graphList = new ArrayList<>();
@@ -86,22 +116,30 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
                     return;
                 }
 
-                NavDirections action = null;
-                switch (position) {
+                String mac = ( (Device) deviceSpinner.getSelectedItem() ).macAddress;
+                switch ( position ) {
                     case 0:
-                        action = NavGraphGraphDirections.actionGlobalWeeklyInteractionsFragment();
+                        NavGraphGraphDirections.ActionGlobalWeeklyInteractionsFragment action =
+                                NavGraphGraphDirections.actionGlobalWeeklyInteractionsFragment();
+                        action.setDeviceMac( mac );
+                        Navigation.findNavController( getActivity(), R.id.GraphNavigator ).navigate( action );
                         break;
                     case 1:
-                        action = NavGraphGraphDirections.actionGlobalTotalInteractionFragment();
+                        NavGraphGraphDirections.ActionGlobalTotalInteractionFragment action2 =
+                                NavGraphGraphDirections.actionGlobalTotalInteractionFragment();
+                        action2.setDeviceMac( mac );
+                        Navigation.findNavController( getActivity(), R.id.GraphNavigator ).navigate( action2 );
                         break;
                     case 2:
-                        action = NavGraphGraphDirections.actionGlobalInteractionsOverTimeFragment();
+                        NavGraphGraphDirections.ActionGlobalInteractionsOverTimeFragment action3 =
+                                NavGraphGraphDirections.actionGlobalInteractionsOverTimeFragment();
+                        action3.setDeviceMac( mac );
+                        Navigation.findNavController( getActivity(), R.id.GraphNavigator ).navigate( action3 );
                         break;
                     default:
-                        Log.d(GRAPH_SPINNER, "Invalid fragment selection - something went very wrong.");
+                        Log.d( GRAPH_SPINNER, "Invalid fragment selection - something went very wrong." );
                         return;
                 }
-                Navigation.findNavController( getActivity(), R.id.GraphNavigator ).navigate( action );
             }
 
             @Override
@@ -142,4 +180,16 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
 
     };
+
+    public void childReady() {
+        RSSIDatabase.databaseGetExecutor.execute( () -> {
+            getCurrentImplementer().updateData( deviceList.get( 0 ).macAddress );
+        } );
+    }
+
+    private IGraphImplementer getCurrentImplementer() {
+        FragmentManager manager = getChildFragmentManager();
+        Fragment frag = manager.findFragmentById( R.id.GraphNavigator );
+        return (IGraphImplementer) frag.getChildFragmentManager().getFragments().get( 0 );
+    }
 }

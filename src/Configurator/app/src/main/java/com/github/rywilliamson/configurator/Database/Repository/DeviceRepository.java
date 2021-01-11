@@ -29,6 +29,10 @@ public class DeviceRepository {
         return mDeviceDao.getDeviceByID( id );
     }
 
+    public List<Device> getUsedDevices() {
+        return mDeviceDao.getUsedDevices();
+    }
+
     public void insert( Device device ) {
         RSSIDatabase.databaseWriteExecutor.execute( () -> {
             Device qDevice = mDeviceDao.getDeviceByID( device.macAddress );

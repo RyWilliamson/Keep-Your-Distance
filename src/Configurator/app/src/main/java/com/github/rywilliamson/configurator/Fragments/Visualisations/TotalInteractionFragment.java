@@ -8,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.rywilliamson.configurator.Interfaces.IGraphImplementer;
 import com.github.rywilliamson.configurator.R;
 
-public class TotalInteractionFragment extends Fragment {
+public class TotalInteractionFragment extends Fragment implements IGraphImplementer {
 
     public TotalInteractionFragment() {
         // Required empty public constructor
@@ -26,5 +27,9 @@ public class TotalInteractionFragment extends Fragment {
             Bundle savedInstanceState ) {
         // Inflate the layout for this fragment
         return inflater.inflate( R.layout.fragment_total_interaction, container, false );
+    }
+
+    public void updateData(String mac) {
+
     }
 }

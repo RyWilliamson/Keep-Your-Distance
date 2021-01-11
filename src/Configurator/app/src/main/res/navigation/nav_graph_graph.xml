@@ -9,12 +9,22 @@
         android:id="@+id/weeklyInteractionsFragment"
         android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.WeeklyInteractionsFragment"
         android:label="fragment_weekly_interactions"
-        tools:layout="@layout/fragment_weekly_interactions" />
+        tools:layout="@layout/fragment_weekly_interactions" >
+        <argument
+            android:name="DeviceMac"
+            app:argType="string"
+            android:defaultValue='' />
+    </fragment>
     <fragment
         android:id="@+id/totalInteractionFragment"
         android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.TotalInteractionFragment"
         android:label="fragment_total_interaction"
-        tools:layout="@layout/fragment_total_interaction" />
+        tools:layout="@layout/fragment_total_interaction" >
+        <argument
+            android:name="DeviceMac"
+            app:argType="string"
+            android:defaultValue=''/>
+    </fragment>
     <action
         android:id="@+id/action_global_weeklyInteractionsFragment"
         app:destination="@id/weeklyInteractionsFragment"
@@ -33,7 +43,12 @@
         android:id="@+id/interactionsOverTimeFragment"
         android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.InteractionsOverTimeFragment"
         android:label="fragment_interactions_over_time"
-        tools:layout="@layout/fragment_interactions_over_time" />
+        tools:layout="@layout/fragment_interactions_over_time" >
+        <argument
+            android:name="DeviceMac"
+            app:argType="string"
+            android:defaultValue=''/>
+    </fragment>
     <action
         android:id="@+id/action_global_interactionsOverTimeFragment"
         app:destination="@id/interactionsOverTimeFragment"

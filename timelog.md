@@ -399,3 +399,9 @@
 - _1 hour_: Tweaking style of histogram.
 - _0.5 hours_: Fixed arduino code so that it only transmits on a correct interaction.
 - _2 hours_: Finished weekly histogram interaction with real data.
+- _1 hour_: Adding ability to choose device that you want graphs for - allows for decoupling it from connection logic and just lets it use database information.
+- _2 hours_: Making this new device spinner use the alias system in preparation for a more full-on move to this system.
+
+### 11 Jan 2021
+
+- _3 hours_: Trying to solve an async bug where the graph doesn't draw when you enter the page but only after a selection is made.

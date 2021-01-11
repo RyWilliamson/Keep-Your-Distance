@@ -50,6 +50,10 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mDeviceRepository.getDevice( id );
     }
 
+    public List<Device> getUsedDevices() {
+        return mDeviceRepository.getUsedDevices();
+    }
+
     // Reads for Interactions
     public LiveData<List<Interaction>> getAllInteractions() {
         return mAllInteractions;

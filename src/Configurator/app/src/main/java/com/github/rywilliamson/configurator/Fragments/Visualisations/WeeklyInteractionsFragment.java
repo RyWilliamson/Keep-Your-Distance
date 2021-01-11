@@ -21,9 +21,10 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.RSSIDatabase;
+import com.github.rywilliamson.configurator.Fragments.GraphFragment;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
+import com.github.rywilliamson.configurator.Interfaces.IGraphImplementer;
 import com.github.rywilliamson.configurator.R;
-import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -33,12 +34,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class WeeklyInteractionsFragment extends Fragment {
+public class WeeklyInteractionsFragment extends Fragment implements IGraphImplementer {
 
     private ArrayList<String> xLabels;
+    private BarChart chart;
 
     private DatabaseViewModel db;
-    private BluetoothHandler bt;
+
 
     public WeeklyInteractionsFragment() {
         // Required empty public constructor
@@ -49,7 +51,6 @@ public class WeeklyInteractionsFragment extends Fragment {
         super.onCreate( savedInstanceState );
         IBackendContainer container = (IBackendContainer) getActivity();
         db = container.getDatabaseViewModel();
-        bt = container.getBluetoothHandler();
     }
 
     @Override
@@ -62,19 +63,38 @@ public class WeeklyInteractionsFragment extends Fragment {
     @Override
     public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
-        if ( bt.isConnected() ) {
+        String mac = WeeklyInteractionsFragmentArgs.fromBundle( getArguments() ).getDeviceMac();
+        chart = view.findViewById( R.id.chart );
+        if ( mac.equals( "" ) ) {
+            ( (GraphFragment) getParentFragment().getParentFragment() ).childReady();
+            return;
+        }
+        if ( !mac.equals( "FF:FF:FF:FF:FF:FF" ) ) {
             RSSIDatabase.databaseGetExecutor.execute( () -> {
-                ArrayList<BarDataSet> dataSet = getDataSet();
-                setupChart( view, dataSet );
+                ArrayList<BarDataSet> dataSet = getDataSet( mac );
+                setupChart( dataSet );
             } );
         } else {
             ArrayList<BarDataSet> dataSet = getTestDataSet();
-            setupChart( view, dataSet );
+            setupChart( dataSet );
         }
     }
 
-    private void setupChart( View view, ArrayList<BarDataSet> dataSet ) {
-        BarChart chart = view.findViewById( R.id.chart );
+    public void updateData( String mac ) {
+        ArrayList<BarDataSet> dataSet = getDataSet( mac );
+        if ( chart.getBarData() == null ) {
+            setupChart( dataSet );
+        } else {
+            BarData data = chart.getBarData();
+            data.clearValues();
+            for ( BarDataSet curSet : dataSet ) {
+                data.addDataSet( curSet );
+            }
+            chart.notifyDataSetChanged();
+        }
+    }
+
+    private void setupChart( ArrayList<BarDataSet> dataSet ) {
         BarData data = new BarData( dataSet.toArray( new BarDataSet[dataSet.size()] ) );
         data.setValueTextSize( 18f );
         data.setValueFormatter( new IndexAxisValueFormatter() {
@@ -121,7 +141,7 @@ public class WeeklyInteractionsFragment extends Fragment {
         xLabels.add( "SUN" );
     }
 
-    public ArrayList<BarDataSet> getDataSet() {
+    public ArrayList<BarDataSet> getDataSet( String mac ) {
         xLabels = new ArrayList<>();
         ArrayList<BarDataSet> dataSets = new ArrayList<>();
         ArrayList<BarEntry> valueSet = new ArrayList<>();
@@ -132,7 +152,7 @@ public class WeeklyInteractionsFragment extends Fragment {
 
         for ( int i = 6; i >= 0; i-- ) {
             current = DateUtils.addDays( tomorrow, -1 );
-            count = db.getInteractionCountByDate( bt.getBLEPeripheral().getAddress(), current, tomorrow );
+            count = db.getInteractionCountByDate( mac, current, tomorrow );
             valueSet.add( new BarEntry( i, count ) );
             xLabels.add( 0, new SimpleDateFormat( "EE", Locale.US ).format( current ) );
             Log.d( "test", count + " " + current + " " + tomorrow + " " + xLabels.get( 0 ) );

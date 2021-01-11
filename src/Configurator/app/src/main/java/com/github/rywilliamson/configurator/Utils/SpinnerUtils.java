@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SpinnerUtils {
 
-    public static <T> void addItem( List<T> list, ArrayAdapter<String> adapter, T data ) {
+    public static <T> void addItem( List<T> list, ArrayAdapter<T> adapter, T data ) {
         if ( !list.contains( data ) ) {
             list.add( data );
             adapter.notifyDataSetChanged();

@@ -18,6 +18,9 @@ public interface DeviceDao {
     @Query( "SELECT * FROM device" )
     LiveData<List<Device>> getDeviceList();
 
+    @Query( "SELECT * FROM device WHERE times_connected > 0" )
+    List<Device> getUsedDevices();
+
     @Query( "SELECT * FROM device WHERE mac_address = :id" )
     Device getDeviceByID( String id );
 
