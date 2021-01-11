@@ -48,6 +48,7 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     private IBackendContainer container;
     private DatabaseViewModel dbViewModel;
     private boolean graphInitFlag;
+    private boolean deviceInitFlag;
 
     private ImageView image;
     private IGraphImplementer current;
@@ -92,8 +93,26 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
                 deviceAdapter.setDropDownViewResource( R.layout.mac_address_item );
                 deviceAdapter.notifyDataSetChanged();
                 deviceSpinner.setAdapter( deviceAdapter );
-            } );
 
+                deviceInitFlag = true;
+                deviceSpinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected( AdapterView<?> parent, View view, int position, long id ) {
+                        if ( deviceInitFlag ) {
+                            deviceInitFlag = false;
+                            return;
+                        }
+
+                        String mac = deviceList.get(position).macAddress;
+                        getCurrentImplementer().updateData( mac );
+                    }
+
+                    @Override
+                    public void onNothingSelected( AdapterView<?> parent ) {
+                        // Do Nothing
+                    }
+                } );
+            } );
         } );
 
         graphSpinner = view.findViewById( R.id.spGSelector );
