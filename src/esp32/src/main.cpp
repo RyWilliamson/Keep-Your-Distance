@@ -22,7 +22,7 @@ BLEAdvertising *pBLEAdvertiser;
 bool foundESP = false;
 
 // RSSI Data
-#define MAXLOG 600 // 10 minutes worth at 1 interaction per second.
+#define MAXLOG 3000 // 10 minutes worth at 1 interaction per second.
 uint8_t rssiLog[MAXLOG][17] = {};
 int frontLogIndex = -1; // Removes from here
 int rearLogIndex = -1; // Adds to here
@@ -219,6 +219,8 @@ void setup() {
     bulkCharacteristic = getBulkCharacteristic();
     pBLEAdvertiser = startBLEAdvertising();
     pBLEScanner = startBLEScanning(new AdvertisedDeviceCallbacks);
+    Serial.println(ESP.getHeapSize());
+    Serial.println(ESP.getFreeHeap());
 }
 
 void loop() {
@@ -234,6 +236,7 @@ void loop() {
     pBLEScanner->clearResults();   // delete results fromBLEScan buffer to release memory
 
     if (!foundESP) {
+        Serial.println(ESP.getFreeHeap());
         clear2x2Line(&screen, 4);
         clear2x2Line(&screen, 6);
     }

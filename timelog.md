@@ -412,3 +412,10 @@
 - _0.5 hours_: Fix x axis labels.
 - _0.5 hours_: Allow graph update on change of device selection - this entire area of code needs serious refactoring.
 - _0.5 hours_: Refactor graph and fix labels.
+- _1 hour_: Begin implementation of trend graph.
+- _0.5 hours_:  Meeting with Jeremy.
+- _0.5 hours_:  Typed minutes and emailed Jeremy my address for mailing me parts.
+
+### 12 Jan 2021
+
+- _7 hours_: Continue trend graph implementation - Gradient lines are very difficult, this commit has the colour gradient working but no real data interaction yet.
