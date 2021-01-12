@@ -185,11 +185,12 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
 
     private void setupGradient( LineDataSet dataSet ) {
         Transformer trans = chart.getTransformer( dataSet.getAxisDependency() );
-        float dangerPoint = 10;
-        float dangerY = (float) trans.getPixelForValues( 0, dangerPoint + 1 ).y;
-        LinearGradient gradient = new LinearGradient( 0f, dangerY, 0f, chart.getHeight(),
-                Color.rgb( 219, 48, 48 ),
-                Color.rgb( 68, 201, 104 ),
+        float dangerPoint = 8;
+        float dangerY0 = (float) trans.getPixelForValues( 0, dangerPoint ).y;
+        float dangerY1 = (float) trans.getPixelForValues( 0, dangerPoint + 1 ).y;
+        LinearGradient gradient = new LinearGradient( 0f, dangerY1, 0f, dangerY0,
+                Color.rgb( 220, 50, 32 ),
+                Color.rgb( 0, 90, 181 ),
                 Shader.TileMode.CLAMP
         );
 

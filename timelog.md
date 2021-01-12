@@ -420,3 +420,4 @@
 
 - _7 hours_: Continue trend graph implementation - Gradient lines are very difficult, this commit has the colour gradient working but no real data interaction yet.
 - _1 hour_: Continue trend graph implementation - coupling it with real data.
+- _0.5 hours_: Making gradient be sharper and also colour blind friendly.
