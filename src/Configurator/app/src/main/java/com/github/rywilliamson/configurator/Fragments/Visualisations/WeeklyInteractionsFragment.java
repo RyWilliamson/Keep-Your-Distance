@@ -118,6 +118,7 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
 
         Description desc = new Description();
         desc.setEnabled( false );
+        chart.setDescription( desc );
 
         xAxis.setPosition( XAxis.XAxisPosition.BOTTOM );
         xAxis.setDrawGridLines( false );
@@ -129,11 +130,11 @@ public class WeeklyInteractionsFragment extends Fragment implements IGraphImplem
         yAxis.setEnabled( false );
         yAxis.setAxisMinimum( 0f );
 
+        chart.setScaleEnabled( false );
         chart.setExtraBottomOffset( 10 );
         chart.getLegend().setEnabled( false );
-        chart.setDescription( desc );
         setupData( dataSet );
-        requireActivity().runOnUiThread( () -> chart.animateXY( 0, 1000 ) );
+
         chart.invalidate();
     }
 

@@ -45,6 +45,7 @@
     <string name="f_g_device">Choose Device</string>
     <string name="f_g_weekly">Daily Interactions by Weekday</string>
     <string name="f_g_total">All Interactions by Weekday</string>
+    <string name="f_g_trend">Trend of Interactions Over Time</string>
 
     <!-- Nav Bar -->
     <string name="nav_device">Device</string>
