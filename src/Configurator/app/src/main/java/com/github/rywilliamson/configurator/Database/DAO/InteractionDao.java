@@ -25,6 +25,17 @@ public interface InteractionDao {
     @Query( "SELECT COUNT(receiver) FROM interaction WHERE receiver = :receiver" )
     LiveData<Integer> getInteractionCountForReceiver( String receiver );
 
+    @Query( "SELECT * FROM interaction WHERE receiver = :receiver" )
+    List<Interaction> getInteractionsForReceiver( String receiver );
+
+    @TypeConverters( Converters.class )
+    @Query( "SELECT MAX(start_time) FROM interaction WHERE receiver = :receiver" )
+    Date getLastDate( String receiver );
+
+    @TypeConverters( Converters.class )
+    @Query( "SELECT MIN(start_time) FROM interaction WHERE receiver = :receiver" )
+    Date getFirstDate( String receiver );
+
     @TypeConverters( Converters.class )
     @Query( "SELECT COUNT(receiver) FROM interaction WHERE receiver = :receiver AND start_time > :start AND start_time < :end" )
     Integer getInteractionCountByDate( String receiver, Date start, Date end );

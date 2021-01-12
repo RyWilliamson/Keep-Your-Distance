@@ -59,11 +59,23 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mAllInteractions;
     }
 
-    public Interaction getInteraction(String sender, String receiver, Date start) {
+    public Interaction getInteraction( String sender, String receiver, Date start ) {
         return mInteractionRepository.getInteractionByID( sender, receiver, start );
     }
 
-    public Integer getInteractionCountByDate(String id, Date start, Date end) {
+    public List<Interaction> getInteractionsForReceiver( String id ) {
+        return mInteractionRepository.getInteractionsForReceiver( id );
+    }
+
+    public Date getLastInteractionDate( String id ) {
+        return mInteractionRepository.getLastDate( id );
+    }
+
+    public Date getFirstInteractionDate( String id ) {
+        return mInteractionRepository.getFirstDate( id );
+    }
+
+    public Integer getInteractionCountByDate( String id, Date start, Date end ) {
         return mInteractionRepository.getInteractionCountByDate( id, start, end );
     }
 
@@ -76,7 +88,7 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mAllRSSI;
     }
 
-    public RSSI getRSSI(Interaction interaction, Date timestamp) {
+    public RSSI getRSSI( Interaction interaction, Date timestamp ) {
         return mRSSIRepository.getRSSIByID( interaction, timestamp );
     }
 
@@ -85,7 +97,7 @@ public class DatabaseViewModel extends AndroidViewModel {
         mDeviceRepository.insert( device );
     }
 
-    public void insertScanned(Device device) {
+    public void insertScanned( Device device ) {
         mDeviceRepository.insertScanned( device );
     }
 
@@ -94,14 +106,14 @@ public class DatabaseViewModel extends AndroidViewModel {
         mInteractionRepository.insert( interaction );
     }
 
-    public void setInteractionCountReceiver(String receiver) {
+    public void setInteractionCountReceiver( String receiver ) {
         mInteractionRepository.setInteractionCountReceiver( receiver );
         mInteractionCount = mInteractionRepository.getInteractionCount();
     }
 
     // Writes for RSSI
     public void insert( RSSI rssi, boolean linked ) {
-        if (linked) {
+        if ( linked ) {
             mRSSIRepository.insert( rssi, mInteractionRepository );
         } else {
             mRSSIRepository.insert( rssi );

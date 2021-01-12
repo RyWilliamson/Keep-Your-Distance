@@ -419,3 +419,4 @@
 ### 12 Jan 2021
 
 - _7 hours_: Continue trend graph implementation - Gradient lines are very difficult, this commit has the colour gradient working but no real data interaction yet.
+- _1 hour_: Continue trend graph implementation - coupling it with real data.

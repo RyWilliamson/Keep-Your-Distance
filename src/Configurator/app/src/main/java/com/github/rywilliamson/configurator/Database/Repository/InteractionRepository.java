@@ -1,7 +1,6 @@
 package com.github.rywilliamson.configurator.Database.Repository;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -31,6 +30,18 @@ public class InteractionRepository {
 
     public LiveData<Integer> getInteractionCount() {
         return mInteractionCount;
+    }
+
+    public List<Interaction> getInteractionsForReceiver( String receiver ) {
+        return mInteractionDao.getInteractionsForReceiver( receiver );
+    }
+
+    public Date getLastDate(String receiver) {
+        return mInteractionDao.getLastDate( receiver );
+    }
+
+    public Date getFirstDate(String receiver) {
+        return mInteractionDao.getFirstDate( receiver );
     }
 
     public void setInteractionCountReceiver(String receiver) {

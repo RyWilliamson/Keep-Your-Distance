@@ -27,7 +27,11 @@ import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.IGraphImplementer;
 import com.github.rywilliamson.configurator.R;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class InteractionsOverTimeFragment extends Fragment implements IGraphImplementer {
 
@@ -96,7 +100,7 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         //chart.getXAxis().setValueFormatter( new IndexAxisValueFormatter( xLabels ) );
         chart.notifyDataSetChanged();
         requireActivity().runOnUiThread( () -> chart.animateXY( 1000, 0 ) );
-        setupGradient(dataSet.get( 0 ));
+        setupGradient( dataSet.get( 0 ) );
     }
 
     private void setupChart( ArrayList<LineDataSet> dataSet ) {
@@ -126,9 +130,26 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
     }
 
     private ArrayList<LineDataSet> getDataSet( String mac ) {
-        ArrayList<LineDataSet> dataSets = new ArrayList<>();
+        ArrayList<LineDataSet> dataSets;
         ArrayList<Entry> valueSet = new ArrayList<>();
 
+
+        Date last = DateUtils.ceiling( db.getLastInteractionDate( mac ), Calendar.DATE );
+        Date first = DateUtils.truncate( db.getFirstInteractionDate( mac ), Calendar.DATE );
+        Date current;
+        Date prev = first;
+        int count;
+        long difference = ( last.getTime() - first.getTime() ) / ( 24 * 60 * 60 * 1000 );
+        Log.d( "test", String.valueOf( difference ) );
+        for ( int i = 0; i < difference; i++ ) {
+            current = DateUtils.addDays( prev, 1 );
+            count = db.getInteractionCountByDate( mac, prev, current );
+            valueSet.add( new Entry( i, count ) );
+            prev = current;
+        }
+
+        dataSets = new ArrayList<>();
+        dataSets.add( createLineData( valueSet ) );
         return dataSets;
     }
 
@@ -148,27 +169,24 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
             modifier = modifier + i / 15000f;
         }
 
-        LineDataSet lineDataSet = new LineDataSet( valueSet, "Interactions" );
+        dataSets = new ArrayList<>();
+        dataSets.add( createLineData( valueSet ) );
+        return dataSets;
+    }
+
+    private LineDataSet createLineData(ArrayList<Entry> entries) {
+        LineDataSet lineDataSet = new LineDataSet( entries, "Interactions" );
         lineDataSet.setDrawCircles( false );
         lineDataSet.setMode( LineDataSet.Mode.CUBIC_BEZIER );
         lineDataSet.setCubicIntensity( 0.1f );
         lineDataSet.setLineWidth( 5f );
-//        lineDataSet.setDrawFilled( true );
-//        lineDataSet.setFillDrawable( ContextCompat.getDrawable( getContext(), R.drawable.line_chart_gradient ) );
-//        lineDataSet.setColors(colours);
-//        lineDataSet.setColor( Color.rgb( 245, 161, 96 ) );
-
-        dataSets = new ArrayList<>();
-        dataSets.add( lineDataSet );
-        return dataSets;
+        return lineDataSet;
     }
 
-    private void setupGradient(LineDataSet dataSet) {
-        Log.d("test", String.valueOf( chart.getHeight() ) );
+    private void setupGradient( LineDataSet dataSet ) {
         Transformer trans = chart.getTransformer( dataSet.getAxisDependency() );
         float dangerPoint = 10;
-        float dangerY = (float) trans.getPixelForValues( 0, dangerPoint+1 ).y;
-        Log.d("test", String.valueOf( dangerY ));
+        float dangerY = (float) trans.getPixelForValues( 0, dangerPoint + 1 ).y;
         LinearGradient gradient = new LinearGradient( 0f, dangerY, 0f, chart.getHeight(),
                 Color.rgb( 219, 48, 48 ),
                 Color.rgb( 68, 201, 104 ),
