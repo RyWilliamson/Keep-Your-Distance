@@ -4,6 +4,7 @@
 
 #include "bluetoothlib.h"
 #include "common.h"
+#include "rbtree.h"
 
 // Screen
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
@@ -29,6 +30,7 @@ int rearLogIndex = -1; // Adds to here
 bool logWasEmpty;
 int rssi = 0;
 String mac;
+AverageRBTree *tree;
 
 BLECharacteristic *rssiCharacteristic;
 BLECharacteristic *bulkCharacteristic;
@@ -213,6 +215,8 @@ void setup() {
     screen.draw2x2String(0, 0, "0");
     setupTile();
 
+    tree = new AverageRBTree();
+
     constructBLEServer("ESP32");
     rssiCharacteristic = getRSSICharacteristic();
     configACKCharacteristic = getConfigACKCharacteristic();
@@ -236,7 +240,7 @@ void loop() {
     pBLEScanner->clearResults();   // delete results fromBLEScan buffer to release memory
 
     if (!foundESP) {
-        Serial.println(ESP.getFreeHeap());
+        // Serial.println(ESP.getFreeHeap());
         clear2x2Line(&screen, 4);
         clear2x2Line(&screen, 6);
     }

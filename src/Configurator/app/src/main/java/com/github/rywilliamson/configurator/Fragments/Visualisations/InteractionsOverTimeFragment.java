@@ -20,6 +20,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.RSSIDatabase;
@@ -29,9 +30,11 @@ import com.github.rywilliamson.configurator.R;
 
 import org.apache.commons.lang3.time.DateUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class InteractionsOverTimeFragment extends Fragment implements IGraphImplementer {
 
@@ -97,7 +100,7 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         }
         data.setValueTextSize( 18f );
         data.setDrawValues( false );
-        //chart.getXAxis().setValueFormatter( new IndexAxisValueFormatter( xLabels ) );
+        chart.getXAxis().setValueFormatter( new IndexAxisValueFormatter( xLabels ) );
         chart.notifyDataSetChanged();
         requireActivity().runOnUiThread( () -> chart.animateXY( 1000, 0 ) );
         setupGradient( dataSet.get( 0 ) );
@@ -112,8 +115,9 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         chart.setDescription( desc );
 
         xAxis.setPosition( XAxis.XAxisPosition.BOTTOM );
-        xAxis.setDrawGridLines( false );
+        xAxis.setDrawGridLines( true );
         xAxis.setTextSize( 18f );
+        //xAxis.setAvoidFirstLastClipping( true );
 
         chart.getAxisRight().setEnabled( false );
         yAxis.setDrawGridLines( false );
@@ -122,6 +126,7 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         //yAxis.setAxisMaximum( 150f );
 
         chart.setExtraBottomOffset( 10 );
+        chart.setExtraRightOffset( 30 );
         chart.setScaleEnabled( false );
         chart.getLegend().setEnabled( false );
         setupData( dataSet );
@@ -132,6 +137,7 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
     private ArrayList<LineDataSet> getDataSet( String mac ) {
         ArrayList<LineDataSet> dataSets;
         ArrayList<Entry> valueSet = new ArrayList<>();
+        xLabels = new ArrayList<>();
 
 
         Date last = DateUtils.ceiling( db.getLastInteractionDate( mac ), Calendar.DATE );
@@ -143,6 +149,7 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         Log.d( "test", String.valueOf( difference ) );
         for ( int i = 0; i < difference; i++ ) {
             current = DateUtils.addDays( prev, 1 );
+            xLabels.add( new SimpleDateFormat( "dd/MM", Locale.US ).format( current ) );
             count = db.getInteractionCountByDate( mac, prev, current );
             valueSet.add( new Entry( i, count ) );
             prev = current;
@@ -156,9 +163,11 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
     private ArrayList<LineDataSet> getTestDataSet() {
         ArrayList<LineDataSet> dataSets;
         ArrayList<Entry> valueSet = new ArrayList<>();
+        xLabels = new ArrayList<>();
 
         float modifier = 0;
-        for ( int i = 10; i < 6000; i += 10 ) {
+        Date current = DateUtils.ceiling( Calendar.getInstance().getTime(), Calendar.DATE );
+        for ( int i = 10; i < 600; i += 10 ) {
             float average = 0;
             for ( int j = 0; j < 10; j++ ) {
                 float val = (int) ( Math.random() * 4 ) + modifier;
@@ -166,7 +175,9 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
             }
             average = average / 10;
             valueSet.add( new Entry( i / 10, average ) );
-            modifier = modifier + i / 15000f;
+            modifier = modifier + i / 1500f;
+            xLabels.add( 0, new SimpleDateFormat( "dd/MM", Locale.US ).format( current ) );
+            current = DateUtils.addDays( current, -1 );
         }
 
         dataSets = new ArrayList<>();
@@ -174,7 +185,7 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         return dataSets;
     }
 
-    private LineDataSet createLineData(ArrayList<Entry> entries) {
+    private LineDataSet createLineData( ArrayList<Entry> entries ) {
         LineDataSet lineDataSet = new LineDataSet( entries, "Interactions" );
         lineDataSet.setDrawCircles( false );
         lineDataSet.setMode( LineDataSet.Mode.CUBIC_BEZIER );

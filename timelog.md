@@ -421,3 +421,9 @@
 - _7 hours_: Continue trend graph implementation - Gradient lines are very difficult, this commit has the colour gradient working but no real data interaction yet.
 - _1 hour_: Continue trend graph implementation - coupling it with real data.
 - _0.5 hours_: Making gradient be sharper and also colour blind friendly.
+
+### 13 Jan 2021
+
+- _1 hour_: Trying to design the algorithms and data structures for handling smoothing out rssi values over time.
+- _1 hour_: Implementing node type for red-black trees and creating node design of bytes.
+- _9 hours_: Successfully? implemented red-black trees.
