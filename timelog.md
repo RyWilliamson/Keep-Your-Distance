@@ -427,3 +427,8 @@
 - _1 hour_: Trying to design the algorithms and data structures for handling smoothing out rssi values over time.
 - _1 hour_: Implementing node type for red-black trees and creating node design of bytes.
 - _9 hours_: Successfully? implemented red-black trees.
+
+### 14 Jan 2021
+
+- _1 hour_: Designing algorithm to use the red-black tree.
+- _2 hours_: Implementing this algorithm.

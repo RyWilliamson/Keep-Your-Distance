@@ -272,6 +272,18 @@ private:
         root->isRed = false;
     }
 
+    void inOrderClear(pNode node, uint32_t time) {
+        if (node != leaf) {
+            inOrderHelper(node->left);
+            
+            if (time - node->timestamp > 7000) {
+                deletionHelper(node, node->mac);
+            }
+
+            inOrderHelper(node->right);
+        }
+    }
+
 public:
     AverageRBTree() {
         leaf = new Node();
@@ -279,6 +291,10 @@ public:
         leaf->left = nullptr;
         leaf->right = nullptr;
         root = leaf;
+    }
+
+    pNode getLeaf() {
+        return this->leaf;
     }
 
     void inOrder() {
@@ -380,7 +396,7 @@ public:
     }
 
     // Insert into the tree
-    void insertNode(uint64_t mac, uint16_t rssi, uint32_t timestamp) {
+    pNode insertNode(uint64_t mac, uint16_t rssi, uint32_t timestamp) {
         // Binary Search Tree Insertion
         pNode node = new Node;
         node->parent = nullptr;
@@ -416,19 +432,24 @@ public:
         // if new node is a root node, return
         if (node->parent == nullptr) {
             node->isRed = false;
-            return;
+            return node;
         }
 
         // if grandparent is null, return
         if (node->parent->parent == nullptr) {
-            return;
+            return node;
         }
 
         correctInsertion(node);
+        return node;
     }
 
     void deleteNode(uint64_t mac) {
         deletionHelper(this->root, mac);
+    }
+
+    void cleanTree(uint32_t time) {
+        inOrderClear(this->root, time);
     }
 };
 

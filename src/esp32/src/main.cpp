@@ -20,7 +20,6 @@ int scanTime = 1;
 bool connected = false;
 BLEScan *pBLEScanner;
 BLEAdvertising *pBLEAdvertiser;
-bool foundESP = false;
 
 // RSSI Data
 #define MAXLOG 3000 // 10 minutes worth at 1 interaction per second.
@@ -30,7 +29,13 @@ int rearLogIndex = -1; // Adds to here
 bool logWasEmpty;
 int rssi = 0;
 String mac;
+
+// Averaging
 AverageRBTree *tree;
+bool interaction;
+float weight = 2 / (10 + 1);
+#define CLEARTIME 10000
+unsigned long clearTrack = 0;
 
 BLECharacteristic *rssiCharacteristic;
 BLECharacteristic *bulkCharacteristic;
@@ -47,6 +52,16 @@ int calculateTargetRSSI(float distance, float measuredPower, int environment) {
 
 void notify(bool value) {
     notification(&screen, value);
+}
+
+uint64_t macToInt64(BLEAddress mac) {
+    uint64_t output = 0;
+    memcpy(&output, mac.getNative(), 6);
+    return output;
+}
+
+uint16_t exponentialWeightedAverage(uint16_t oldRSSI, uint16_t newRSSI) {
+    return (newRSSI * weight) + (oldRSSI * (1 - weight));
 }
 
 int logLength() {
@@ -139,22 +154,36 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
         if (advertisedDevice.getName() == "ESP32") {
             rssi = advertisedDevice.getRSSI();
             mac = advertisedDevice.getAddress().toString().c_str();
+            uint64_t mac64 = macToInt64(advertisedDevice.getAddress());
+            unsigned long time = millis();
+
+            pNode node = tree->search(mac64);
+            if (node == tree->getLeaf()) {
+                node = tree->insertNode(mac64, rssi, time);
+                Serial.println("insert");
+            } else {
+                if (time - node->timestamp > 5000) {
+                    Serial.println("update new");
+                    node->rssi = rssi;
+                } else {
+                    Serial.println("update average");
+                    node->rssi = exponentialWeightedAverage(node->rssi, rssi);
+                }
+
+                node->timestamp = time;
+            }
             
-            if (rssi >= target_rssi) {
-                notify(true);
+            if (node->rssi >= target_rssi) {
+                interaction = true;
                 if (connected) {
                     uint8_t packet[13] = {};
                     setupPacket(packet, rssi, mac);
                     rssiCharacteristic->setValue(packet, 13);
                     rssiCharacteristic->notify();
                 } else {
-                    setupBulkPacket(rssi, mac, millis());
+                    setupBulkPacket(rssi, mac, time);
                 }
-            } else {
-                notify(false);
             }
-
-            foundESP = true;
         }
     }
 };
@@ -228,22 +257,16 @@ void setup() {
 }
 
 void loop() {
-    //screen.drawString(0, 0, "Advertising...");
-    //screen.drawString(0, 1, "Scanning...");
-    // screen.draw2x2String(0, 0, "Advert..");
-    // screen.draw2x2String(0, 2, "Scan..");
 
     BLEScanResults foundDevices = pBLEScanner->start(scanTime, false); // Blocks until done
-    //Serial.print("Devices found: ");
-    //Serial.println(foundDevices.getCount());
-    //Serial.println("Scan done!");
     pBLEScanner->clearResults();   // delete results fromBLEScan buffer to release memory
 
-    if (!foundESP) {
-        // Serial.println(ESP.getFreeHeap());
-        clear2x2Line(&screen, 4);
-        clear2x2Line(&screen, 6);
+    uint32_t time = millis();
+    if (time - clearTrack > CLEARTIME) {
+        tree->cleanTree(time);
+        clearTrack = millis();
     }
-    foundESP = false;
+    notify(interaction);
+    interaction = false;
     //delay(200);
 }
