@@ -13,7 +13,7 @@ U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=
 int measured_power = -81;
 int environment = 3;
 float distance = 1.5;
-int target_rssi = -86;
+int16_t target_rssi = -86;
 
 // BLE Data
 int scanTime = 1;
@@ -27,14 +27,14 @@ uint8_t rssiLog[MAXLOG][17] = {};
 int frontLogIndex = -1; // Removes from here
 int rearLogIndex = -1; // Adds to here
 bool logWasEmpty;
-int rssi = 0;
+float rssi = 0;
 String mac;
 
 // Averaging
 AverageRBTree *tree;
 bool interaction;
-float weight = 2 / (10 + 1);
-#define CLEARTIME 10000
+float weight = 2.0 / (5 + 1.0); // Decaying average over last 10 elements
+#define CLEARTIME 600000
 unsigned long clearTrack = 0;
 
 BLECharacteristic *rssiCharacteristic;
@@ -42,11 +42,11 @@ BLECharacteristic *bulkCharacteristic;
 BLECharacteristic *configACKCharacteristic;
 
 // Path loss model of free space propogation.
-float calculateDistance(int rssi, float measuredPower, float environment) {
+float calculateDistance(int16_t rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / (10 * environment));
 }
 
-int calculateTargetRSSI(float distance, float measuredPower, int environment) {
+int16_t calculateTargetRSSI(float distance, float measuredPower, int environment) {
     return measuredPower - 10 * environment * log10f(distance);
 }
 
@@ -60,7 +60,7 @@ uint64_t macToInt64(BLEAddress mac) {
     return output;
 }
 
-uint16_t exponentialWeightedAverage(uint16_t oldRSSI, uint16_t newRSSI) {
+float exponentialWeightedAverage(float oldRSSI, float newRSSI) {
     return (newRSSI * weight) + (oldRSSI * (1 - weight));
 }
 
@@ -109,7 +109,7 @@ void popFromLog(uint8_t* destination) {
     screen.draw2x2String(0, 0, String(logLength()).c_str());
 }
 
-void setupPacket(uint8_t* packet, int rssi, String mac) {
+void setupPacket(uint8_t* packet, int16_t rssi, String mac) {
     // Address (12 bytes), rssi (1 byte) - 13 bytes total
     uint8_t data_arr[13] = {};
     mac.replace(":", "");
@@ -119,7 +119,7 @@ void setupPacket(uint8_t* packet, int rssi, String mac) {
     memcpy(packet, &data_arr, 13);
 }
 
-void setupBulkPacket(int rssi, String mac, unsigned long timestamp) {
+void setupBulkPacket(int16_t rssi, String mac, unsigned long timestamp) {
     // Address (12 bytes), rssi (1 byte), timestamp (4 bytes) - 17 bytes total
     uint8_t data_arr[17] = {};
     mac.replace(":", "");
@@ -152,7 +152,7 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
         // Only an inital check - bad for security long-term
         if (advertisedDevice.getName() == "ESP32") {
-            rssi = advertisedDevice.getRSSI();
+            rssi = (float) advertisedDevice.getRSSI();
             mac = advertisedDevice.getAddress().toString().c_str();
             uint64_t mac64 = macToInt64(advertisedDevice.getAddress());
             unsigned long time = millis();
@@ -163,11 +163,11 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
                 Serial.println("insert");
             } else {
                 if (time - node->timestamp > 5000) {
-                    Serial.println("update new");
                     node->rssi = rssi;
+                    Serial.printf("update new: %f - %f\n", rssi, node->rssi);
                 } else {
-                    Serial.println("update average");
                     node->rssi = exponentialWeightedAverage(node->rssi, rssi);
+                    Serial.printf("update average: %f - %f\n", rssi, node->rssi);
                 }
 
                 node->timestamp = time;
@@ -177,11 +177,11 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
                 interaction = true;
                 if (connected) {
                     uint8_t packet[13] = {};
-                    setupPacket(packet, rssi, mac);
+                    setupPacket(packet, (int16_t) rssi, mac);
                     rssiCharacteristic->setValue(packet, 13);
                     rssiCharacteristic->notify();
                 } else {
-                    setupBulkPacket(rssi, mac, time);
+                    setupBulkPacket((int16_t) rssi, mac, time);
                 }
             }
         }
@@ -252,8 +252,6 @@ void setup() {
     bulkCharacteristic = getBulkCharacteristic();
     pBLEAdvertiser = startBLEAdvertising();
     pBLEScanner = startBLEScanning(new AdvertisedDeviceCallbacks);
-    Serial.println(ESP.getHeapSize());
-    Serial.println(ESP.getFreeHeap());
 }
 
 void loop() {

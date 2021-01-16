@@ -7,7 +7,7 @@
 
 struct Node {
     uint64_t mac;
-    uint16_t rssi;
+    float rssi;
     uint32_t timestamp;
 
     Node *parent;
@@ -40,7 +40,7 @@ private:
         std::string mac_string = "";
         if (node != leaf) {
             inOrderHelper(node->left);
-            Serial.printf("%llx %u %u\r\n", node->mac, node->rssi, node->timestamp);
+            Serial.printf("%llx %f %u\r\n", node->mac, node->rssi, node->timestamp);
             inOrderHelper(node->right);
         }
     }
@@ -396,7 +396,7 @@ public:
     }
 
     // Insert into the tree
-    pNode insertNode(uint64_t mac, uint16_t rssi, uint32_t timestamp) {
+    pNode insertNode(uint64_t mac, float rssi, uint32_t timestamp) {
         // Binary Search Tree Insertion
         pNode node = new Node;
         node->parent = nullptr;
