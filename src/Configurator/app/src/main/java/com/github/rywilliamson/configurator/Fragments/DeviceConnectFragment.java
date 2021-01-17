@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.Database.Entity.Device;
+import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
@@ -34,8 +36,8 @@ public class DeviceConnectFragment extends Fragment implements IBluetoothImpleme
 
     private TextView prevMac;
     private Spinner macSpinner;
-    private ArrayAdapter<String> macAdapter;
-    private List<String> macList;
+    private ArrayAdapter<Device> macAdapter;
+    private List<Device> macList;
     private IBackendContainer container;
     private BluetoothHandler bt;
     private DatabaseViewModel db;
@@ -70,7 +72,12 @@ public class DeviceConnectFragment extends Fragment implements IBluetoothImpleme
         macSpinner.setAdapter( macAdapter );
 
         prevMac = view.findViewById( R.id.tvDcMacText );
-        prevMac.setText( bt.getPrevMac() );
+        RSSIDatabase.databaseGetExecutor.execute( () -> {
+            Device device = db.getDevice( bt.getPrevMac() );
+            getActivity().runOnUiThread( () -> {
+                prevMac.setText( device.alias );
+            } );
+        } );
 
         view.findViewById( R.id.bDcConnect ).setOnClickListener( this::connectClick );
         view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
@@ -79,15 +86,17 @@ public class DeviceConnectFragment extends Fragment implements IBluetoothImpleme
 
     public void connectClick( View view ) {
         if ( macList != null && !macList.isEmpty() ) {
-            container.directConnect( macSpinner.getSelectedItem().toString() );
+            container.directConnect( ((Device)macSpinner.getSelectedItem()).macAddress );
         }
     }
 
     public void reconnectClick( View view ) {
-        String mac = prevMac.getText().toString();
-        if ( !mac.equals( "" ) ) {
-            container.directConnect( mac );
-        }
+        RSSIDatabase.databaseGetExecutor.execute( () -> {
+            if (!prevMac.getText().toString().equals( "" )) {
+                Device device = db.getDevice( bt.getPrevMac() );
+                container.directConnect( device.macAddress );
+            }
+        } );
     }
 
     public void scanClick( View view ) {
@@ -109,7 +118,12 @@ public class DeviceConnectFragment extends Fragment implements IBluetoothImpleme
         @Override
         public void onDiscoveredPeripheral( BluetoothPeripheral peripheral, @NonNull ScanResult scanResult ) {
             Log.d( Keys.CONNECTION_CENTRAL, "Adding item for: " + peripheral.getAddress() );
-            SpinnerUtils.addItem( macList, macAdapter, peripheral.getAddress() );
+            RSSIDatabase.databaseGetExecutor.execute( () -> {
+                Device device = db.getDevice( peripheral.getAddress() );
+                getActivity().runOnUiThread( () -> {
+                    SpinnerUtils.addItem( macList, macAdapter, device );
+                } );
+            } );
         }
 
         @Override

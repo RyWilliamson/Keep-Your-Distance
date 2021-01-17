@@ -27,6 +27,9 @@ public interface DeviceDao {
     @Insert
     void insertDevice( Device device );
 
+    @Query( "UPDATE device SET alias = :alias WHERE mac_address=:id" )
+    void updateAlias( String id, String alias );
+
     @Update(onConflict = OnConflictStrategy.REPLACE )
     void updateDevice( Device device );
 

@@ -1,9 +1,12 @@
 package com.github.rywilliamson.configurator.Fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.Database.Entity.Device;
+import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.IBluetoothImplementer;
 import com.github.rywilliamson.configurator.R;
@@ -62,10 +67,17 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
         currentInfo = view.findViewById( R.id.tvDiCurrentInfo );
         curCount = -1;
 
-        ( (TextView) view.findViewById( R.id.tvDiMacInfo ) ).setText( bt.getBLEPeripheral().getAddress() );
+        RSSIDatabase.databaseGetExecutor.execute( () -> {
+            Device device = db.getDevice( bt.getBLEPeripheral().getAddress() );
+            getActivity().runOnUiThread( () -> {
+                ( (TextView) view.findViewById( R.id.tvDiMacInfo ) ).setText( device.macAddress );
+                ( (TextView) view.findViewById( R.id.tvDiAliasInfo ) ).setText( device.alias );
+            } );
+        } );
 
         view.findViewById( R.id.bDiExport ).setOnClickListener( this::exportClick );
         view.findViewById( R.id.bDiClear ).setOnClickListener( this::clearClick );
+        view.findViewById( R.id.bDiRename ).setOnClickListener( this::renameClick );
         view.findViewById( R.id.bDiDisconnect ).setOnClickListener( this::disconnectClick );
 
         db.setInteractionCountReceiver( bt.getBLEPeripheral().getAddress() );
@@ -78,6 +90,33 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
         } );
 
 
+    }
+
+    public void renameClick( View view ) {
+        AlertDialog.Builder alert = new AlertDialog.Builder( getContext() );
+        alert.setTitle( R.string.f_di_rename );
+
+        final EditText input = new EditText( getContext() );
+        input.setSingleLine();
+        input.setHint( R.string.f_di_rename_msg );
+        FrameLayout container = new FrameLayout( getContext() );
+        FrameLayout.LayoutParams parameters = new FrameLayout.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT );
+        parameters.leftMargin = getResources().getDimensionPixelSize( R.dimen.rename_margin );
+        parameters.rightMargin = getResources().getDimensionPixelSize( R.dimen.rename_margin );
+        input.setLayoutParams( parameters );
+        container.addView( input );
+        alert.setView( container );
+
+        alert.setPositiveButton( "Ok", ( dialog, which ) -> {
+            db.updateAlias( bt.getBLEPeripheral().getAddress(), input.getText().toString() );
+            ( (TextView) view.findViewById( R.id.tvDiAliasInfo ) ).setText( input.getText().toString() );
+        } );
+
+        alert.setNegativeButton( "Cancel", ( dialog, which ) -> {
+        } );
+
+        alert.show();
     }
 
     public void exportClick( View view ) {
@@ -111,7 +150,7 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
     private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
         @Override
         public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
-            if (!clearing) {
+            if ( !clearing ) {
                 Navigation.findNavController( DeviceInfoFragment.this.getView() ).navigate(
                         DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
             } else {

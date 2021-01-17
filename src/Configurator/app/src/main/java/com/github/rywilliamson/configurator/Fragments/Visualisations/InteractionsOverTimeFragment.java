@@ -99,20 +99,6 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         } );
     }
 
-    private float closestValue( float[] vals, float target ) {
-        float closest = vals[0];
-        float closest_diff = Math.abs( target - vals[0] );
-        float temp;
-        for (float val : vals) {
-            temp = Math.abs( target - val );
-            if (temp < closest_diff) {
-                closest = val;
-                closest_diff = temp;
-            }
-        }
-        return closest;
-    }
-
     private void setupData( ArrayList<LineDataSet> dataSet ) {
         data.clearValues();
         for ( LineDataSet curSet : dataSet ) {

@@ -45,6 +45,12 @@ public class DeviceRepository {
         } );
     }
 
+    public void updateAlias( String id, String alias ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
+            mDeviceDao.updateAlias( id, alias );
+        } );
+    }
+
     public void insertScanned( Device device ) {
         RSSIDatabase.databaseWriteExecutor.execute( () -> {
             Device qDevice = mDeviceDao.getDeviceByID( device.macAddress );

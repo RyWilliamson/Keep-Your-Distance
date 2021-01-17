@@ -14,7 +14,7 @@
 
     <!-- Device Connect Fragment -->
     <string name="f_dc_title">Connect to Device</string>
-    <string name="f_dc_maclabel">Previous Mac Address:</string>
+    <string name="f_dc_maclabel">Previous Device:</string>
     <string name="f_dc_previousmac">None</string>
     <string name="f_dc_reconnect">Reconnect to Device</string>
     <string name="f_dc_scan">Scan</string>
@@ -24,12 +24,16 @@
     <!-- Device Info Fragment -->
     <string name="f_di_title">Device Info</string>
     <string name="f_di_maclabel">Device MAC Address:</string>
+    <string name="f_di_aliaslabel">Device Name:</string>
     <string name="f_di_mac_default">00:11:22:33:EE:FF</string>
+    <string name="f_di_alias_default">Name</string>
     <string name="f_di_total_interactions">Total Interactions:</string>
     <string name="f_di_connection_interactions">Interactions Since Connection:</string>
     <string name="f_di_export">Export Data</string>
     <string name="f_di_clear">Clear Data</string>
     <string name="f_di_disconnect">Disconnect</string>
+    <string name="f_di_rename">Rename</string>
+    <string name="f_di_rename_msg">New alias: </string>
 
     <!-- Settings Fragment -->
     <string name="f_s_title">Settings</string>

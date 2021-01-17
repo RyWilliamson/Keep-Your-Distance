@@ -442,3 +442,4 @@
 ### 17 Jan 2021
 
 - _2 hours_: Still trying to fix trend labels - new approach to set label drawing to false and try overlay textviews at the start and end positions.
+- _2.5 hours_: Implement device alias naming.

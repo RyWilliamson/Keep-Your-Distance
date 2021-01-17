@@ -101,6 +101,10 @@ public class DatabaseViewModel extends AndroidViewModel {
         mDeviceRepository.insertScanned( device );
     }
 
+    public void updateAlias( String id, String alias ) {
+        mDeviceRepository.updateAlias( id, alias );
+    }
+
     // Writes for Insert
     public void insert( Interaction interaction ) {
         mInteractionRepository.insert( interaction );

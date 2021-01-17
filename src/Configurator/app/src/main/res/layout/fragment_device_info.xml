@@ -34,19 +34,36 @@
         android:id="@+id/tvDiMacLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="20dp"
         android:text="@string/f_di_maclabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDiTitle" />
+        app:layout_constraintStart_toStartOf="@+id/tvDiAliasLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiAliasLabel" />
 
     <TextView
         android:id="@+id/tvDiMacInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/f_di_mac_default"
+        app:layout_constraintEnd_toEndOf="@+id/tvDiAliasInfo"
+        app:layout_constraintTop_toTopOf="@+id/tvDiMacLabel" />
+
+    <TextView
+        android:id="@+id/tvDiAliasLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="70dp"
+        android:text="@string/f_di_aliaslabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiTitle" />
+
+    <TextView
+        android:id="@+id/tvDiAliasInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="15dp"
-        android:text="@string/f_di_mac_default"
+        android:text="@string/f_di_alias_default"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDiTitle" />
 
@@ -64,8 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="13"
-        app:layout_constraintEnd_toEndOf="@+id/tvDiMacInfo"
-        app:layout_constraintStart_toStartOf="@+id/tvDiMacInfo"
+        app:layout_constraintEnd_toEndOf="@+id/tvDiAliasInfo"
         app:layout_constraintTop_toTopOf="@+id/tvDiTotalLabel" />
 
     <TextView
@@ -112,6 +128,16 @@
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
         android:text="@string/f_di_disconnect"
+        app:layout_constraintEnd_toEndOf="@+id/bDiClear"
+        app:layout_constraintStart_toStartOf="@+id/bDiClear"
+        app:layout_constraintTop_toBottomOf="@+id/bDiRename" />
+
+    <Button
+        android:id="@+id/bDiRename"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/f_di_rename"
         app:layout_constraintEnd_toEndOf="@+id/bDiClear"
         app:layout_constraintStart_toStartOf="@+id/bDiClear"
         app:layout_constraintTop_toBottomOf="@+id/bDiClear" />
