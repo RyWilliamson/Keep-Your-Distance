@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,7 +44,9 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
     private LineChart chart;
     private LineData data;
     private boolean first;
-    private LinearGradient gradient;
+
+    private TextView startLabel;
+    private TextView endLabel;
 
     private DatabaseViewModel db;
 
@@ -68,6 +71,9 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
     @Override
     public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        startLabel = view.findViewById( R.id.tvStartLabel );
+        endLabel = view.findViewById( R.id.tvEndLabel );
+
         first = true;
         String mac = InteractionsOverTimeFragmentArgs.fromBundle( getArguments() ).getDeviceMac();
         chart = view.findViewById( R.id.trend_chart );
@@ -93,6 +99,20 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         } );
     }
 
+    private float closestValue( float[] vals, float target ) {
+        float closest = vals[0];
+        float closest_diff = Math.abs( target - vals[0] );
+        float temp;
+        for (float val : vals) {
+            temp = Math.abs( target - val );
+            if (temp < closest_diff) {
+                closest = val;
+                closest_diff = temp;
+            }
+        }
+        return closest;
+    }
+
     private void setupData( ArrayList<LineDataSet> dataSet ) {
         data.clearValues();
         for ( LineDataSet curSet : dataSet ) {
@@ -100,7 +120,12 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         }
         data.setValueTextSize( 18f );
         data.setDrawValues( false );
-        chart.getXAxis().setValueFormatter( new IndexAxisValueFormatter( xLabels ) );
+        chart.getXAxis().setValueFormatter( new IndexAxisValueFormatter() {
+            @Override
+            public String getFormattedValue( float value ) {
+                return "";
+            }
+        } );
         chart.notifyDataSetChanged();
         requireActivity().runOnUiThread( () -> chart.animateXY( 1000, 0 ) );
         setupGradient( dataSet.get( 0 ) );
@@ -117,13 +142,11 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         xAxis.setPosition( XAxis.XAxisPosition.BOTTOM );
         xAxis.setDrawGridLines( true );
         xAxis.setTextSize( 18f );
-        //xAxis.setAvoidFirstLastClipping( true );
 
         chart.getAxisRight().setEnabled( false );
         yAxis.setDrawGridLines( false );
         yAxis.setTextSize( 18f );
         yAxis.setAxisMinimum( 0f );
-        //yAxis.setAxisMaximum( 150f );
 
         chart.setExtraBottomOffset( 10 );
         chart.setExtraRightOffset( 30 );
@@ -155,6 +178,9 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
             prev = current;
         }
 
+        startLabel.setText( xLabels.get( 0 ) );
+        endLabel.setText( xLabels.get( xLabels.size() - 1 ) );
+
         dataSets = new ArrayList<>();
         dataSets.add( createLineData( valueSet ) );
         return dataSets;
@@ -179,6 +205,9 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
             xLabels.add( 0, new SimpleDateFormat( "dd/MM", Locale.US ).format( current ) );
             current = DateUtils.addDays( current, -1 );
         }
+
+        startLabel.setText( xLabels.get( 0 ) );
+        endLabel.setText( xLabels.get( xLabels.size() - 1 ) );
 
         dataSets = new ArrayList<>();
         dataSets.add( createLineData( valueSet ) );

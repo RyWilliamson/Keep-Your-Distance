@@ -437,3 +437,8 @@
 
 - _1.5 hours_: Fixing bugs with new RSSI system that I hadn't noticed.
 - _1.5 hours_: Update red-black tree node struct and required code to move to using a float. Previously using int16_t which meant that on each EWA calculation some data was being lost which meant for less reliable and smooth averaging.
+- _1.5 hours_: Trying to sort trend graph labels - best approach is to only display first and last labels but having to work around the library using a bit of a hacky approach.
+
+### 17 Jan 2021
+
+- _2 hours_: Still trying to fix trend labels - new approach to set label drawing to false and try overlay textviews at the start and end positions.
