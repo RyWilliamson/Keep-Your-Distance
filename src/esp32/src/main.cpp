@@ -193,12 +193,14 @@ class ServerCallbacks: public BLEServerCallbacks {
         connected = true;
         pServer->getAdvertising()->stop();
         pBLEAdvertiser = startJustESPAdvertising();
+        Serial.println("Connected");
     }
 
     void onDisconnect(BLEServer* pServer) {
         connected = false;
         pServer->getAdvertising()->stop();
         pBLEAdvertiser = startBLEAdvertising();
+        Serial.println("Disconnected");
     }
 };
 

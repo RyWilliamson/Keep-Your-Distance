@@ -141,6 +141,7 @@ public class BluetoothHandler {
 
     public void disconnect() {
         this.BLEPeripheral.setNotify( rssiCharacteristic, false );
+        this.BLEPeripheral.setNotify( bulkCharacteristic, false );
         this.BLEPeripheral.setNotify( configACKCharacteristic, false );
         central.cancelConnection( BLEPeripheral );
     }
