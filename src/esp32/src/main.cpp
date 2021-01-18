@@ -33,7 +33,7 @@ String mac;
 // Averaging
 AverageRBTree *tree;
 bool interaction;
-float weight = 2.0 / (5 + 1.0); // Decaying average over last 10 elements
+float weight = 2.0 / (5 + 1.0); // Decaying average over last 5 elements
 #define CLEARTIME 600000
 unsigned long clearTrack = 0;
 

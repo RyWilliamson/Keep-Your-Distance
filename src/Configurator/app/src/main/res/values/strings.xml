@@ -27,7 +27,7 @@
     <string name="f_di_aliaslabel">Device Name:</string>
     <string name="f_di_mac_default">00:11:22:33:EE:FF</string>
     <string name="f_di_alias_default">Name</string>
-    <string name="f_di_total_interactions">Duration &amp; Distance</string>
+    <string name="f_di_total_interactions">Total Interactions:</string>
     <string name="f_di_connection_interactions">Interactions Since Connection:</string>
     <string name="f_di_export">Export Data</string>
     <string name="f_di_clear">Clear Data</string>

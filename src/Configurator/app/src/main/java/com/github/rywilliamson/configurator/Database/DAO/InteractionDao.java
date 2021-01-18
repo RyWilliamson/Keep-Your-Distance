@@ -32,7 +32,10 @@ public interface InteractionDao {
     @Query( "SELECT COUNT(*) FROM interaction WHERE receiver = :receiver AND" +
             "(end_time - start_time) >= :start_range AND " +
             "(end_time - start_time) < :end_range" )
-    Integer getInteractionsInRange(String receiver, long start_range, long end_range);
+    Integer getInteractionsInRange( String receiver, long start_range, long end_range );
+
+    @Query( "SELECT COUNT(*) FROM interaction WHERE receiver = :receiver" )
+    Integer getInteractionCountByReceiverNow( String receiver );
 
     @TypeConverters( Converters.class )
     @Query( "SELECT MAX(start_time) FROM interaction WHERE receiver = :receiver" )

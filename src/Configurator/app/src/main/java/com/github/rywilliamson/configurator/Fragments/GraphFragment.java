@@ -1,6 +1,8 @@
 package com.github.rywilliamson.configurator.Fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,10 +79,19 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
 
         image = view.findViewById( R.id.ivConnected );
 
+        if (dbViewModel == null) {
+            container = (IBackendContainer) getActivity();
+            dbViewModel = container.getDatabaseViewModel();
+        }
+
         deviceList = new ArrayList<>();
         RSSIDatabase.databaseGetExecutor.execute( () -> {
             List<Device> devices = dbViewModel.getUsedDevices();
-            deviceList.addAll( devices );
+            for ( Device device : devices ) {
+                if ( dbViewModel.getInteractionCountByReceiverNow( device.macAddress ) != 0 ) {
+                    deviceList.add( device );
+                }
+            }
             deviceList.add( fakeDevice );
 
             getActivity().runOnUiThread( () -> {
@@ -99,7 +110,7 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
                             return;
                         }
 
-                        String mac = deviceList.get(position).macAddress;
+                        String mac = deviceList.get( position ).macAddress;
                         getCurrentImplementer().updateData( mac );
                     }
 
@@ -119,7 +130,7 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
         graphSpinner.setAdapter( graphAdapter );
 
         SpinnerUtils.addItem( graphList, graphAdapter, "Weekly Interactions" );
-        SpinnerUtils.addItem( graphList, graphAdapter, "Total Interactions" );
+        SpinnerUtils.addItem( graphList, graphAdapter, "Duration & Distance" );
         SpinnerUtils.addItem( graphList, graphAdapter, "Interactions Over Time" );
 
         graphInitFlag = true;
@@ -197,7 +208,20 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     };
 
     public void childReady() {
-        getCurrentImplementer().updateData( deviceList.get( 0 ).macAddress );
+        if ( deviceList.size() > 0 ) {
+            getCurrentImplementer().updateData( deviceList.get( 0 ).macAddress );
+        } else {
+            Handler handler = new Handler( Looper.getMainLooper() );
+            handler.post( () -> {
+                while ( deviceList.size() < 1 ) {
+                    Log.d( "Graph", "Waiting until device list is populated." );
+                }
+                getActivity().runOnUiThread( () -> {
+                    getCurrentImplementer().updateData( deviceList.get( 0 ).macAddress );
+                } );
+            } );
+        }
+
     }
 
     private IGraphImplementer getCurrentImplementer() {

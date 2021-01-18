@@ -67,6 +67,10 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mInteractionRepository.getInteractionsForReceiver( id );
     }
 
+    public Integer getInteractionCountByReceiverNow( String receiver ) {
+        return mInteractionRepository.getInteractionCountByReceiverNow( receiver );
+    }
+
     public Date getLastInteractionDate( String id ) {
         return mInteractionRepository.getLastDate( id );
     }

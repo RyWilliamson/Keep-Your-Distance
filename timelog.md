@@ -449,3 +449,6 @@
 ### 18 Jan 2021
 
 - _5 hours_: Continue Duration-Distance pie chart fragment implementation.
+- _0.5 hours_:  Meeting with Jeremy.
+- _0.5 hours_:  Typed minutes.
+- _1 hour_: Tracked and solved indexing bug on opening graph view - this was a race condition so added a new thread runnable to wait until the deviceList was ready before setting the graph.
