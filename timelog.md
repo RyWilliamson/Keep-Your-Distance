@@ -452,3 +452,4 @@
 - _0.5 hours_:  Meeting with Jeremy.
 - _0.5 hours_:  Typed minutes.
 - _1 hour_: Tracked and solved indexing bug on opening graph view - this was a race condition so added a new thread runnable to wait until the deviceList was ready before setting the graph.
+- _2 hours_: Removing pie slice labels when they get too small - This functionality is heavily integrated with MPAndroidChart so the best solution was to remove it drawing all labels and have the user read the legend, then when the slice is too small set the value string to "" in the value formatter.

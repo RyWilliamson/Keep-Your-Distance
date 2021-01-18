@@ -102,7 +102,16 @@ public class DurationDistanceFragment extends Fragment implements IGraphImplemen
     private void setupData( PieChart chart, PieData data, PieDataSet dataSet ) {
         data.clearValues();
         data.addDataSet( dataSet );
-        data.setValueFormatter( new PercentFormatter( chart ) );
+        data.setValueFormatter( new PercentFormatter( chart ) {
+            @Override
+            public String getFormattedValue( float value ) {
+                if (value >= 9.5) {
+                    return super.getFormattedValue( value );
+                } else {
+                    return "";
+                }
+            }
+        } );
 
         chart.notifyDataSetChanged();
         requireActivity().runOnUiThread( () -> chart.animateY( 1000, Easing.EaseInOutQuad ) );
@@ -127,6 +136,9 @@ public class DurationDistanceFragment extends Fragment implements IGraphImplemen
         chart.setUsePercentValues( true );
         chart.getLegend().setTextSize( 14f );
         chart.getLegend().setHorizontalAlignment( Legend.LegendHorizontalAlignment.CENTER );
+        chart.setDrawEntryLabels( false );
+//        chart.setEntryLabelColor( Color.BLACK );
+//        chart.setEntryLabelTextSize( 14f );
 
         setupData( chart, data, dataSet );
         chart.setData( data );
@@ -149,9 +161,7 @@ public class DurationDistanceFragment extends Fragment implements IGraphImplemen
         }
 
         PieDataSet dataSet = new PieDataSet( entries, "" );
-        dataSet.setValueTextSize( 16f );
-        dataSet.setSliceSpace( 3f );
-        dataSet.setSelectionShift( 5f );
+        configureDataSet( dataSet );
 
         dataSet.setColors( colours );
         return dataSet;
@@ -171,9 +181,7 @@ public class DurationDistanceFragment extends Fragment implements IGraphImplemen
         }
 
         PieDataSet dataSet = new PieDataSet( entries, "" );
-        dataSet.setValueTextSize( 16f );
-        dataSet.setSliceSpace( 3f );
-        dataSet.setSelectionShift( 5f );
+        configureDataSet( dataSet );
 
         dataSet.setColors( colours );
         return dataSet;
@@ -191,16 +199,13 @@ public class DurationDistanceFragment extends Fragment implements IGraphImplemen
         for (int i = 0; i < 5; i++) {
             float offset = i * 0.5f;
             count = db.getCountAverageDistanceInRange( mac, offset, offset + 0.49f );
-            Log.d("test", String.valueOf( count ) );
             if (count != 0) {
                 entries.add( new PieEntry( count, labels[i] ) );
             }
         }
 
         PieDataSet dataSet = new PieDataSet( entries, "" );
-        dataSet.setValueTextSize( 16f );
-        dataSet.setSliceSpace( 3f );
-        dataSet.setSelectionShift( 5f );
+        configureDataSet( dataSet );
 
         dataSet.setColors( colours );
         return dataSet;
@@ -241,5 +246,12 @@ public class DurationDistanceFragment extends Fragment implements IGraphImplemen
                 "150-200",
                 ">200"
         };
+    }
+
+    private void configureDataSet(PieDataSet dataSet) {
+        dataSet.setValueTextSize( 16f );
+        dataSet.setSliceSpace( 3f );
+        dataSet.setSelectionShift( 5f );
+//        dataSet.setXValuePosition( PieDataSet.ValuePosition.OUTSIDE_SLICE );
     }
 }
