@@ -443,3 +443,9 @@
 
 - _2 hours_: Still trying to fix trend labels - new approach to set label drawing to false and try overlay textviews at the start and end positions.
 - _2.5 hours_: Implement device alias naming.
+- _1 hour_: Fix reconnection bug.
+- _1 hour_: Start Duration-Distance pie chart fragment implementation.
+
+### 18 Jan 2021
+
+- _5 hours_: Continue Duration-Distance pie chart fragment implementation.

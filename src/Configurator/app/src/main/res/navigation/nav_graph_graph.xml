@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/totalInteractionFragment"
-        android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.TotalInteractionFragment"
+        android:name="com.github.rywilliamson.configurator.Fragments.Visualisations.DurationDistanceFragment"
         android:label="fragment_total_interaction"
-        tools:layout="@layout/fragment_total_interaction" >
+        tools:layout="@layout/fragment_duration_distance" >
         <argument
             android:name="DeviceMac"
             app:argType="string"

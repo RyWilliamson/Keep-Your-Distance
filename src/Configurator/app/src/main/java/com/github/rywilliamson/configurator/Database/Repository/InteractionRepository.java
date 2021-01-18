@@ -36,6 +36,10 @@ public class InteractionRepository {
         return mInteractionDao.getInteractionsForReceiver( receiver );
     }
 
+    public Integer getInteractionsInRange(String receiver, long start_range, long end_range) {
+        return mInteractionDao.getInteractionsInRange( receiver ,start_range, end_range );
+    }
+
     public Date getLastDate(String receiver) {
         return mInteractionDao.getLastDate( receiver );
     }

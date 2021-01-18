@@ -79,6 +79,10 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mInteractionRepository.getInteractionCountByDate( id, start, end );
     }
 
+    public Integer getInteractionsInRange( String id, long start_range, long end_range ) {
+        return mInteractionRepository.getInteractionsInRange( id, start_range, end_range );
+    }
+
     public LiveData<Integer> getConnectedInteractionCount() {
         return mInteractionCount;
     }
@@ -90,6 +94,10 @@ public class DatabaseViewModel extends AndroidViewModel {
 
     public RSSI getRSSI( Interaction interaction, Date timestamp ) {
         return mRSSIRepository.getRSSIByID( interaction, timestamp );
+    }
+
+    public Integer getCountAverageDistanceInRange(String receiver, float start_range, float end_range) {
+        return mRSSIRepository.getCountAverageDistanceInRange( receiver, start_range, end_range );
     }
 
     // Writes for Device
