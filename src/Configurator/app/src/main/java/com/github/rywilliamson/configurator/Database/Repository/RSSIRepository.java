@@ -32,6 +32,10 @@ public class RSSIRepository {
         return mRSSIDao.getRSSIByID( sender, receiver, start, timestamp );
     }
 
+    public List<RSSI> getRSSIForReceiver( String receiver ) {
+        return mRSSIDao.getRSSIForReceiver( receiver );
+    }
+
     public Integer getCountAverageDistanceInRange(String receiver, float start_range, float end_range) {
         return mRSSIDao.getCountAverageDistanceInRange( receiver, start_range, end_range );
     }

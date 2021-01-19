@@ -104,6 +104,10 @@ public class DatabaseViewModel extends AndroidViewModel {
         return mRSSIRepository.getCountAverageDistanceInRange( receiver, start_range, end_range );
     }
 
+    public List<RSSI> getRSSIForReceiver( String receiver ) {
+        return mRSSIRepository.getRSSIForReceiver( receiver );
+    }
+
     // Writes for Device
     public void insert( Device device ) {
         mDeviceRepository.insert( device );

@@ -459,4 +459,5 @@
 ### 19 Jan 2021
 
 - _0.5 hours_:  Fix remaining 0's bug on device log count.
-- _1 hour_:  Research to see if it would be possible to implement resolvable private addresses with remaining implementation time (i.e today).
+- _1 hour_:  Research to see if it would be possible to implement resolvable private addresses with remaining implementation time (i.e today). Decided not feasible as using resolvable private addressing requires bonding which is not feasible on the esp 32 device.
+- _1 hour_: Implement export functionality - forgot about this.

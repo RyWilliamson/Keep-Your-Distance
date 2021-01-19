@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.github.rywilliamson.configurator.Database.DatabaseExporter;
 import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.Entity.Device;
 import com.github.rywilliamson.configurator.Database.RSSIDatabase;
@@ -120,8 +121,7 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
     }
 
     public void exportClick( View view ) {
-        // Later
-
+        DatabaseExporter.export( getActivity(), db, bt.getBLEPeripheral().getAddress() );
     }
 
     public void clearClick( View view ) {

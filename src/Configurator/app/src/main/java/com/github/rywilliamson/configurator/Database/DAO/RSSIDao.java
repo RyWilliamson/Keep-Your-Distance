@@ -18,7 +18,7 @@ public interface RSSIDao {
     LiveData<List<RSSI>> getRSSIList();
 
     @Query( "SELECT * FROM rssi WHERE sender_ref = :sender AND receiver_ref = :receiver AND start_time_ref = :start AND timestamp = :timestamp" )
-    RSSI getRSSIByID(String sender, String receiver, Date start, Date timestamp);
+    RSSI getRSSIByID( String sender, String receiver, Date start, Date timestamp );
 
     @Query( "SELECT COUNT(*)" +
             "FROM (" +
@@ -28,7 +28,10 @@ public interface RSSIDao {
             "    GROUP BY i.sender, i.receiver, i.start_time" +
             ")" +
             "WHERE avg_val >= :start_range AND avg_val < :end_range" )
-    Integer getCountAverageDistanceInRange(String receiver, float start_range, float end_range);
+    Integer getCountAverageDistanceInRange( String receiver, float start_range, float end_range );
+
+    @Query( "SELECT * FROM rssi WHERE receiver_ref = :receiver" )
+    List<RSSI> getRSSIForReceiver( String receiver );
 
     @Insert
     void insertRSSI( RSSI rssi );

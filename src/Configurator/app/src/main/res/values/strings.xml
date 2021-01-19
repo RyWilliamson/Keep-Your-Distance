@@ -65,5 +65,11 @@
     <!-- All Toasts -->
     <string name="toast_no_connect">Could not connect.</string>
     <string name="toast_scan_fail">Error: Scan failed, please retry</string>
+    <string name="toast_no_file_perms">Can\'t export - file permission not given!</string>
+    <string name="toast_export_success">Database exported to storage</string>
+    <string name="toast_export_folder_fail">Could not create folders - aborting</string>
+    <string name="toast_export_device_fail">Failed to export device table - aborting</string>
+    <string name="toast_export_interaction_fail">Failed to export interaction table - aborting</string>
+    <string name="toast_export_rssi_fail">Failed to export rssi table - aborting</string>
 
 </resources>
