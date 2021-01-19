@@ -106,7 +106,10 @@ void popFromLog(uint8_t* destination) {
         frontLogIndex++;
     }
     Serial.println("Front Log Index is at " + String(frontLogIndex));
-    screen.draw2x2String(0, 0, String(logLength()).c_str());
+    String logLenStr = String(logLength());
+    char buf[9] = {};
+    sprintf(buf, "%s%.*s", logLenStr.c_str(), 8 - logLenStr.length(), "        ");
+    screen.draw2x2String(0, 0, buf);
 }
 
 void setupPacket(uint8_t* packet, int16_t rssi, String mac) {

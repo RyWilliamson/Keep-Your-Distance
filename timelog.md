@@ -446,6 +446,8 @@
 - _1 hour_: Fix reconnection bug.
 - _1 hour_: Start Duration-Distance pie chart fragment implementation.
 
+# Week 14
+
 ### 18 Jan 2021
 
 - _5 hours_: Continue Duration-Distance pie chart fragment implementation.
@@ -453,3 +455,8 @@
 - _0.5 hours_:  Typed minutes.
 - _1 hour_: Tracked and solved indexing bug on opening graph view - this was a race condition so added a new thread runnable to wait until the deviceList was ready before setting the graph.
 - _2 hours_: Removing pie slice labels when they get too small - This functionality is heavily integrated with MPAndroidChart so the best solution was to remove it drawing all labels and have the user read the legend, then when the slice is too small set the value string to "" in the value formatter.
+
+### 19 Jan 2021
+
+- _0.5 hours_:  Fix remaining 0's bug on device log count.
+- _1 hour_:  Research to see if it would be possible to implement resolvable private addresses with remaining implementation time (i.e today).
