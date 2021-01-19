@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements IBackendContainer
             super.onDisconnectedPeripheral( peripheral, status );
             Log.d( Keys.GLOBAL_CENTRAL, "Disconnected from: " + peripheral.getAddress() );
             bt.clearForDisconnect();
+            if (!bt.isManual_disconnect()) {
+                directConnect( peripheral.getAddress() );
+            }
             getCurrentImplementer().getCentralCallback().onDisconnectedPeripheral( peripheral, status );
         }
 

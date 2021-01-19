@@ -52,6 +52,7 @@ public class BluetoothHandler {
     private final HashMap<String, TimeoutData> bulkTimeMap;
     private boolean connected;
     private boolean synced;
+    private boolean manual_disconnect = false;
     private final int SCAN_TIMEOUT = 3000; // Milliseconds
     private final int INTERACTION_TIMEOUT = 3000; // Milliseconds
 
@@ -132,17 +133,20 @@ public class BluetoothHandler {
     public void onConnect( BluetoothPeripheral peripheral ) {
         this.prefs.edit().putString( Keys.PREV_MAC, peripheral.getAddress() ).apply();
         this.BLEPeripheral = peripheral;
+        manual_disconnect = false;
         connected = true;
     }
 
     public void directConnect( String UUID, BluetoothPeripheralCallback callback ) {
-        central.connectPeripheral( central.getPeripheral( UUID ), callback );
+//        central.connectPeripheral( central.getPeripheral( UUID ), callback );
+        central.autoConnectPeripheral( central.getPeripheral( UUID ), callback );
     }
 
     public void disconnect() {
         this.BLEPeripheral.setNotify( rssiCharacteristic, false );
         this.BLEPeripheral.setNotify( bulkCharacteristic, false );
         this.BLEPeripheral.setNotify( configACKCharacteristic, false );
+        manual_disconnect = true;
         central.cancelConnection( BLEPeripheral );
     }
 
@@ -261,5 +265,9 @@ public class BluetoothHandler {
 
     public void setSynced( boolean synced ) {
         this.synced = synced;
+    }
+
+    public boolean isManual_disconnect() {
+        return manual_disconnect;
     }
 }
