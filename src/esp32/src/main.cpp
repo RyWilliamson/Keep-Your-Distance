@@ -5,7 +5,7 @@
 #include "bluetoothlib.h"
 #include "common.h"
 #include "rbtree.h"
-#include "main.h"
+#include "circularqueue.h"
 
 // Screen
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
@@ -23,11 +23,7 @@ BLEScan *pBLEScanner;
 BLEAdvertising *pBLEAdvertiser;
 
 // RSSI Data
-#define MAXLOG 3000 // 10 minutes worth at 1 interaction per second.
-uint8_t rssiLog[MAXLOG][17] = {};
-int frontLogIndex = -1; // Removes from here
-int rearLogIndex = -1; // Adds to here
-bool logWasEmpty;
+CircularQueueLog *RSSIlog;
 float rssi = 0;
 String mac;
 
@@ -65,54 +61,6 @@ float exponentialWeightedAverage(float oldRSSI, float newRSSI) {
     return (newRSSI * weight) + (oldRSSI * (1 - weight));
 }
 
-int logLength() {
-    return abs(frontLogIndex - rearLogIndex);
-}
-
-void addToLog(uint8_t* packet) {
-    if ((frontLogIndex == 0 && rearLogIndex == MAXLOG - 1) ||
-        (rearLogIndex == (frontLogIndex - 1) % MAXLOG - 1)) {
-        Serial.println("Log Full");
-        return;
-    } else if (frontLogIndex == -1) {
-        frontLogIndex = 0;
-        rearLogIndex = 0;
-    } else if (rearLogIndex == MAXLOG - 1 && frontLogIndex != 0) {
-        rearLogIndex = 0;
-    } else {
-        rearLogIndex++;
-    }
-    memcpy(rssiLog[rearLogIndex], packet, 17);
-    Serial.println("Rear Log Index is at " + String(rearLogIndex));
-    screen.draw2x2String(0, 0, String(logLength()).c_str());
-}
-
-void popFromLog(uint8_t* destination) {
-    if (frontLogIndex == -1) {
-        Serial.println("Log Empty");
-        logWasEmpty = true;
-        return;
-    }
-    logWasEmpty = false;
-
-    memcpy(destination, rssiLog[frontLogIndex], 17);
-    memset(rssiLog[frontLogIndex], 0, 17);
-
-    if (frontLogIndex == rearLogIndex) {
-        frontLogIndex = -1;
-        rearLogIndex = -1;
-    } else if (frontLogIndex == MAXLOG - 1) {
-        frontLogIndex = 0;
-    } else {
-        frontLogIndex++;
-    }
-    Serial.println("Front Log Index is at " + String(frontLogIndex));
-    String logLenStr = String(logLength());
-    char buf[9] = {};
-    sprintf(buf, "%s%.*s", logLenStr.c_str(), 8 - logLenStr.length(), "        ");
-    screen.draw2x2String(0, 0, buf);
-}
-
 void setupPacket(uint8_t* packet, int16_t rssi, String mac) {
     // Address (12 bytes), rssi (1 byte) - 13 bytes total
     uint8_t data_arr[13] = {};
@@ -131,7 +79,7 @@ void setupBulkPacket(int16_t rssi, String mac, unsigned long timestamp) {
     memcpy(&data_arr, mac.c_str(), 12);
     data_arr[12] = rssi_byte;
     memcpy(&data_arr[13], &timestamp, 4);
-    addToLog(data_arr);
+    RSSIlog->addToLog(data_arr);
 }
 
 void sendBulkPacket() {
@@ -141,8 +89,8 @@ void sendBulkPacket() {
     // Step 4 - clear memory at that position in the rssiLog
     // Step 5 - decrement logIndex
     uint8_t packet[17] = {};
-    popFromLog(packet);
-    if (!logWasEmpty) {
+    RSSIlog->popFromLog(packet);
+    if (!RSSIlog->wasLogEmpty()) {
         unsigned long newTime;
         memcpy(&newTime, &packet[13], 4);
         newTime = millis() - newTime;
@@ -250,12 +198,9 @@ void setup() {
     screen.draw2x2String(0, 0, "0");
     setupTile();
 
+    RSSIlog = new CircularQueueLog(&screen);
+
     tree = new AverageRBTree();
-    tree->insertNode(0, 0, 0);
-    tree->insertNode(2, 0, 0);
-    tree->insertNode(1, 0, 0);
-    std::string val = tree->inOrderString();
-    Serial.println(val.c_str());
 
     constructBLEServer("ESP32");
     rssiCharacteristic = getRSSICharacteristic();

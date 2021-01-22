@@ -68,7 +68,7 @@ private:
         if (mac < node->mac) {
             return searchHelper(node->left, mac);
         } else {
-            return searchHelper(node->left, mac);
+            return searchHelper(node->right, mac);
         }
     }
 
