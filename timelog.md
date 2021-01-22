@@ -462,3 +462,16 @@
 - _1 hour_:  Research to see if it would be possible to implement resolvable private addresses with remaining implementation time (i.e today). Decided not feasible as using resolvable private addressing requires bonding which is not feasible on the esp 32 device.
 - _2 hours_: Implement export functionality - forgot about this.
 - _1 hours_: Research & implement auto-connect.
+
+### 20 Jan 2021
+
+- _1 hour_: Research on unit testing.
+
+### 21 Jan 2021
+
+- _2 hours_: Learning AUnit.
+- _3 hours_: Trying to get some Red-Black tree tests written.
+
+### 22 Jan 2021
+
+- _1 hour_: Started to try implement tests for main functionality of the Arduino - this is going to require a large refactor.

@@ -5,6 +5,7 @@
 #include "bluetoothlib.h"
 #include "common.h"
 #include "rbtree.h"
+#include "main.h"
 
 // Screen
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
@@ -250,6 +251,11 @@ void setup() {
     setupTile();
 
     tree = new AverageRBTree();
+    tree->insertNode(0, 0, 0);
+    tree->insertNode(2, 0, 0);
+    tree->insertNode(1, 0, 0);
+    std::string val = tree->inOrderString();
+    Serial.println(val.c_str());
 
     constructBLEServer("ESP32");
     rssiCharacteristic = getRSSICharacteristic();

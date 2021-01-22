@@ -4,6 +4,7 @@
 
 #include <Arduino.h>
 #include <string>
+#include <sstream>
 
 struct Node {
     uint64_t mac;
@@ -23,6 +24,7 @@ class AverageRBTree {
 private:
     pNode root;
     pNode leaf;
+    int size;
 
     // Creates empty (default) node
     void createLeafNode(pNode node, pNode parent) {
@@ -36,12 +38,22 @@ private:
         node->isRed = false;
     }
 
-    void inOrderHelper(pNode node) {
+    void inOrderPrintHelper(pNode node) {
         std::string mac_string = "";
         if (node != leaf) {
-            inOrderHelper(node->left);
+            inOrderPrintHelper(node->left);
             Serial.printf("%llx %f %u\r\n", node->mac, node->rssi, node->timestamp);
-            inOrderHelper(node->right);
+            inOrderPrintHelper(node->right);
+        }
+    }
+
+    void inOrderStringHelper(pNode node, std::string* acc) {
+        if (node != leaf) {
+            inOrderStringHelper(node->left, acc);
+            std::ostringstream os;
+            os << node->mac << " " << node->rssi << " " << node->timestamp << std::endl;
+            *acc += os.str();
+            inOrderStringHelper(node->right, acc);
         }
     }
 
@@ -179,6 +191,8 @@ private:
             return;
         }
 
+        size -= 1;
+
         y = target;
         bool y_original_is_red = y->isRed;
         if (target->left == leaf) {
@@ -274,13 +288,21 @@ private:
 
     void inOrderClear(pNode node, uint32_t time) {
         if (node != leaf) {
-            inOrderHelper(node->left);
+            inOrderClear(node->left, time);
             
             if (time - node->timestamp > 7000) {
                 deletionHelper(node, node->mac);
             }
 
-            inOrderHelper(node->right);
+            inOrderClear(node->right, time);
+        }
+    }
+
+    void inOrderClear(pNode node) {
+        if (node != leaf) {
+            inOrderClear(node->left);
+            deletionHelper(node, node->mac);
+            inOrderClear(node->right);
         }
     }
 
@@ -291,6 +313,11 @@ public:
         leaf->left = nullptr;
         leaf->right = nullptr;
         root = leaf;
+        size = 0;
+    }
+
+    ~AverageRBTree() {
+        clearTree();
     }
 
     pNode getLeaf() {
@@ -298,7 +325,13 @@ public:
     }
 
     void inOrder() {
-        inOrderHelper(this->root);
+        inOrderPrintHelper(this->root);
+    }
+
+    std::string inOrderString() {
+        std::string output = "";
+        inOrderStringHelper(this->root, &output);
+        return output;
     }
 
     pNode search(uint64_t mac) {
@@ -398,6 +431,7 @@ public:
     // Insert into the tree
     pNode insertNode(uint64_t mac, float rssi, uint32_t timestamp) {
         // Binary Search Tree Insertion
+        size += 1;
         pNode node = new Node;
         node->parent = nullptr;
         node->left = leaf;
@@ -450,6 +484,27 @@ public:
 
     void cleanTree(uint32_t time) {
         inOrderClear(this->root, time);
+    }
+
+    void clearTree() {
+        inOrderClear(this->root);
+    }
+
+    int getSize() {
+        return size;
+    }
+
+    // Functions specifically for testing
+    pNode getRootTest() {
+        return root;
+    }
+
+    pNode getLeafTest() {
+        return leaf;
+    }
+
+    void setRootTest(pNode node) {
+        root = node;
     }
 };
 
