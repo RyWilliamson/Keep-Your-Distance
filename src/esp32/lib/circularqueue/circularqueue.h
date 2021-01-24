@@ -13,14 +13,23 @@ private:
     int rearLogIndex = -1; // Adds to here
     U8X8_SSD1306_128X64_NONAME_SW_I2C *screen;
     bool logWasEmpty;
+    bool testing;
 
 public:
     CircularQueueLog(U8X8_SSD1306_128X64_NONAME_SW_I2C *screen) {
         this->screen = screen;
+        this->testing = false;
+    }
+
+    CircularQueueLog() {
+        this->testing = true;
     }
 
     int logLength() {
-        return abs(frontLogIndex - rearLogIndex);
+        if (frontLogIndex == -1) {
+            return 0;
+        }
+        return abs(frontLogIndex - rearLogIndex) + 1;
     }
 
     bool wasLogEmpty() {
@@ -30,7 +39,7 @@ public:
     void addToLog(uint8_t* packet) {
         if ((frontLogIndex == 0 && rearLogIndex == MAXLOG - 1) ||
             (rearLogIndex == (frontLogIndex - 1) % MAXLOG - 1)) {
-            Serial.println("Log Full");
+            if (!testing) { Serial.println("Log Full"); }
             return;
         } else if (frontLogIndex == -1) {
             frontLogIndex = 0;
@@ -41,13 +50,15 @@ public:
             rearLogIndex++;
         }
         memcpy(rssiLog[rearLogIndex], packet, 17);
-        Serial.println("Rear Log Index is at " + String(rearLogIndex));
-        screen->draw2x2String(0, 0, String(logLength()).c_str());
+        if (!testing) {
+            Serial.println("Rear Log Index is at " + String(rearLogIndex));
+            screen->draw2x2String(0, 0, String(logLength()).c_str());
+        }
     }
 
     void popFromLog(uint8_t* destination) {
         if (frontLogIndex == -1) {
-            Serial.println("Log Empty");
+            if (!testing) { Serial.println("Log Empty"); }
             logWasEmpty = true;
             return;
         }
@@ -64,11 +75,24 @@ public:
         } else {
             frontLogIndex++;
         }
-        Serial.println("Front Log Index is at " + String(frontLogIndex));
-        String logLenStr = String(logLength());
-        char buf[9] = {};
-        sprintf(buf, "%s%.*s", logLenStr.c_str(), 8 - logLenStr.length(), "        ");
-        screen->draw2x2String(0, 0, buf);
+
+        if (!testing) {
+            Serial.println("Front Log Index is at " + String(frontLogIndex));
+            String logLenStr = String(logLength());
+            char buf[9] = {};
+            sprintf(buf, "%s%.*s", logLenStr.c_str(), 8 - logLenStr.length(), "        ");
+            screen->draw2x2String(0, 0, buf);
+        }
+    }
+
+    /* For testing only */
+    int getFrontIndex() {
+        return this->frontLogIndex;
+    }
+
+    /* For testing only */
+    int getRearIndex() {
+        return this->rearLogIndex;
     }
 };
 

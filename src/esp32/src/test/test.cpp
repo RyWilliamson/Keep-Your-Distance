@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <AUnitVerbose.h>
 #include "rbtree.h"
-#include "main.h"
 #include "common.h"
+#include "circularqueue.h"
 
 class TreeTests: public aunit::TestOnce {
     protected:
@@ -50,12 +50,12 @@ testF(TreeTests, inOrderString) {
     root->right = rightChild;
 
     leftChild->parent = root;
-    leftChild->left = tree->getLeafTest();
-    leftChild->right = tree->getLeafTest();
+    leftChild->left = tree->getLeaf();
+    leftChild->right = tree->getLeaf();
 
     rightChild->parent = root;
-    rightChild->left = tree->getLeafTest();
-    rightChild->right = tree->getLeafTest();
+    rightChild->left = tree->getLeaf();
+    rightChild->right = tree->getLeaf();
 
     tree->setRootTest(root);
 
@@ -99,6 +99,54 @@ testF(TreeTests, rootCheck) {
     tree->insertNode(1, 0, 0);
     tree->insertNode(2, 0, 0);
     assertEqual(tree->getRootTest()->mac, (uint64_t) 1);
+}
+
+/* Tests that search can properly find a node on left path */
+testF(TreeTests, searchLeft) {
+    tree->insertNode(5, 0, 0);
+    tree->insertNode(6, 0, 0);
+    tree->insertNode(4, 0, 0);
+    tree->insertNode(2, 0, 0);
+    tree->insertNode(3, 0, 0);
+    tree->insertNode(7, 0, 0);
+    pNode found = tree->search(2);
+    assertEqual(found->mac, (uint64_t) 2);
+}
+
+/* Tests that search can properly find a node on right path */
+testF(TreeTests, searchRight) {
+    tree->insertNode(5, 0, 0);
+    tree->insertNode(6, 0, 0);
+    tree->insertNode(4, 0, 0);
+    tree->insertNode(2, 0, 0);
+    tree->insertNode(3, 0, 0);
+    tree->insertNode(7, 0, 0);
+    pNode found = tree->search(7);
+    assertEqual(found->mac, (uint64_t) 7);
+}
+
+/* Tests that search can properly find a node down a branching path */
+testF(TreeTests, searchBranch) {
+    tree->insertNode(5, 0, 0);
+    tree->insertNode(6, 0, 0);
+    tree->insertNode(4, 0, 0);
+    tree->insertNode(2, 0, 0);
+    tree->insertNode(3, 0, 0);
+    tree->insertNode(7, 0, 0);
+    pNode found = tree->search(4);
+    assertEqual(found->mac, (uint64_t) 4);
+}
+
+/* Tests that search returns leaf on not finding a node */
+testF(TreeTests, searchNone) {
+    tree->insertNode(5, 0, 0);
+    tree->insertNode(6, 0, 0);
+    tree->insertNode(4, 0, 0);
+    tree->insertNode(2, 0, 0);
+    tree->insertNode(3, 0, 0);
+    tree->insertNode(7, 0, 0);
+    pNode found = tree->search(99);
+    assertEqual(found, tree->getLeaf());
 }
 
 /* Tests that min does return the min value from tree */
@@ -179,34 +227,68 @@ testF(TreeTests, deleteNone) {
     assertStringCaseEqual(tree->inOrderString().c_str(), "0 0 0\n1 0 0\n2 0 0\n3 0 0\n4 0 0\n5 0 0\n");
 }
 
-// class CommonTests: public aunit::TestOnce {
-//     protected:
-//         void setup() override {
-//             aunit::TestOnce::setup();
-//         }
-
-//         void teardown() override {
-//             aunit::TestOnce::teardown();
-//         }
-// };
-
-class MainTests: public aunit::TestOnce {
+class LogTests: public aunit::TestOnce {
     protected:
+        CircularQueueLog *log;
         void setup() override {
             aunit::TestOnce::setup();
+            log = new CircularQueueLog();
         }
 
         void teardown() override {
+            delete log;
             aunit::TestOnce::teardown();
         }
 };
 
-// testF(MainTests, calculateDistance) {
-//     // assertNear(calculateDistance(-81, -81, 3), 1.0, 0);
-//     // assertEqual(calculateDistance((short)-81, -81.0, 3.0), 1.0);
-//     setupTile();
-//     assertTrue(true);
-// }
+/* Tests that log size is zero before any operations */
+testF(LogTests, sizeInitiallyZero) {
+    assertEqual(log->logLength(), 0);
+}
+
+/* Tests that the indexes get updated when inserting for the first time */
+testF(LogTests, firstInsert) {
+    uint8_t dummy_packet[17] = {};
+    log->addToLog(dummy_packet);
+    assertEqual(log->logLength(), 1);
+}
+
+/* Tests that the indexes get updated when inserting multiple times */
+testF(LogTests, multipleInsert) {
+    uint8_t dummy_packet[17] = {};
+    log->addToLog(dummy_packet);
+    log->addToLog(dummy_packet);
+    log->addToLog(dummy_packet);
+    log->addToLog(dummy_packet);
+    assertEqual(log->logLength(), 4);
+}
+
+/* Tests that the indexes stop at the MAXLOG length */
+testF(LogTests, fullInsert) {
+    uint8_t dummy_packet[17] = {};
+    for (int i = 0; i < MAXLOG + 1; i++) {
+        log->addToLog(dummy_packet);
+    }
+    assertEqual(log->logLength(), MAXLOG);
+}
+
+/* Tests that the indexes get updated when inserting should wrap around */
+testF(LogTests, wrapInsert) {
+    uint8_t dummy_packet[17] = {};
+    for (int i = 0; i < MAXLOG; i++) {
+        log->addToLog(dummy_packet);
+    }
+    log->popFromLog(dummy_packet);
+    log->popFromLog(dummy_packet);
+    log->addToLog(dummy_packet);
+    assertEqual(log->getFrontIndex(), 2);
+    assertEqual(log->getRearIndex(), 0);
+}
+
+/* Tests that the correct parts of the log are changed when inserting */
+
+
+
 
 void setup() {
     Serial.begin(115200);

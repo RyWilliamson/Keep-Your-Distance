@@ -475,3 +475,13 @@
 ### 22 Jan 2021
 
 - _1 hour_: Started to try implement tests for main functionality of the Arduino - this is going to require a large refactor.
+- _3 hours_: Circular Queue Refactored into own class, can now be tested.
+
+### 23 Jan 2021
+
+- _0.5 hours_: Added search tests to tree and added testing flag to circular queue to avoid screen and serial print issues.
+- _2 hours_: Added some Circular Queue tests.
+
+### 24 Jan 2021
+
+- _1 hours_: Changing test configuration to allow control of terminal after tests complete.

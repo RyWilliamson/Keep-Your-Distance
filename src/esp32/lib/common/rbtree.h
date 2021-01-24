@@ -494,15 +494,12 @@ public:
         return size;
     }
 
-    // Functions specifically for testing
+    /* For testing only */
     pNode getRootTest() {
         return root;
     }
 
-    pNode getLeafTest() {
-        return leaf;
-    }
-
+    /* For testing only */
     void setRootTest(pNode node) {
         root = node;
     }
