@@ -29,7 +29,12 @@ public:
         if (frontLogIndex == -1) {
             return 0;
         }
-        return abs(frontLogIndex - rearLogIndex) + 1;
+        if (frontLogIndex > rearLogIndex) {
+            return MAXLOG - (frontLogIndex - (rearLogIndex + 2));
+        } else {
+            return (rearLogIndex - frontLogIndex) + 1;
+        }
+        // return abs(frontLogIndex - rearLogIndex) + 1;
     }
 
     bool wasLogEmpty() {

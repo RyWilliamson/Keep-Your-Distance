@@ -285,8 +285,57 @@ testF(LogTests, wrapInsert) {
     assertEqual(log->getRearIndex(), 0);
 }
 
-/* Tests that the correct parts of the log are changed when inserting */
+/* Tests that when removing from empty no change and flag set */
+testF(LogTests, emptyRemove) {
+    uint8_t dummy_packet[17] = {};
+    log->popFromLog(dummy_packet);
+    assertTrue(log->wasLogEmpty());
+    assertEqual(log->logLength(), 0);
+}
 
+/* Tests that removing a single element doesn't set flag */
+testF(LogTests, singleRemove) {
+    uint8_t dummy_packet[17] = {};
+    log->addToLog(dummy_packet);
+    log->popFromLog(dummy_packet);
+    assertFalse(log->wasLogEmpty());
+    assertEqual(log->logLength(), 0);
+}
+
+/* Tests that size changes and no flag set on multiple add then remove */
+testF(LogTests, multiRemove) {
+    uint8_t dummy_packet[17] = {};
+    log->addToLog(dummy_packet);
+    log->addToLog(dummy_packet);
+    log->addToLog(dummy_packet);
+    log->popFromLog(dummy_packet);
+    log->popFromLog(dummy_packet);
+    assertFalse(log->wasLogEmpty());
+    assertEqual(log->logLength(), 1);
+}
+
+/* Tests that removing works after a wrap around has occurred */
+testF(LogTests, wrapRemove) {
+    uint8_t dummy_packet[17] = {};
+    for (int i = 0; i < MAXLOG; i++) {
+        log->addToLog(dummy_packet);
+    }
+
+    log->popFromLog(dummy_packet);
+    log->popFromLog(dummy_packet);
+    log->popFromLog(dummy_packet);
+
+    log->addToLog(dummy_packet);
+    log->addToLog(dummy_packet);
+    log->addToLog(dummy_packet);
+
+    for (int i = 0; i < MAXLOG - 2; i++) {
+        log->popFromLog(dummy_packet);
+    }
+
+    assertEqual(log->getFrontIndex(), 1);
+    assertEqual(log->getRearIndex(), 1);
+}
 
 
 

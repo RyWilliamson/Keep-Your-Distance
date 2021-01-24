@@ -484,4 +484,5 @@
 
 ### 24 Jan 2021
 
-- _1 hours_: Changing test configuration to allow control of terminal after tests complete.
+- _1 hour_: Changing test configuration to allow control of terminal after tests complete.
+- _1 hour_: Implementing more log tests - fix bug with queue size.
