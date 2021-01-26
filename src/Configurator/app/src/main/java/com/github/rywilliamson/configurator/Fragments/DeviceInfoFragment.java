@@ -32,6 +32,7 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
 
     private TextView totalInfo;
     private TextView currentInfo;
+    private TextView aliasInfo;
 
     private DatabaseViewModel db;
     private BluetoothHandler bt;
@@ -66,6 +67,8 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
 
         totalInfo = view.findViewById( R.id.tvDiTotalInfo );
         currentInfo = view.findViewById( R.id.tvDiCurrentInfo );
+        aliasInfo = view.findViewById( R.id.tvDiAliasInfo );
+
         curCount = -1;
 
         RSSIDatabase.databaseGetExecutor.execute( () -> {
@@ -111,7 +114,7 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
 
         alert.setPositiveButton( "Ok", ( dialog, which ) -> {
             db.updateAlias( bt.getBLEPeripheral().getAddress(), input.getText().toString() );
-            ( (TextView) view.findViewById( R.id.tvDiAliasInfo ) ).setText( input.getText().toString() );
+            aliasInfo.setText( input.getText().toString() );
         } );
 
         alert.setNegativeButton( "Cancel", ( dialog, which ) -> {

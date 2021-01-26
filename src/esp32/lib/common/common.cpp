@@ -25,8 +25,3 @@ void notification(U8X8_SSD1306_128X64_NONAME_SW_I2C *screen, bool state) {
 void setupTile() {
     memset(tiles, 255, 128);
 }
-
-void printByteArrayAsHex(uint8_t* arr, int length) {
-    for (int i = 0; i < length; i++) Serial.print(arr[i], HEX);
-    Serial.println();
-}

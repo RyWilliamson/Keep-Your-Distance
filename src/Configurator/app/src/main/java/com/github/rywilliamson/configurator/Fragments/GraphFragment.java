@@ -45,7 +45,7 @@ public class GraphFragment extends Fragment implements IBluetoothImplementer {
     private Spinner deviceSpinner;
     private ArrayAdapter<Device> deviceAdapter;
     private List<Device> deviceList;
-    private final Device fakeDevice = new Device( "FF:FF:FF:FF:FF:FF", "None", 0 );
+    private final Device fakeDevice = new Device( "FF:FF:FF:FF:FF:FF", "Test Device", 0 );
 
     private IBackendContainer container;
     private DatabaseViewModel dbViewModel;

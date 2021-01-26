@@ -3,6 +3,7 @@
 #include "rbtree.h"
 #include "common.h"
 #include "circularqueue.h"
+#include "configdata.h"
 
 class TreeTests: public aunit::TestOnce {
     protected:
@@ -337,6 +338,37 @@ testF(LogTests, wrapRemove) {
     assertEqual(log->getRearIndex(), 1);
 }
 
+class ConfigTests: public aunit::TestOnce {
+    protected:
+        ConfigData *config;
+        void setup() override {
+            aunit::TestOnce::setup();
+            config = new ConfigData(true);
+        }
+
+        void teardown() override {
+            delete config;
+            aunit::TestOnce::teardown();
+        }
+};
+
+/* Tests that the inital state of the class is as expected */
+testF(ConfigTests, checkInitial) {
+    assertEqual(config->getMeasuredPower(), -81);
+    assertEqual(config->getEnvironment(), 3);
+    assertEqual(config->getDistance(), 1.5);
+    assertEqual(config->getTargetRSSI(), -86);
+}
+
+/* Tests that the state of the class after an update is correct */
+testF(ConfigTests, checkUpdate) {
+    uint8_t bytes[12] = {0x40, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xAF, 0x00, 0x00, 0x00, 0x02};
+    config->updateData(bytes);
+    assertEqual(config->getMeasuredPower(), -81);
+    assertEqual(config->getEnvironment(), 2);
+    assertEqual(config->getDistance(), 2.0);
+    assertEqual(config->getTargetRSSI(), -87);
+}
 
 
 void setup() {

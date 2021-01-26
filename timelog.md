@@ -486,3 +486,24 @@
 
 - _1 hour_: Changing test configuration to allow control of terminal after tests complete.
 - _1 hour_: Implementing more log tests - fix bug with queue size.
+- _5 hours_: Thinking of survey questions
+
+# Week 15
+
+### 25 Jan 2021
+
+- _1 hour_: Setting up recording software and grabbing static app images that I need.
+- _0.5 hours_: Started to record app videos then encountered app crashing rename bug. Fixed this bug.
+- _1.5 hours_: Continuation of recording.
+- _1 hour_: Editing photos and video.
+- _2 hours_: Working on creating Google Form survey.
+- _0.5 hours_: Meeting with Jeremy.
+- _0.5 hours_: Typed minutes.
+- _1 hour_: Fixed up and updated survey.
+- _1 hour_: Re-recorded videos.
+
+### 26 Jan 2021
+
+- _1 hour_: Rewrote consent section of survey and added demographic question.
+- _0.5 hours_: Sent email about needing to get ethics checklist signed before sending survey.
+- _1 hour_: Refactored and tested config data section of arduino code.

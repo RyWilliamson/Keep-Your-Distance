@@ -126,7 +126,7 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         chart.setDescription( desc );
 
         xAxis.setPosition( XAxis.XAxisPosition.BOTTOM );
-        xAxis.setDrawGridLines( true );
+        xAxis.setDrawGridLines( false );
         xAxis.setTextSize( 18f );
 
         chart.getAxisRight().setEnabled( false );
@@ -147,7 +147,6 @@ public class InteractionsOverTimeFragment extends Fragment implements IGraphImpl
         ArrayList<LineDataSet> dataSets;
         ArrayList<Entry> valueSet = new ArrayList<>();
         xLabels = new ArrayList<>();
-
 
         Date last = DateUtils.ceiling( db.getLastInteractionDate( mac ), Calendar.DATE );
         Date first = DateUtils.truncate( db.getFirstInteractionDate( mac ), Calendar.DATE );

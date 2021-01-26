@@ -6,15 +6,13 @@
 #include "common.h"
 #include "rbtree.h"
 #include "circularqueue.h"
+#include "configdata.h"
 
 // Screen
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
-// Config Data Defaults
-int measured_power = -81;
-int environment = 3;
-float distance = 1.5;
-int16_t target_rssi = -86;
+//Config
+ConfigData *pconfigData;
 
 // BLE Data
 int scanTime = 1;
@@ -41,10 +39,6 @@ BLECharacteristic *configACKCharacteristic;
 // Path loss model of free space propogation.
 float calculateDistance(int16_t rssi, float measuredPower, float environment) {
     return pow(10, (measuredPower - rssi) / (10 * environment));
-}
-
-int16_t calculateTargetRSSI(float distance, float measuredPower, int environment) {
-    return measuredPower - 10 * environment * log10f(distance);
 }
 
 void notify(bool value) {
@@ -125,7 +119,7 @@ class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
                 node->timestamp = time;
             }
             
-            if (node->rssi >= target_rssi) {
+            if (node->rssi >= pconfigData->getTargetRSSI()) {
                 interaction = true;
                 if (connected) {
                     uint8_t packet[13] = {};
@@ -166,13 +160,8 @@ class ConfigCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic* characteristic) {
         // Should be a 12 byte array, first 4 bytes are distance float, next 4 is measured power, final 4 is environment variable
         uint8_t* vals = characteristic->getData();
-        printByteArrayAsHex(vals, 12);
-        int distance_bytes = (*(vals + 0) << 24) | (*(vals+1) << 16) | (*(vals+2) << 8) | *(vals + 3);
-        memcpy(&distance, &distance_bytes, 4);
-        measured_power = (*(vals+4) << 24) | (*(vals+5) << 16) | (*(vals+6) << 8) | *(vals+7);
-        environment = (*(vals+8) << 24) | (*(vals+9) << 16) | (*(vals+10) << 8) | *(vals+11);
-        target_rssi = calculateTargetRSSI(distance, measured_power, environment);
-        Serial.println("Config Data is: " + String(distance) + " " + String(measured_power) + " " + String(environment) + " " + String(target_rssi));
+
+        pconfigData->updateData(vals);
 
         configACKCharacteristic->setValue("ACK");
         configACKCharacteristic->notify();
@@ -199,8 +188,8 @@ void setup() {
     setupTile();
 
     RSSIlog = new CircularQueueLog(&screen);
-
     tree = new AverageRBTree();
+    pconfigData = new ConfigData(false);
 
     constructBLEServer("ESP32");
     rssiCharacteristic = getRSSICharacteristic();
