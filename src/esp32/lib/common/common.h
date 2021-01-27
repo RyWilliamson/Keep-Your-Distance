@@ -11,7 +11,6 @@ void setupTile();
 
 // Callbacks - defined in main
 extern BLEServerCallbacks* servercb;
-extern BLECharacteristicCallbacks* rssicb;
 extern BLECharacteristicCallbacks* bulkackcb;
 extern BLECharacteristicCallbacks* configcb;
 

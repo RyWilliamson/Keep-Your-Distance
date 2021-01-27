@@ -507,3 +507,7 @@
 - _1 hour_: Rewrote consent section of survey and added demographic question.
 - _0.5 hours_: Sent email about needing to get ethics checklist signed before sending survey.
 - _1 hour_: Refactored and tested config data section of arduino code.
+- _3 hours_: Refactored and began testing RSSI handler.
+
+### 27 Jan 2021
+- _1.5 hours_: Continued writing RSSI Handler tests

@@ -20,6 +20,12 @@ private:
         return measuredPower - 10 * environment * log10f(distance);
     }
 
+    // Path loss model of free space propogation.
+    /* Deprecated - kept for potential future use */
+    float calculateDistance(int16_t rssi, float measuredPower, float environment) {
+        return pow(10, (measuredPower - rssi) / (10 * environment));
+    }
+
 public:
     ConfigData(bool testing) {
         this->measured_power = -81;
@@ -61,4 +67,4 @@ public:
     }
 };
 
-#endif CONFIGDATA
+#endif

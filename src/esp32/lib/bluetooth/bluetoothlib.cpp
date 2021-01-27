@@ -24,7 +24,7 @@
 #define CHARA_ADV_UUID          "c74f40df-d464-4dea-818c-13e7914f332a" // Device -> Device
 
 #define CHARA_CONFIG_UUID       "757affde-78ab-49d6-84a5-16193ad80b13" // Phone -> Device
-#define CHARA_CONFIG_ACK_UUID   "41a8c415-7ad6-4efd-8638-9d5d504039ce" // Devuce -> Phone
+#define CHARA_CONFIG_ACK_UUID   "41a8c415-7ad6-4efd-8638-9d5d504039ce" // Device -> Phone
 
 BLECharacteristic * createCharacteristic(const char* id) {
     BLECharacteristic *pCharacteristic = new BLECharacteristic(
@@ -65,7 +65,6 @@ void constructBLEServer(String name) {
     BLEService *pESPService = pServer->createService(SERVICE_ESP_UUID);
     BLEService *pConfigService = pServer->createService(SERVICE_CONFIG_UUID);
 
-    pRSSICharacteristic->setCallbacks(rssicb);
     pConfigCharacteristic->setCallbacks(configcb);
     pBulkACKCharacteristic->setCallbacks(bulkackcb);
 

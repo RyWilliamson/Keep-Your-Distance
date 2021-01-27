@@ -25,6 +25,7 @@ private:
     pNode root;
     pNode leaf;
     int size;
+    bool testing;
 
     // Creates empty (default) node
     void createLeafNode(pNode node, pNode parent) {
@@ -187,7 +188,7 @@ private:
         }
 
         if (target == leaf) {
-            Serial.println("Nothing to delete from tree");
+            if (!testing) { Serial.println("Nothing to delete from tree"); }
             return;
         }
 
@@ -307,13 +308,14 @@ private:
     }
 
 public:
-    AverageRBTree() {
+    AverageRBTree(bool testing) {
         leaf = new Node();
         leaf->isRed = false;
         leaf->left = nullptr;
         leaf->right = nullptr;
         root = leaf;
         size = 0;
+        this->testing = testing;
     }
 
     ~AverageRBTree() {

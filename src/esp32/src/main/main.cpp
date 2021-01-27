@@ -7,12 +7,13 @@
 #include "rbtree.h"
 #include "circularqueue.h"
 #include "configdata.h"
+#include "rssihandler.h"
 
 // Screen
 U8X8_SSD1306_128X64_NONAME_SW_I2C screen(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
 //Config
-ConfigData *pconfigData;
+ConfigData *configData;
 
 // BLE Data
 int scanTime = 1;
@@ -27,109 +28,30 @@ String mac;
 
 // Averaging
 AverageRBTree *tree;
+RSSIHandler *rssiHandler;
 bool interaction;
-float weight = 2.0 / (5 + 1.0); // Decaying average over last 5 elements
 #define CLEARTIME 600000
-unsigned long clearTrack = 0;
+unsigned long clearTrackTimer = 0;
 
 BLECharacteristic *rssiCharacteristic;
 BLECharacteristic *bulkCharacteristic;
 BLECharacteristic *configACKCharacteristic;
 
-// Path loss model of free space propogation.
-float calculateDistance(int16_t rssi, float measuredPower, float environment) {
-    return pow(10, (measuredPower - rssi) / (10 * environment));
-}
-
 void notify(bool value) {
     notification(&screen, value);
-}
-
-uint64_t macToInt64(BLEAddress mac) {
-    uint64_t output = 0;
-    memcpy(&output, mac.getNative(), 6);
-    return output;
-}
-
-float exponentialWeightedAverage(float oldRSSI, float newRSSI) {
-    return (newRSSI * weight) + (oldRSSI * (1 - weight));
-}
-
-void setupPacket(uint8_t* packet, int16_t rssi, String mac) {
-    // Address (12 bytes), rssi (1 byte) - 13 bytes total
-    uint8_t data_arr[13] = {};
-    mac.replace(":", "");
-    uint8_t rssi_byte = (uint8_t) rssi;
-    memcpy(&data_arr, mac.c_str(), 12);
-    data_arr[12] = rssi_byte;
-    memcpy(packet, &data_arr, 13);
-}
-
-void setupBulkPacket(int16_t rssi, String mac, unsigned long timestamp) {
-    // Address (12 bytes), rssi (1 byte), timestamp (4 bytes) - 17 bytes total
-    uint8_t data_arr[17] = {};
-    mac.replace(":", "");
-    uint8_t rssi_byte = (uint8_t) rssi;
-    memcpy(&data_arr, mac.c_str(), 12);
-    data_arr[12] = rssi_byte;
-    memcpy(&data_arr[13], &timestamp, 4);
-    RSSIlog->addToLog(data_arr);
-}
-
-void sendBulkPacket() {
-    // Step 1 - if log was not empty grab the value from circular queue.
-    // Step 2 - Update time offset so the app knows when the interaction occurred.
-    // Step 3 - send packet over bulkRSSICharacteristic from rssiLog at position logIndex
-    // Step 4 - clear memory at that position in the rssiLog
-    // Step 5 - decrement logIndex
-    uint8_t packet[17] = {};
-    RSSIlog->popFromLog(packet);
-    if (!RSSIlog->wasLogEmpty()) {
-        unsigned long newTime;
-        memcpy(&newTime, &packet[13], 4);
-        newTime = millis() - newTime;
-        memcpy(&packet[13], &newTime, 4);
-        bulkCharacteristic->setValue(packet, 17);
-        bulkCharacteristic->notify();
-    }
 }
 
 class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
         // Only an inital check - bad for security long-term
         if (advertisedDevice.getName() == "ESP32") {
+            unsigned long time = millis();
             rssi = (float) advertisedDevice.getRSSI();
             mac = advertisedDevice.getAddress().toString().c_str();
-            uint64_t mac64 = macToInt64(advertisedDevice.getAddress());
-            unsigned long time = millis();
 
-            pNode node = tree->search(mac64);
-            if (node == tree->getLeaf()) {
-                node = tree->insertNode(mac64, rssi, time);
-                Serial.println("insert");
-            } else {
-                if (time - node->timestamp > 5000) {
-                    node->rssi = rssi;
-                    Serial.printf("update new: %f - %f\n", rssi, node->rssi);
-                } else {
-                    node->rssi = exponentialWeightedAverage(node->rssi, rssi);
-                    Serial.printf("update average: %f - %f\n", rssi, node->rssi);
-                }
-
-                node->timestamp = time;
-            }
+            pNode node = rssiHandler->handleAverage(tree, rssi, (uint8_t *) advertisedDevice.getAddress().getNative(), time);
             
-            if (node->rssi >= pconfigData->getTargetRSSI()) {
-                interaction = true;
-                if (connected) {
-                    uint8_t packet[13] = {};
-                    setupPacket(packet, (int16_t) rssi, mac);
-                    rssiCharacteristic->setValue(packet, 13);
-                    rssiCharacteristic->notify();
-                } else {
-                    setupBulkPacket((int16_t) rssi, mac, time);
-                }
-            }
+            interaction = rssiHandler->checkInteraction(node->rssi, configData->getTargetRSSI(), mac, time, connected, rssiCharacteristic);
         }
     }
 };
@@ -150,18 +72,12 @@ class ServerCallbacks: public BLEServerCallbacks {
     }
 };
 
-class RSSICallbacks: public BLECharacteristicCallbacks {
-    void onRead(BLECharacteristic* characteristic) {
-        Serial.println("Has been read from " + String(*characteristic->getData()));
-    }
-};
-
 class ConfigCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic* characteristic) {
         // Should be a 12 byte array, first 4 bytes are distance float, next 4 is measured power, final 4 is environment variable
         uint8_t* vals = characteristic->getData();
 
-        pconfigData->updateData(vals);
+        configData->updateData(vals);
 
         configACKCharacteristic->setValue("ACK");
         configACKCharacteristic->notify();
@@ -171,12 +87,11 @@ class ConfigCallbacks: public BLECharacteristicCallbacks {
 class BulkACKCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic* characteristic) {
         Serial.println("Bulk ACK");
-        sendBulkPacket();
+        rssiHandler->sendBulkPacket(bulkCharacteristic);
     }
 };
 
 BLEServerCallbacks* servercb = new ServerCallbacks;
-BLECharacteristicCallbacks* rssicb = new RSSICallbacks;
 BLECharacteristicCallbacks* bulkackcb = new BulkACKCallbacks;
 BLECharacteristicCallbacks* configcb = new ConfigCallbacks;
 
@@ -188,8 +103,9 @@ void setup() {
     setupTile();
 
     RSSIlog = new CircularQueueLog(&screen);
-    tree = new AverageRBTree();
-    pconfigData = new ConfigData(false);
+    tree = new AverageRBTree(false);
+    configData = new ConfigData(false);
+    rssiHandler = new RSSIHandler(RSSIlog, false);
 
     constructBLEServer("ESP32");
     rssiCharacteristic = getRSSICharacteristic();
@@ -205,9 +121,9 @@ void loop() {
     pBLEScanner->clearResults();   // delete results fromBLEScan buffer to release memory
 
     uint32_t time = millis();
-    if (time - clearTrack > CLEARTIME) {
+    if (time - clearTrackTimer > CLEARTIME) {
         tree->cleanTree(time);
-        clearTrack = millis();
+        clearTrackTimer = millis();
     }
     notify(interaction);
     interaction = false;
