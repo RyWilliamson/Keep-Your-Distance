@@ -510,4 +510,25 @@
 - _3 hours_: Refactored and began testing RSSI handler.
 
 ### 27 Jan 2021
-- _1.5 hours_: Continued writing RSSI Handler tests
+
+- _2.5 hours_: Finished writing RSSI Handler tests
+
+### 28 Jan 2021
+
+- _0.5 hours_: Sending my survey to various groups
+- _1 hour_: Begin reading and highlighting COVID-19 what have we learned? The rise of social machines and connected devices in pandemic management following the concepts of predictive, preventive and personalized medicine
+
+### 29 Jan 2021
+
+- _1 hour_: Finish reading and highlighting COVID-19 what have we learned? The rise of social machines and connected devices in pandemic management following the concepts of predictive, preventive and personalized medicine
+- _1 hour_: Summarise COVID-19 what have we learned? The rise of social machines and connected devices in pandemic management following the concepts of predictive, preventive and personalized medicine
+
+# Week 15
+
+### 01 Feb 2021
+
+- _3 hours_: Writing the motivation section of the dissertation.
+
+### 02 Feb 2021
+
+- _0.5 hours_: Integrating the vibration motors into my notification system.

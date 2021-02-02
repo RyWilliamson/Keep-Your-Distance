@@ -37,8 +37,11 @@ BLECharacteristic *rssiCharacteristic;
 BLECharacteristic *bulkCharacteristic;
 BLECharacteristic *configACKCharacteristic;
 
+int pinNo = 23;
+
 void notify(bool value) {
     notification(&screen, value);
+    notification(pinNo, value);
 }
 
 class AdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
@@ -96,6 +99,8 @@ BLECharacteristicCallbacks* bulkackcb = new BulkACKCallbacks;
 BLECharacteristicCallbacks* configcb = new ConfigCallbacks;
 
 void setup() {
+    pinMode(pinNo, OUTPUT);
+
     Serial.begin(115200);
     screen.begin();
     screen.setFont(u8x8_font_chroma48medium8_r);

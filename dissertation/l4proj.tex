@@ -13,7 +13,7 @@
 %% METADATA
 \title{Keep Your Distance! Real-time Social Distancing Using Wearable ESP32s}
 \author{Ryan Williamson}
-\date{September 29, 2020}
+\date{February 01, 2021}
 
 \maketitle
 
@@ -22,19 +22,19 @@
 \begin{abstract}
     Every abstract follows a similar pattern. Motivate; set aims; describe work; explain results.
     \vskip 0.5em
-    ``XYZ is bad. This project investigated ABC to determine if it was better. 
+    ``XYZ is bad. This project investigated ABC to determine if it was better.
     ABC used XXX and YYY to implement ZZZ. This is particularly interesting as XXX and YYY have
-    never been used together. It was found that  
+    never been used together. It was found that
     ABC was 20\% better than XYZ, though it caused rabies in half of subjects.''
-    
-    During the COVID-19 pandemic systems were designed and developed to "track and trace" people 
-    who may have been infected. However, these systems don't offer protection to those in the 
-    potentially infections situation. This project investigated using bluetooth enabled 
-    microcontrollers to provide active feedback to reduce risk of infection in the first instance.
-    It also aims to provide data visualisations to allow identification of risk of infection over 
-    time. This uses, ESP32 microcontrollers, bluetooth recieved signal strength, and mobile 
-    connectivity to implement "active contact identification". While there are some existing 
-    solutions similar to this project, many of these are proprietary and don't explore many 
+
+    During the COVID-19 pandemic systems were designed and developed to "track and trace" people
+    who may have been infected. However, these systems don't offer protection to those in the
+    potentially infectious situation. This project investigated using Bluetooth enabled
+    micro-controllers to provide active feedback to reduce risk of infection in the first instance.
+    It also aims to provide data visualisations to allow identification of infection risk over
+    time. This uses, ESP32 micro-controllers, Bluetooth received signal strength, and mobile
+    connectivity to implement "active contact identification". While there are some existing
+    solutions similar to this project, many of these are proprietary and don't explore many
     considerations of usability with this technology.
     -- THIS IS NOT DONE, WILL BE UPDATED AS TIME GOES ON --
 \end{abstract}
@@ -51,7 +51,7 @@
 % this declaration, but doing so would help future students.
 %
 \def\consentname {Ryan Williamson} % your full name
-\def\consentdate {15 October 2020} % the date you agree
+\def\consentdate {01 February 2021} % the date you agree
 %
 \educationalconsent
 
@@ -92,74 +92,21 @@
 \pagenumbering{arabic}
 
 
-Why should the reader care about what are you doing and what are you actually doing?
-\section{Guidance}
+\section{Motivation}
 
-\textbf{Motivate} first, then state the general problem clearly. 
+SARS-CoV-2, henceforth referred to as either Coronavirus or COVID-19, has caused a pandemic on a scale that hasn't been seen in modern history. The \citet{world_health_organisation_dashboard_2021} reports that, at the time of writing, there have been over 100 million confirmed cases of COVID-19 and over 2.2 million deaths. There are a number of recommendations that governments and official bodies have been making to the public. The key recommendation that this paper will be considering is to maintain a distance from others as much as possible, this distance varies between recommending bodies.
 
-\section{Writing guidance}
-\subsection{Who is the reader?}
+This has brought about many styles of contact tracing. Contact tracing is a technical solution to tracing infection by finding who an infected individual has been in contact with - i.e. where this distance has not been maintained between two or more people. This works. However, this is only a method for tracing infections after they occur and doesn't help with preventing the infections in the first instance. Preventing infection is extremely important. It is important both in terms of individual impact, coronavirus has awful short and long term impacts, and also in terms of a global impact, infection is an exponential chain so by preventing infection early in the link we prevent the most cases possible.
 
-This is the key question for any writing. Your reader:
+Furthermore, another key aspect of getting the pandemic under control is information. There are already large amounts of general information given to the public everyday through the news and social media. This information is all useful, but due to the constant exposure to this information people become desensitised \citep{koh_messaging_2020} and may be less likely to act on this information. Personalised information on someones behaviour is another avenue, that currently is not used as much. They may be more likely to act on this information, seeing the direct relevance to themselves.
 
-\begin{itemize}
-    \item
-          is a trained computer scientist: \emph{don't explain basics}.
-    \item
-          has limited time: \emph{keep on topic}.
-    \item
-          has no idea why anyone would want to do this: \emph{motivate clearly}
-    \item
-          might not know \emph{anything} about your project in particular:
-          \emph{explain your project}.
-    \item
-          but might know precise details and check them: \emph{be precise and
-              strive for accuracy.}
-    \item
-          doesn't know or care about you: \emph{personal discussions are
-              irrelevant}.
-\end{itemize}
+\section{Goals}
 
-Remember, you will be marked by your supervisor and one or more members
-of staff. You might also have your project read by a prize-awarding
-committee or possibly a future employer. Bear that in mind.
 
-\subsection{References and style guides}
-There are many style guides on good English writing. You don't need to
-read these, but they will improve how you write.
 
-\begin{itemize}
-    \item
-          \emph{How to write a great research paper} \cite{Pey17} (\textbf{recommended}, even though you aren't writing a research paper)
-    \item
-          \emph{How to Write with Style} \cite{Von80}. Short and easy to read. Available online.
-    \item
-          \emph{Style: The Basics of Clarity and Grace} \cite{Wil09} A very popular modern English style guide.
-    \item
-          \emph{Politics and the English Language} \cite{Orw68}  A famous essay on effective, clear writing in English.
-    \item
-          \emph{The Elements of Style} \cite{StrWhi07} Outdated, and American, but a classic.
-    \item
-          \emph{The Sense of Style} \cite{Pin15} Excellent, though quite in-depth.
-\end{itemize}
+\section{Summary}
 
-\subsubsection{Citation styles}
 
-\begin{itemize}
-    \item If you are referring to a reference as a noun, then cite it as: ``\citet{Orw68} discusses the role of language in political thought.''
-    \item If you are referring implicitly to references, use: ``There are many good books on writing \citep{Orw68, Wil09, Pin15}.''
-\end{itemize}
-
-There is a complete guide on good citation practice by Peter Coxhead available here: \url{http://www.cs.bham.ac.uk/~pxc/refs/index.html}. 
-If you are unsure about how to cite online sources, please see this guide: \url{https://student.unsw.edu.au/how-do-i-cite-electronic-sources}.
-
-\subsection{Plagiarism warning}
-
-\begin{highlight_title}{WARNING}
-    
-    If you include material from other sources without full and correct attribution, you are commiting plagiarism. The penalties for plagiarism are severe.
-    Quote any included text and cite it correctly. Cite all images, figures, etc. clearly in the caption of the figure.
-\end{highlight_title}
 
 
 %==================================================================================================================================
@@ -168,7 +115,7 @@ What did other people do, and how is it relevant to what you want to do?
 
 Talk about how bluetooth and RSSI work - e.g. bluetooth operates on em spectrum 2.4Ghz etc.
 \section{Guidance}
-\begin{itemize}    
+\begin{itemize}
     \item
           Don't give a laundry list of references.
     \item
@@ -185,11 +132,11 @@ Talk about how bluetooth and RSSI work - e.g. bluetooth operates on em spectrum 
 \chapter{Analysis/Requirements}
 What is the problem that you want to solve, and how did you arrive at it?
 \section{Guidance}
-Make it clear how you derived the constrained form of your problem via a clear and logical process. 
+Make it clear how you derived the constrained form of your problem via a clear and logical process.
 
 %==================================================================================================================================
 \chapter{Design}
-How is this problem to be approached, without reference to specific implementation details? 
+How is this problem to be approached, without reference to specific implementation details?
 \section{Guidance}
 Design should cover the abstract design in such a way that someone else might be able to do what you did, but with a different language or library or tool.
 
@@ -217,13 +164,13 @@ You may include multiple figures in one float, as in Figure \ref{fig:synthetic},
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{images/relu.pdf}
-    
+
     \caption{In figure captions, explain what the reader is looking at: ``A schematic of the rectifying linear unit, where $a$ is the output amplitude,
-        $d$ is a configurable dead-zone, and $Z_j$ is the input signal'', as well as why the reader is looking at this: 
-        ``It is notable that there is no activation \emph{at all} below 0, which explains our initial results.'' 
+        $d$ is a configurable dead-zone, and $Z_j$ is the input signal'', as well as why the reader is looking at this:
+        ``It is notable that there is no activation \emph{at all} below 0, which explains our initial results.''
         \textbf{Use vector image formats (.pdf) where possible}. Size figures appropriately, and do not make them over-large or too small to read.
     }
-    
+
     % use the notation fig:name to cross reference a figure
     \label{fig:relu}
 \end{figure}
@@ -255,8 +202,8 @@ You may include multiple figures in one float, as in Figure \ref{fig:synthetic},
 
 \subsection{Equations}
 
-Equations should be typeset correctly and precisely. Make sure you get parenthesis sizing correct, and punctuate equations correctly 
-(the comma is important and goes \textit{inside} the equation block). Explain any symbols used clearly if not defined earlier. 
+Equations should be typeset correctly and precisely. Make sure you get parenthesis sizing correct, and punctuate equations correctly
+(the comma is important and goes \textit{inside} the equation block). Explain any symbols used clearly if not defined earlier.
 
 For example, we might define:
 \begin{equation}
@@ -292,7 +239,7 @@ Algorithms can be set using \texttt{algorithm2e}, as in Algorithm \ref{alg:metro
             }
         }
     }
-    
+
     \caption{The Metropolis-Hastings MCMC algorithm for drawing samples from arbitrary probability distributions,
         specialised for normal proposal distributions $q(x^\prime|x) = \mathcal{N}(x, \sigma^2)$. The symmetry of the normal distribution means the acceptance rule takes the simplified form.}\label{alg:metropolis}
 \end{algorithm}
@@ -300,7 +247,7 @@ Algorithms can be set using \texttt{algorithm2e}, as in Algorithm \ref{alg:metro
 \subsection{Tables}
 
 If you need to include tables, like Table \ref{tab:operators}, use a tool like https://www.tablesgenerator.com/ to generate the table as it is
-extremely tedious otherwise. 
+extremely tedious otherwise.
 
 \begin{table}[]
     \caption{The standard table of operators in Python, along with their functional equivalents from the \texttt{operator} package. Note that table
@@ -418,12 +365,12 @@ See the file \texttt{guide\_to\_visualising.pdf} for further information and gui
 \begin{figure}
     \centering
     \includegraphics[width=1.0\linewidth]{images/boxplot_finger_distance.pdf}
-    
+
     \caption{Average number of fingers detected by the touch sensor at different heights above the surface, averaged over all gestures. Dashed lines indicate
-        the true number of fingers present. The Box plots include bootstrapped uncertainty notches for the median. It is clear that the device is biased toward 
+        the true number of fingers present. The Box plots include bootstrapped uncertainty notches for the median. It is clear that the device is biased toward
         undercounting fingers, particularly at higher $z$ distances.
     }
-    
+
     % use the notation fig:name to cross reference a figure
     \label{fig:boxplot}
 \end{figure}
@@ -438,7 +385,7 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
           Summarise briefly and fairly.
     \item
           You should be addressing the general problem you introduced in the
-          Introduction.        
+          Introduction.
     \item
           Include summary of concrete results (``the new compiler ran 2x
           faster'')
@@ -456,9 +403,9 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
 \begin{appendices}
 
     \chapter{Appendices}
-    
+
     Typical inclusions in the appendices are:
-    
+
     \begin{itemize}
         \item
               Copies of ethics approvals (required if obtained)
@@ -467,16 +414,16 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
         \item
               Extensive tables or figures that are too bulky to fit in the main body of
               the report, particularly ones that are repetitive and summarised in the body.
-              
+
         \item Outline of the source code (e.g. directory structure), or other architecture documentation like class diagrams.
-              
+
         \item User manuals, and any guides to starting/running the software.
-              
+
     \end{itemize}
-    
+
     \textbf{Don't include your source code in the appendices}. It will be
     submitted separately.
-    
+
 \end{appendices}
 
 %==================================================================================================================================
