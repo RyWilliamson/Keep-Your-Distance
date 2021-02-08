@@ -125,6 +125,8 @@ void loop() {
     BLEScanResults foundDevices = pBLEScanner->start(scanTime, false); // Blocks until done
     pBLEScanner->clearResults();   // delete results fromBLEScan buffer to release memory
 
+    // screen.drawString(4, 0, String(configData->getTargetRSSI()).c_str());
+
     uint32_t time = millis();
     if (time - clearTrackTimer > CLEARTIME) {
         tree->cleanTree(time);

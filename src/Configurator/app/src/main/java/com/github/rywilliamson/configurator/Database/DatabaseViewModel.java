@@ -1,6 +1,7 @@
 package com.github.rywilliamson.configurator.Database;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -142,6 +143,7 @@ public class DatabaseViewModel extends AndroidViewModel {
 
     // Deletes
     public void clearReceiver( String receiver ) {
+        Log.d("test", "Clear mac: " + receiver);
         mRSSIRepository.deleteByReceiver( receiver );
         mInteractionRepository.deleteByReceiver( receiver );
         mDeviceRepository.deleteByMac( receiver );

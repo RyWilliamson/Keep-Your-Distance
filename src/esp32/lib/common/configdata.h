@@ -31,20 +31,21 @@ public:
         this->measured_power = -81;
         this->environment = 3;
         this->distance = 1.5;
-        this->target_rssi = -86;
+        // this->target_rssi = -86;
+        this->target_rssi = -115;
         this->testing = testing;
     }
 
     void updateData(uint8_t *bytes) {
-        if (!testing) { printByteArrayAsHex(bytes, 12); }
+        // if (!testing) { printByteArrayAsHex(bytes, 12); }
 
-        int distance_bytes = (*(bytes + 0) << 24) | (*(bytes+1) << 16) | (*(bytes+2) << 8) | *(bytes + 3);
-        memcpy(&distance, &distance_bytes, 4);
-        measured_power = (*(bytes+4) << 24) | (*(bytes+5) << 16) | (*(bytes+6) << 8) | *(bytes+7);
-        environment = (*(bytes+8) << 24) | (*(bytes+9) << 16) | (*(bytes+10) << 8) | *(bytes+11);
-        target_rssi = calculateTargetRSSI(distance, measured_power, environment);
+        // int distance_bytes = (*(bytes + 0) << 24) | (*(bytes+1) << 16) | (*(bytes+2) << 8) | *(bytes + 3);
+        // memcpy(&distance, &distance_bytes, 4);
+        // measured_power = (*(bytes+4) << 24) | (*(bytes+5) << 16) | (*(bytes+6) << 8) | *(bytes+7);
+        // environment = (*(bytes+8) << 24) | (*(bytes+9) << 16) | (*(bytes+10) << 8) | *(bytes+11);
+        // target_rssi = calculateTargetRSSI(distance, measured_power, environment);
 
-        if (!testing) { Serial.println("Config Data is: " + String(distance) + " " + String(measured_power) + " " + String(environment) + " " + String(target_rssi)); }
+        // if (!testing) { Serial.println("Config Data is: " + String(distance) + " " + String(measured_power) + " " + String(environment) + " " + String(target_rssi)); }
     }
 
     int16_t getTargetRSSI() {

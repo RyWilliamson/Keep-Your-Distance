@@ -532,3 +532,15 @@
 ### 02 Feb 2021
 
 - _0.5 hours_: Integrating the vibration motors into my notification system.
+
+### 07 Feb 2021
+
+- _1.5 hours_: Getting app working again after phone update broke some functionality.
+- _1.5 hours_: Fixing other related bugs.
+- _1.5 hours_: Setting up and performing outdoor experiment.
+- _0.5 hours_: Re-doing experiment as results were not a good representation due to experimental setup of them still being inside the styrofoam.
+- _1 hour_: Write updated output data parser to work with new csv output format.
+- _0.5 hours_: Create and save new graphs.
+- _1 hour_: Setup and perform same experiment again, except this time with the device facing pin side up.
+- _0.5 hours_: Reverse indexing on data processing procedure.
+- _0.5 hours_: Create and save new graphs.

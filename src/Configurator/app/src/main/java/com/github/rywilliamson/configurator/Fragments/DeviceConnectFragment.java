@@ -72,12 +72,14 @@ public class DeviceConnectFragment extends Fragment implements IBluetoothImpleme
         macSpinner.setAdapter( macAdapter );
 
         prevMac = view.findViewById( R.id.tvDcMacText );
-        RSSIDatabase.databaseGetExecutor.execute( () -> {
-            Device device = db.getDevice( bt.getPrevMac() );
-            getActivity().runOnUiThread( () -> {
-                prevMac.setText( device.alias );
+        if (!bt.getPrevMac().equals( "" )){
+            RSSIDatabase.databaseGetExecutor.execute( () -> {
+                Device device = db.getDevice( bt.getPrevMac() );
+                getActivity().runOnUiThread( () -> {
+                    prevMac.setText( device.alias );
+                } );
             } );
-        } );
+        }
 
         view.findViewById( R.id.bDcConnect ).setOnClickListener( this::connectClick );
         view.findViewById( R.id.bDcReconnect ).setOnClickListener( this::reconnectClick );
@@ -120,8 +122,17 @@ public class DeviceConnectFragment extends Fragment implements IBluetoothImpleme
             Log.d( Keys.CONNECTION_CENTRAL, "Adding item for: " + peripheral.getAddress() );
             RSSIDatabase.databaseGetExecutor.execute( () -> {
                 Device device = db.getDevice( peripheral.getAddress() );
+                Device newdevice = new Device(peripheral.getAddress(), peripheral.getAddress(), 0);
+                if (device == null) {
+                    db.insert( newdevice );
+                }
                 getActivity().runOnUiThread( () -> {
-                    SpinnerUtils.addItem( macList, macAdapter, device );
+                    if (device == null) {
+                        SpinnerUtils.addItem( macList, macAdapter, device );
+                    } else {
+                        SpinnerUtils.addItem( macList, macAdapter, newdevice );
+                    }
+
                 } );
             } );
         }
