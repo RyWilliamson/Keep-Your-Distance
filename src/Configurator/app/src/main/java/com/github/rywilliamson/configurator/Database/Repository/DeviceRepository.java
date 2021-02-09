@@ -51,6 +51,12 @@ public class DeviceRepository {
         } );
     }
 
+    public void updateTimesConnected( String id, int times_connected ) {
+        RSSIDatabase.databaseWriteExecutor.execute( () -> {
+            mDeviceDao.updateTimesConnected( id, times_connected );
+        } );
+    }
+
     public void insertScanned( Device device ) {
         RSSIDatabase.databaseWriteExecutor.execute( () -> {
             Device qDevice = mDeviceDao.getDeviceByID( device.macAddress );

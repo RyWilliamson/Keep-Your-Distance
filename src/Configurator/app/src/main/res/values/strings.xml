@@ -25,10 +25,11 @@
     <string name="f_di_title">Device Info</string>
     <string name="f_di_maclabel">Device MAC Address:</string>
     <string name="f_di_aliaslabel">Device Name:</string>
-    <string name="f_di_mac_default">00:11:22:33:EE:FF</string>
+    <string name="f_di_mac_default">No Previous Stored Address</string>
     <string name="f_di_alias_default">Name</string>
     <string name="f_di_total_interactions">Total Interactions:</string>
     <string name="f_di_connection_interactions">Interactions Since Connection:</string>
+    <string name="f_di_interaction_data_default">0</string>
     <string name="f_di_export">Export Data</string>
     <string name="f_di_clear">Clear Data</string>
     <string name="f_di_disconnect">Disconnect</string>
@@ -64,6 +65,7 @@
 
     <!-- All Toasts -->
     <string name="toast_no_connect">Could not connect.</string>
+    <string name="toast_disconnect_during_clear">Data still being cleared, try disconnecting again soon.</string>
     <string name="toast_scan_fail">Error: Scan failed, please retry</string>
     <string name="toast_no_file_perms">Can\'t export - file permission not given!</string>
     <string name="toast_export_success">Database exported to storage</string>

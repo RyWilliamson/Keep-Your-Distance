@@ -30,6 +30,7 @@ String mac;
 AverageRBTree *tree;
 RSSIHandler *rssiHandler;
 bool interaction;
+bool prevInteraction = false;
 #define CLEARTIME 600000
 unsigned long clearTrackTimer = 0;
 
@@ -40,7 +41,10 @@ BLECharacteristic *configACKCharacteristic;
 int pinNo = 23;
 
 void notify(bool value) {
-    notification(&screen, value);
+    if (value != prevInteraction) {
+        notification(&screen, value);
+        prevInteraction = value;
+    }
     notification(pinNo, value);
 }
 

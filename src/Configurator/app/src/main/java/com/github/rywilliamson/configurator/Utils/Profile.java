@@ -11,10 +11,10 @@ public class Profile {
     private static final int DEFAULT_MP = -81;
     private static final int DEFAULT_EV = 3;
 
-    private static final int INDOOR_MP = -81;
-    private static final int INDOOR_EV = 3;
+    private static final int INDOOR_MP = -87;
+    private static final int INDOOR_EV = 2;
 
-    private static final int OUTDOOR_CITY_MP = -81;
+    private static final int OUTDOOR_CITY_MP = -85;
     private static final int OUTDOOR_CITY_EV = 2;
 
     private static final int OUTDOOR_NATURE_MP = -81;

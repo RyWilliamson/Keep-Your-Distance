@@ -146,6 +146,8 @@ public class DatabaseViewModel extends AndroidViewModel {
         Log.d("test", "Clear mac: " + receiver);
         mRSSIRepository.deleteByReceiver( receiver );
         mInteractionRepository.deleteByReceiver( receiver );
-        mDeviceRepository.deleteByMac( receiver );
+        //mDeviceRepository.deleteByMac( receiver );
+        mDeviceRepository.updateAlias( receiver, receiver );
+        mDeviceRepository.updateTimesConnected( receiver, 1 );
     }
 }

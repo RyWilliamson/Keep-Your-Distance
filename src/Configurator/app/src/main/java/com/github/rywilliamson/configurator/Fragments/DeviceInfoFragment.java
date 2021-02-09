@@ -2,12 +2,14 @@ package com.github.rywilliamson.configurator.Fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -130,6 +132,7 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
     public void clearClick( View view ) {
         currentInfo.setText( "0" );
         totalInfo.setText( "0" );
+        aliasInfo.setText( bt.getBLEPeripheral().getAddress() );
         oldCount = 0;
         curCount = 0;
         clearing = true;
@@ -137,7 +140,12 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
     }
 
     public void disconnectClick( View view ) {
-        container.getBluetoothHandler().disconnect();
+        Log.d("test", String.valueOf( clearing ) );
+        if (clearing) {
+            Toast.makeText( this.getActivity(), R.string.toast_disconnect_during_clear, Toast.LENGTH_LONG ).show();
+        } else {
+            container.getBluetoothHandler().disconnect();
+        }
     }
 
     @Override
@@ -152,12 +160,16 @@ public class DeviceInfoFragment extends Fragment implements IBluetoothImplemente
 
     private final BluetoothCentralCallback centralCallback = new BluetoothCentralCallback() {
         @Override
+        public void onConnectedPeripheral( BluetoothPeripheral peripheral ) {
+            clearing = false;
+        }
+
+        @Override
         public void onDisconnectedPeripheral( @NonNull BluetoothPeripheral peripheral, int status ) {
             if ( !clearing ) {
                 Navigation.findNavController( DeviceInfoFragment.this.getView() ).navigate(
                         DeviceInfoFragmentDirections.actionDeviceInfoFragmentToDeviceConnectFragment2() );
             } else {
-                clearing = false;
                 db.clearReceiver( peripheral.getAddress() );
                 container.directConnect( peripheral.getAddress() );
             }

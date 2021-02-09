@@ -30,6 +30,9 @@ public interface DeviceDao {
     @Query( "UPDATE device SET alias = :alias WHERE mac_address=:id" )
     void updateAlias( String id, String alias );
 
+    @Query( "UPDATE device SET times_connected = :times_connected WHERE mac_address=:id" )
+    void updateTimesConnected( String id, int times_connected );
+
     @Update(onConflict = OnConflictStrategy.REPLACE )
     void updateDevice( Device device );
 

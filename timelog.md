@@ -557,3 +557,10 @@
 - _0.5 hours_: Finish creating and saving graphs from test data.
 - _0.5 hours_: Meeting with Jeremy.
 - _0.5 hours_: Typing up meeting notes.
+
+### 09 Feb 2021
+
+- _1 hour_: Track down and fix evasive clear bug that drops all records in rssi - due to cascading delete from device
+- _1 hour_: Track down and fix screen corruption bug - somewhat fixed but sometimes leftover artifacting when stopping an interaction while transferring stored bulk interactions.
+- _0.5 hours_: Change default app screen text.
+- _0.5 hours_: Fix crash on disconnecting during data clear.
