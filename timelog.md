@@ -544,3 +544,16 @@
 - _1 hour_: Setup and perform same experiment again, except this time with the device facing pin side up.
 - _0.5 hours_: Reverse indexing on data processing procedure.
 - _0.5 hours_: Create and save new graphs.
+
+# Week 16
+
+### 08 Feb 2021
+
+- _0.5 hours_: Fix App bug on loading after clear.
+- _1.5 hours_: Setting up and performing both the up and down indoor test.
+- _0.5 hours_: Creating graphs from the test data.
+- _0.5 hours_: Writing email to Jeremy.
+- _1.5 hours_: Finishing first draft on intro section.
+- _0.5 hours_: Finish creating and saving graphs from test data.
+- _0.5 hours_: Meeting with Jeremy.
+- _0.5 hours_: Typing up meeting notes.

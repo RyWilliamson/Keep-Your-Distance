@@ -1,8 +1,8 @@
 import os
 import csv
 
-input_filename = "../../../data/raw/rssi_outdoor_city_up.csv"
-output_file = "../../../data/processed/rssi_processed_outdoor_city_up.csv"
+input_filename = "../../../data/raw/rssi_indoor_up.csv"
+output_file = "../../../data/processed/rssi_processed_indoor_up.csv"
 
 expectedAmount = 250
 counter = 0
@@ -34,6 +34,9 @@ with open(input_filename, "r", encoding="utf-8", newline='') as inputF:
         elif (prevTime is not None and counter < expectedAmount and timestamp - prevTime > 2000):
             # Insert Nones
             for i in range( (timestamp - prevTime - 1000) // 1000 ):
+                print(counter)
+                print(timestamp)
+                print(prevTime)
                 outputs[counter][index] = None
                 counter += 1
                 if (counter >= expectedAmount):

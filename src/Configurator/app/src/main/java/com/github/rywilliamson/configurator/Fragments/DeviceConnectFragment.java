@@ -75,9 +75,11 @@ public class DeviceConnectFragment extends Fragment implements IBluetoothImpleme
         if (!bt.getPrevMac().equals( "" )){
             RSSIDatabase.databaseGetExecutor.execute( () -> {
                 Device device = db.getDevice( bt.getPrevMac() );
-                getActivity().runOnUiThread( () -> {
-                    prevMac.setText( device.alias );
-                } );
+                if ( device != null ) {
+                    getActivity().runOnUiThread( () -> {
+                        prevMac.setText( device.alias );
+                    } );
+                }
             } );
         }
 
