@@ -568,3 +568,4 @@
 - _2.5 hours_: Designing a new version of the exploratory data analysis, then carrying it out for indoor and outdoor settings.
 - _0.5 hours_: Data analysis and graph saving.
 - _0.5 hours_: Changing profile values on app and default device values.
+- _0.5 hours_: Making changes suggested to intro section of dissertation based on Jeremy's feedback.
