@@ -355,10 +355,10 @@ class ConfigTests: public aunit::TestOnce {
 
 /* Tests that the inital state of the class is as expected */
 testF(ConfigTests, checkInitial) {
-    assertEqual(config->getMeasuredPower(), -81);
-    assertEqual(config->getEnvironment(), 3);
+    assertEqual(config->getMeasuredPower(), -78);
+    assertEqual(config->getEnvironment(), 2);
     assertEqual(config->getDistance(), 1.5);
-    assertEqual(config->getTargetRSSI(), -86);
+    assertEqual(config->getTargetRSSI(), -81);
 }
 
 /* Tests that the state of the class after an update is correct */

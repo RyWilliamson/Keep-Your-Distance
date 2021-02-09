@@ -28,10 +28,10 @@ private:
 
 public:
     ConfigData(bool testing) {
-        this->measured_power = -81;
-        this->environment = 3;
+        this->measured_power = -78;
+        this->environment = 2;
         this->distance = 1.5;
-        this->target_rssi = -86;
+        this->target_rssi = -81;
         // this->target_rssi = -115;
         this->testing = testing;
     }

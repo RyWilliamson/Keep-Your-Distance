@@ -564,3 +564,7 @@
 - _1 hour_: Track down and fix screen corruption bug - somewhat fixed but sometimes leftover artifacting when stopping an interaction while transferring stored bulk interactions.
 - _0.5 hours_: Change default app screen text.
 - _0.5 hours_: Fix crash on disconnecting during data clear.
+- _1.5 hours_: Preparing experiment script, identifying experiment variables, and creating end of experiment survey.
+- _2.5 hours_: Designing a new version of the exploratory data analysis, then carrying it out for indoor and outdoor settings.
+- _0.5 hours_: Data analysis and graph saving.
+- _0.5 hours_: Changing profile values on app and default device values.
