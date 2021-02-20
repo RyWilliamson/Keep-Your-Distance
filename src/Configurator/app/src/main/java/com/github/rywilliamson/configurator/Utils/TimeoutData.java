@@ -7,7 +7,7 @@ public class TimeoutData {
     private Date startTime;
     private Date endTime;
 
-    public TimeoutData( BluetoothHandler handler, Date startTime, Date endTime ) {
+    public TimeoutData( Date startTime, Date endTime ) {
         this.startTime = startTime;
         this.endTime = endTime;
     }

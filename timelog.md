@@ -569,3 +569,17 @@
 - _0.5 hours_: Data analysis and graph saving.
 - _0.5 hours_: Changing profile values on app and default device values.
 - _0.5 hours_: Making changes suggested to intro section of dissertation based on Jeremy's feedback.
+
+### 10 Feb 2021
+
+- _3 hours_: Experiment with parents.
+
+# Week 17
+
+### 20 Feb 2021
+
+- _2.5 hours_: Trying to get JUnit, Roboelectric, and Mockito to work.
+- _2.5 hours_: Bluetooth Handler Unit Tests.
+- _1 hour_: Profile / ProfileEnum Unit Tests.
+- _0.5 hours_: Spinner Utils Unit Tests.
+- _0.5 hours_: Timeout Unit Tests.

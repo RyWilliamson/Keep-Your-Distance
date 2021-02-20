@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -57,10 +56,14 @@ public class BluetoothHandler {
     private final int INTERACTION_TIMEOUT = 3000; // Milliseconds
 
     public BluetoothHandler( Activity activity, BluetoothCentralCallback callback ) {
+        this( activity, callback, activity.getSharedPreferences( Keys.PREFS, Context.MODE_PRIVATE ) );
+    }
+
+    public BluetoothHandler( Activity activity, BluetoothCentralCallback callback, SharedPreferences prefs ) {
         central = new BluetoothCentral( activity, callback, new Handler(
                 Looper.getMainLooper() ) );
         scannedPeripherals = new ArrayList<>();
-        prefs = activity.getSharedPreferences( Keys.PREFS, Context.MODE_PRIVATE );
+        this.prefs = prefs;
         interactionTimeMap = new HashMap<>();
         bulkTimeMap = new HashMap<>();
         this.profile = Profile.getFromPreferences( activity );
@@ -97,18 +100,6 @@ public class BluetoothHandler {
 
     public BluetoothGattCharacteristic getBulkCharacteristic() {
         return bulkCharacteristic;
-    }
-
-    public BluetoothGattCharacteristic getBulkACKCharacteristic() {
-        return bulkACKCharacteristic;
-    }
-
-    public BluetoothGattCharacteristic getConnectionCharacteristic() {
-        return connectionCharacteristic;
-    }
-
-    public BluetoothGattCharacteristic getConfigCharacteristic() {
-        return configCharacteristic;
     }
 
     public BluetoothGattCharacteristic getConfigACKCharacteristic() {
@@ -167,11 +158,16 @@ public class BluetoothHandler {
         bulkTimeMap.clear();
     }
 
-    public void sendConfig() {
+    public ByteBuffer setupConfigByteBuffer() {
         ByteBuffer packetBuffer = ByteBuffer.allocate( 12 );
         packetBuffer.putFloat( getDistance() );
         packetBuffer.putInt( getMeasuredPower() );
         packetBuffer.putInt( getEnvironmentVar() );
+        return packetBuffer;
+    }
+
+    public void sendConfig() {
+        ByteBuffer packetBuffer = setupConfigByteBuffer();
         boolean written = BLEPeripheral.writeCharacteristic( configCharacteristic, packetBuffer.array(),
                 WRITE_TYPE_DEFAULT );
         setSynced( written );
@@ -211,19 +207,21 @@ public class BluetoothHandler {
         return insertStartTimeHelper( bulkTimeMap, sender, receiver, startTime );
     }
 
+    // For testing
+    public Date insertArbStartTimeAndGet( HashMap<String, TimeoutData> map, String sender, String receiver,
+            Date startTime ) {
+        return insertStartTimeHelper( map, sender, receiver, startTime );
+    }
+
     private Date insertStartTimeHelper( HashMap<String, TimeoutData> map, String sender, String receiver,
             Date startTime ) {
         String key = sender + receiver;
         if ( !map.containsKey( key ) ) {
-            map.put( key, new TimeoutData( this, startTime, startTime ) );
+            map.put( key, new TimeoutData( startTime, startTime ) );
         } else {
             map.get( key ).updateTime( startTime );
         }
         return map.get( key ).getStartTime();
-    }
-
-    public void removeStartTime( String key ) {
-        interactionTimeMap.remove( key );
     }
 
     public void setProfile( Activity activity, Profile.ProfileEnum prof ) {
