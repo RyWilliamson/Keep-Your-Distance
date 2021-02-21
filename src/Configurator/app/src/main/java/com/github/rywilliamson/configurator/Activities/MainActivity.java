@@ -71,10 +71,6 @@ public class MainActivity extends AppCompatActivity implements IBackendContainer
         bt.directConnect( UUID, peripheralCallback );
     }
 
-    public void swapToDebug( View view ) {
-        startActivity( new Intent( this, DevActivity.class ) );
-    }
-
     private final BluetoothCentralCallback bluetoothCentralCallback = new BluetoothCentralCallback() {
         @Override
         public void onDiscoveredPeripheral( @NonNull BluetoothPeripheral peripheral,
@@ -167,22 +163,33 @@ public class MainActivity extends AppCompatActivity implements IBackendContainer
         bt.sendBulkACK( "ACK" );
     }
 
-    private void insertRSSI( byte[] value, BluetoothPeripheral peripheral, boolean isBulk ) {
-        String mac = new String( Arrays.copyOfRange( value, 0, 12 ), StandardCharsets.UTF_8 );
-        int rssi = value[12];
-        Date endTime = Calendar.getInstance().getTime();
-        if ( isBulk ) {
+    public String extendMac(String mac) {
+        mac = mac.replaceAll( "(.{2})", "$1:" );
+        mac = mac.substring( 0, mac.length() - 1 );
+        mac = mac.toUpperCase();
+        return mac;
+    }
+
+    public Date calculateTimeFromData(byte[] value, boolean isBulk, Date endTime) {
+        if (isBulk) {
             ByteBuffer buffer = ByteBuffer.allocate( 4 ).order( ByteOrder.LITTLE_ENDIAN ).put( value, 13, 4 );
             buffer.rewind();
             long offset = buffer.getInt();
             endTime = new Date( endTime.getTime() - offset );
         }
+        return endTime;
+    }
+
+    private void insertRSSI( byte[] value, BluetoothPeripheral peripheral, boolean isBulk ) {
+        String mac = new String( Arrays.copyOfRange( value, 0, 12 ), StandardCharsets.UTF_8 );
+        int rssi = value[12];
+
+        Date endTime = Calendar.getInstance().getTime();
+        endTime = calculateTimeFromData( value, isBulk, endTime );
 
         Log.d( Keys.GLOBAL_PERIPHERAL, "Received value: " + mac + " " + rssi + " " + endTime );
 
-        mac = mac.replaceAll( "(.{2})", "$1:" );
-        mac = mac.substring( 0, mac.length() - 1 );
-        mac = mac.toUpperCase();
+        mac = extendMac( mac );
 
         // Database Calls
         dbViewModel.insertScanned( new Device( mac, mac, 0 ) );

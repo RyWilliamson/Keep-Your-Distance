@@ -583,3 +583,6 @@
 - _1 hour_: Profile / ProfileEnum Unit Tests.
 - _0.5 hours_: Spinner Utils Unit Tests.
 - _0.5 hours_: Timeout Unit Tests.
+- _1 hour_: Main Activity Unit Tests.
+- _4 hours_: Figure out how to unit test Room Repository.
+- _1 hour_: Device Repository Unit Tests.

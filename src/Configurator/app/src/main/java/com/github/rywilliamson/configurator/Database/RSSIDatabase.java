@@ -23,8 +23,8 @@ public abstract class RSSIDatabase extends RoomDatabase {
     private static final String DB_NAME = "rssi_db";
     private static RSSIDatabase instance;
     private static final int NO_THREADS = 1;
-    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool( NO_THREADS );
-    public static final ExecutorService databaseGetExecutor = Executors.newSingleThreadExecutor();
+    public static ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool( NO_THREADS );
+    public static ExecutorService databaseGetExecutor = Executors.newSingleThreadExecutor();
 
     // Uses Singleton pattern
     public static synchronized RSSIDatabase getInstance( Context context ) {
@@ -40,6 +40,10 @@ public abstract class RSSIDatabase extends RoomDatabase {
             }
         }
         return instance;
+    }
+
+    public static synchronized void setInstance( RSSIDatabase database ) {
+        instance = database;
     }
 
     public abstract DeviceDao deviceDao();

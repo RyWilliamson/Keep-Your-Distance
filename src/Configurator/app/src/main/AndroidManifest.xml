@@ -21,9 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Configurator"
         android:requestLegacyExternalStorage="true">
-        <activity android:name=".Activities.DevActivity"></activity>
         <activity android:name=".Activities.MainActivity"
-            android:screenOrientation = "portrait">>
+            android:screenOrientation = "portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
