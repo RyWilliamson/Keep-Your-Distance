@@ -587,3 +587,8 @@
 - _4 hours_: Figure out how to unit test Room Repository.
 - _1 hour_: Device Repository Unit Tests.
 - _1 hour_: Interaction Repository Unit Tests.
+
+
+### 21 Feb 2021
+
+- _1.5 hours_: RSSI Repository Unit Tests.

@@ -12,6 +12,7 @@ import com.github.rywilliamson.configurator.Database.Entity.Interaction;
 import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Database.Repository.InteractionRepository;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,13 +30,13 @@ public class InteractionRepositoryUnitTest {
 
     private final ActivityScenario<MainActivity> scenario = ActivityScenario.launch( MainActivity.class );
     private final Context context = ApplicationProvider.getApplicationContext();
-    private final RSSIDatabase database = Room.inMemoryDatabaseBuilder( context,
-            RSSIDatabase.class ).allowMainThreadQueries().build();
+    private RSSIDatabase database;
     private InteractionRepository repo;
 
     @Before
     public void initialise() {
         scenario.onActivity( activity -> {
+            database = Room.inMemoryDatabaseBuilder( context, RSSIDatabase.class ).allowMainThreadQueries().build();
             RSSIDatabase.setInstance( database );
             repo = new InteractionRepository( activity.getApplication() );
             database.deviceDao().insertDevice( new Device( "A", "aliasA", 1 ) );
@@ -187,7 +188,7 @@ public class InteractionRepositoryUnitTest {
     }
 
     @Test
-    public void insert_isCorrectSingle() {
+    public void delete_isCorrectSingle() {
         RSSIDatabase.databaseWriteExecutor = Executors.newFixedThreadPool( 1 );
         repo.insert( new Interaction( "B", "A", new Date( 1 ), new Date( 1 ) ) );
         RSSIDatabase.databaseWriteExecutor.shutdown();
@@ -209,7 +210,7 @@ public class InteractionRepositoryUnitTest {
     }
 
     @Test
-    public void insert_isCorrectMultiple() {
+    public void delete_isCorrectMultiple() {
         RSSIDatabase.databaseWriteExecutor = Executors.newFixedThreadPool( 1 );
         repo.insert( new Interaction( "B", "A", new Date( 1 ), new Date( 1 ) ) );
         repo.insert( new Interaction( "A", "A", new Date( 1 ), new Date( 1 ) ) );
@@ -230,6 +231,11 @@ public class InteractionRepositoryUnitTest {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getInteractionByID( "B", "A", new Date( 1 ) ) ).isNull();
+    }
+
+    @After
+    public void teardown() {
+        database.close();
     }
 
 }
