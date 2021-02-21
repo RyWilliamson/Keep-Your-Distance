@@ -586,3 +586,4 @@
 - _1 hour_: Main Activity Unit Tests.
 - _4 hours_: Figure out how to unit test Room Repository.
 - _1 hour_: Device Repository Unit Tests.
+- _1 hour_: Interaction Repository Unit Tests.
