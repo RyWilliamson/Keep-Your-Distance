@@ -16,6 +16,7 @@ private:
         Serial.println();
     }
 
+    // Formula in survey of COVID-19 contact tracing apps - d0 is 1m so just 1
     int16_t calculateTargetRSSI(float distance, float measuredPower, int environment) {
         return measuredPower - 10 * environment * log10f(distance);
     }

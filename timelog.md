@@ -588,7 +588,26 @@
 - _1 hour_: Device Repository Unit Tests.
 - _1 hour_: Interaction Repository Unit Tests.
 
-
 ### 21 Feb 2021
 
 - _1.5 hours_: RSSI Repository Unit Tests.
+- _0.5 hours_: Trying to get code coverage to work and output.
+- _0.5 hours_: Looking at hall of fame background sections and planning background subheadings.
+
+# Week 18
+
+### 22 Feb 2021
+
+- _3 hours_: First draft of COVID section in background.
+- _3 hours_: Started work on contact tracing section in background.
+- _0.5 hours_: Meeting with Jeremy
+
+### 27 Feb 2021
+
+- _0.5 hours_: Typing up meeting notes
+- _1.5 hours_: Continue working on Background section
+
+### 28 Feb 2021
+
+- _7.5 hours_: Finish working on Background section first draft.
+- _1 hour_: Another pass over Background section, after comments givin by reviewer.

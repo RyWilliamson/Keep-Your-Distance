@@ -94,53 +94,188 @@
 
 \section{Motivation}
 
-SARS-CoV-2, henceforth referred to as either Coronavirus or COVID-19, has caused a pandemic on a scale that hasn't been seen in modern history. The \citet{world_health_organisation_dashboard_2021} reports that, at the time of writing, there have been over 100 million confirmed cases of COVID-19 and over 2.2 million deaths. There are a number of recommendations that governments and official bodies have been making to the public, such as wearing a face covering in enclosed spaces, to avoid crowded places, and more. The key recommendation that this paper will be considering is to maintain a distance from others as much as possible, this recommended distance varies.
+SARS-CoV-2, henceforth referred to as either Coronavirus or COVID-19, has caused a pandemic on a scale that hasn't been seen in modern history. The \citet{world_health_organisation_dashboard_2021} reports that, at the time of writing, there have been over 100 million confirmed cases of COVID-19 and over 2.2 million deaths. There are a number of recommendations that governments and official bodies have been making to the public. The key recommendation that this paper will be considering is to maintain a distance from others as much as possible, this distance varies between recommending bodies.
 
-This has brought about many styles of contact tracing. Contact tracing is a technical solution to tracing infection by finding who an infected individual has been in contact with - i.e. where this distance has not been maintained between two or more people. This works. However, this is only a method for tracing infections after they occur and doesn't help with preventing the infections in the first instance. Preventing infection is extremely important. Both in terms of individual impact, coronavirus has awful short and long term impacts, and also in terms of a global impact, infection is an exponential chain so by preventing infection early in the link we prevent the most cases possible.
+This has brought about many styles of contact tracing. Contact tracing is a technical solution to tracing infection by finding who an infected individual has been in contact with - i.e. where this distance has not been maintained between two or more people. This works. However, this is only a method for tracing infections after they occur and doesn't help with preventing the infections in the first instance. Preventing infection is extremely important. It is important both in terms of individual impact, coronavirus has awful short and long term impacts, and also in terms of a global impact, infection is an exponential chain so by preventing infection early in the link we prevent the most cases possible.
 
 Furthermore, another key aspect of getting the pandemic under control is information. There are already large amounts of general information given to the public everyday through the news and social media. This information is all useful, but due to the constant exposure to this information people become desensitised \citep{koh_messaging_2020} and may be less likely to act on this information. Personalised information on someones behaviour is another avenue, that currently is not used as much. They may be more likely to act on this information, seeing the direct relevance to themselves.
 
 \section{Goals}
 
-This report proposes Keep Your Distance, a system built on existing technologies, such as the ESP32 micro-controller, with the overall goal of reducing the spread of COVID-19. There is a primary focus on users within an organisational setting, however many considerations were made for users outwith this category.
+This paper proposes Keep Your Distance, a system built on existing technologies, such as the ESP32 micro-controllers, with the overall goal of reducing the spread of COVID-19. There is a primary consideration on users within an organisational setting, however many considerations were made for users outwith this category.
 
-Keep Your Distance aims to provide active contact identification, a term I use to describe the process of alerting a user of the system when they have gotten too close to another user of the system. The system doesn't not require any form of tracing functionality as seen in existing systems, the system is designed to be used alongside these. This goal is supported by some of the key functions in system which include distance detection based on the Received Signal Strength Indicator (RSSI) between two of the ESP32 devices, a method of feedback to the user on the current system state - i.e. if they are too close to another device or are currently separated enough - using external electronic hardware in the form of a wearable.
+Keep Your Distance aims to provide active contact identification, a term I use to describe the process of alerting a user of the system when they have gotten too close to another user of the system. The system doesn't not require any form of tracing functionality as seen in existing systems, the system is designed to be used alongside these. This goal is supported by some of the key functions in system which include distance detection based on the Received Signal Strength Indication (RSSI) between two of the ESP32 devices, a method of feedback to the user on the current system state - i.e. if they are too close to another device or are currently separated enough - using external electronic hardware.
 
 A further goal of the Keep Your Distance system is to educate users on their current social distancing behaviour, and try to help the users reduce encounters through this information in addition to the real-time alerts. The system meets this goal by transferring encounter information to a connected mobile device and storing it in an on-device database. This data is then used by the graphing functionality built into the system, which allows the user to see various aspects of how they've been interacting with others. With this system also comes potential privacy concerns from the user perspective. To deal with this all the data is stored locally only, the user is also given options with their data to feel in full control including being able to export their data to csv for personal extended analysis, or clearing the data completely from the phone.
 
 The final primary objective is for the system to be usable by a range of people, in a range of scenarios. This is done through two factors, the first is the configuration system. Within the app is an area for configuring device functionality, the user can change the distance, and also a set profile from indoors, outdoor within a city, and outdoor within nature. Internally these profiles change different values that are used by the distance calculation. The second factor is accessibility, through careful choice of colours for the graphs, and by adhering the best practice for app development in the chosen app, it is expected that users with a range of impairments will be able to use the Keep Your Distance system.
 
 \section{Summary}
-This chapter briefly discussed the motivation for the project and the goals for development of the Keep Your Distance system. The remaining chapters will discuss the realisation of these goals throughout the design and development of the product. The dissertation has the following structure.
+This chapter briefly discussed the motivation for the project and the goals for development of the Keep Your Distance system. The remaining chapters will discuss the realisation of these goals throughout the design and development of the product. The paper has the following structure.
 \begin{itemize}
     \item \textbf{Chapter 2:} Presents the findings from my research into systems analogous to Keep Your Distance, such as contact tracing methods, identifying useful concepts and some criticism of current techniques. This chapter also investigates the Bluetooth Low Energy (BLE) technology stack.
     \item \textbf{Chapter 3:} Shows the steps taken for analysis, such as creating user stories and user scenarios, and the resulting set of functional and non-functional requirements for the system. Also includes a discussion of the exploratory data analysis performed.
     \item \textbf{Chapter 4:} Outlines the steps taken in design work, including analysis of technologies to use and the limitations of hardware used. This section also includes the considerations made when designing the UI.
-    \item \textbf{Chapter 5:} Contains a brief discussion of overall implementation challenges, with in-depth discussion of particular technical areas of interest such as dealing with endianess differences between platforms.
+    \item \textbf{Chapter 5:} Contains a brief discussion of overall implementation challenges, with in-depth discussion of particular areas of interest such as dealing with endianess differences between platforms.
     \item \textbf{Chapter 6:} Details the variety of techniques employed to evaluate the system. This includes user evaluation, in the form of surveys and an experiment, and also unit testing of the end system.
-    \item \textbf{Chapter 7:} Provides a summary of the project, with examination for any potential future work on the system, a discussion on the results from evaluation, and a reflection of the work as a whole.
+    \item \textbf{Chapter 7:} Provides a summary of the paper, with examination for any potential future work on the system, a discussion on the results from evaluation, and a reflection of the paper as a whole.
 \end{itemize}
 
 
 
 %==================================================================================================================================
 \chapter{Background}
-What did other people do, and how is it relevant to what you want to do?
 
-Talk about how bluetooth and RSSI work - e.g. bluetooth operates on em spectrum 2.4Ghz etc.
-\section{Guidance}
-\begin{itemize}
-    \item
-          Don't give a laundry list of references.
-    \item
-          Tie everything you say to your problem.
-    \item
-          Present an argument.
-    \item Think critically; weigh up the contribution of the background and put it in context.
-    \item
-          \textbf{Don't write a tutorial}; provide background and cite
-          references for further information.
-\end{itemize}
+\section{SARS-CoV-2}
+
+The pandemic caused by COVID-19 has caused widespread disruption to daily life across the globe. Every country has been gravely affected. Both in terms of human illness and mortality, and in terms of their economies from shutdown of work and trade. Even for those countries that handled it best, such as New Zealand \citep{robert_lessons_2020}, still suffered some COVID deaths. This is because the world was vastly under prepared for handling a disease like COVID-19. Coronavirus has had such an effect for two reasons: high mortality rate, albeit lower than other SARS and MERS viruses, and transmission rate. COVID-19 has a long and variable incubation period, along with the potential to be transmitted by asymptomatic people, and by those with varying levels of symptoms \citep{vannabouathong_novel_2020}. Coupled with this the \citet{world_health_organisation_transmission_2020} states that coronavirus can be transmitted both directly, droplet / airborne transmission, and indirectly, fomite transmission.
+
+Over time guidelines have been researched and developed by governments and recommending bodies around the world. Many governments follow the recommendations established by the \cite{world_health_organization_responding_2020} which include good hand hygiene, adoption of masks, and key to this project social distancing. Although the World Health Organisation recommends what to do, it is up to individual governments to decide how to implement this.\citet{yoo_comparative_2020} found that the distance recommended by government bodies, from comparing 6 governments, tended to be 1.8 - 2.0 metres, showing that although they are deciding the guidelines individually the recommendations are similar globally.
+
+\section{Contact Tracing}
+
+\subsection{Contact Tracing Overview}
+
+The proposed system is not a contact tracing system, however it shares many analogues with the digital contact tracing systems developed for smartphones. The literature surrounding contact tracing therefore formed a good basis of research in the early stages of the project.
+
+In addition to the prevention guidelines discussed above countries have also found it essential, and useful, to identify individuals who have recently been or are potentially currently infected with COVID-19. Infection still occurs since some interaction is still necessary for people to survive, such as essential food shopping, and given enough of these outings it is likely that a mistake will be made and one of the guidelines violated. This makes the process of contact tracing, which allows for infectious individuals to be found, necessary so that these individuals can be made to self isolate to prevent risk to others. When done well this causes a large reduction in infection rates, as it doesn't just prevent a single infection but all infections that person would cause, and all the people those infections would infect and so on.
+
+To be able to perform this contact tracing effectively it is not enough to rely solely on manual contact tracing methods alone \citep{shubina_technical_2020}. Instead the strategy has been to augment manual efforts through using digital contact tracing i.e., wireless technologies on electronic devices. Smartphones are the most common choice of device as for digital contact people not using the same system will be invisible to each other, and smartphones are devices that most of the population carries with then daily, meaning driving public adoption of a system is easier.
+
+\subsection{Digital Contact Tracing Technologies}
+
+In the development of their own digital contact tracing systems countries have made use of a number of wireless technologies to accomplish the task of proximity estimation. I'll briefly describe a few discussing their suitability for use in contact detection.
+
+\subsubsection{Global Positioning System (GPS):}
+
+GPS uses satellite communication. Each satellite in the network is constantly transmitting a signal which a device, such as a smartphone, can receive. This device can then calculate its positions based on the distance from multiple satellites. This already has common deployment, as they are implemented in almost all modern smartphones. However, the precision of GPS is only 7 - 13 metres \citep{merry_smartphone_2019}, with even worse performance indoors if any GPS signal can be received at all.
+
+\subsubsection{Cellular:}
+
+Through using mobile phone networks and the cell towers they use to distinguish "cells", which are sections of land, a very rough location can be determined \citep{hernandez-orallo_evaluating_2020}. The main advantage to this approach is that cellular infrastructure is already widely deployed, with even people without smartphones being able to make use of it. However, the precision of this is very low and also very variable and distances between cell towers vary.
+
+\subsubsection{Bluetooth:}
+
+Bluetooth is widely deployed on smartphones and also within wearable devices. Each device can advertise its presence while also scanning for the presence of other advertising devices, when scanned part of the information received is the signal strength. This can somewhat be used to derive a distance between the two devices, therefore the people in contact tracing scenarios, with a precision of around a few metres. However, the signal strength can be affected by many things other than distance, such as objects in-between or interference from other similar frequency signals \citep{ahmed_survey_2020}, which can cause the distance estimation to vary significantly depending on location.
+
+\subsubsection{Ultra-Wideband (UWB):}
+
+UWB is a technology that has been around for some time, but has not been adopted widely. It has only recently started appearing in popular commercial devices such as the iPhone 11, which would make using this for contact tracing at present challenging. UWB works by measuring time of flight between receivers, leveraging it's high frequency, on the order of Ghz, to be able to more precisely measure distance than other technologies. \citet{angelis_experimental_2008} find that a precision measured in centimetres rather than metres is possible.
+
+\subsection{Digital Contact Tracing Architectures}
+
+There are three types of architectures that have been used in the development of digital contact tracing apps. These are classified by \citet{ahmed_survey_2020} as Centralised, Decentralised, and Hybrid. Each comes with varying levels of effectiveness in terms of tracing contacts but also with their own attack vectors and privacy concerns. I'll briefly describe each, giving their positives and negatives.
+
+\subsubsection{Centralised Architecture:}
+
+In a centralised architecture, Figure \ref{fig:centralised_arch}, there is a main server that the contact tracing app connects and exchanges key information with. This server stores a users stored close encounter occurrences when a user chooses to voluntarily upload them, for example after testing positive. The server then handles mapping these occurrences back to the other people involved in encounters with this user and informs them.
+
+Since the main server handles the bulk of data related system operations, including storing encrypted information, analysing contact risk, and notifying contacts if they were potentially exposed. This aids in lowering battery use of the application, making users more likely to use this, at a perceived privacy risk since the contact data is being stored and processed by a server.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/ahmed_centralised.png}
+
+    \caption{ Architecture Overview Diagram for Centralised Architecture from \citet{ahmed_survey_2020}.
+    }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:centralised_arch}
+\end{figure}
+
+\subsubsection{Decentralised Architecture:}
+
+Figure \ref{fig:decentralised_arch} shows a decentralised architecture for digital contact tracing. This style of architecture performs the work on the devices, instead of performing it on a central server. The device creates and stores seeds, which are in turn used to create chirps which are short lasting pseudonyms for the device. These chirps are what is exchanged by devices and stored. When a user voluntarily uploads data only the seeds and relevant timestamps are uploaded. Other users can then download the seeds, calculate the chirps, and check if they were exposed.
+
+Counter to the centralised architecture, the decentralised architecture having the majority of the system operations on the mobile device gives this architecture the opposite implications. The privacy is significantly better, no sign-up process is required and the main server knows very little about the users, while decreasing battery efficiency.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/ahmed_decentralised.png}
+
+    \caption{ Architecture Overview Diagram for Decentralised Architecture from \citet{ahmed_survey_2020}.
+    }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:decentralised_arch}
+\end{figure}
+
+\subsubsection{Hybrid Architecture:}
+
+The hybrid architecture, Figure \ref{fig:hybrid_arch}, the responsibilities are more evenly split between the client device and the server. Similar to the decentralised architecture the client device handles the generation of "Ephemeral IDs" which are what the devices exchange when a contact occurs. Similar to the centralised architecture the server handles calculating the risk of exposure and the notification of users who may have been exposed.
+
+By nature of its design, the hybrid architecture is intended to compromise the benefits and drawbacks of the centralised and decentralised architecture, Having part of the process on the server allows for better identification of exposure, as it has the whole data-set to perform statistical analysis on. Also, privacy is still preserved with this architecture due to having id creation and management on device.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/ahmed_hybrid.png}
+
+    \caption{ Architecture Overview Diagram for Hybrid Architecture from \citet{ahmed_survey_2020}.
+    }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:hybrid_arch}
+\end{figure}
+
+\section{Bluetooth}
+
+\subsection{Brief Overview of Bluetooth}
+
+Bluetooth, also referred to as Bluetooth Classic, is a wireless communications protocol, and set of specifications, designed for short-range communication between devices. Developed by the Bluetooth Special Interest Group (SIG), this technology specification has been maturing since 1999 and is currently on version 5.0 of the specification which broughy improved data transfer and tighter security. Like all wireless technologies Bluetooth operates on the electromagnetic (EM) spectrum, at a frequency of around 2.4Ghz.
+
+\subsection{Bluetooth vs Bluetooth Low Energy}
+
+Developed as part of the Bluetooth 4.0 specification Bluetooth Low Energy (BLE) was introduced. The primary feature in the design of BLE is its low power consumption, although this comes at the cost of having a significantly reduced throughput \citep{gomez_overview_2012}. Due to this trade-off BLE is suitable for applications that Bluetooth is not, and vice-versa, such as long-term system state monitoring solutions. Bluetooth consumes too much power to be used effectively for this.
+
+Like Bluetooth Classic, BLE operates around the 2.4Ghz frequency band on the EM spectrum. BLE has other similarities with Bluetooth Classic, especially the lower layer architecture as seen in Figure \ref{fig:bluetooth_stack_comparison} where the controller, is very similar. They also share the Logical Link Control and Adaptation Protocol (L2CAP) layer in the host segment, which performs data translation between the upper and lower layers. This is where the similarities end.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/bluetooth_stacks.png}
+
+    \caption{ Comparative diagram of the high level Bluetooth Classic stack vs the BLE stack. The central stack is a "dual-mode" device which supports Bluetooth Classic and BLE \citep{yang_beyond_2020}. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:bluetooth_stack_comparison}
+\end{figure}
+
+\subsection{Bluetooth Low Energy Technical Stack - High Level}
+
+I will give a brief overview of each layer on the BLE architecture presented in Figure \ref{fig:bluetooth_stack_comparison} from a bottom-up approach.
+
+\subsubsection{Physical Layer:} The physical layer handles the communication hardware with a BLE system. This includes 40 radio frequency (RF) channels which, as previously stated, operate at around 2.4Ghz \citep{yang_beyond_2020}. Of these 40 channels, there are 3 dedicated advertisement channels which allow devices to detect each other and provide the necessary information for establishing a formal connection. The remaining 37 channels are used for data transmission during connections. \citet{gomez_overview_2012} states an important feature of the advertisement channels - they have been selected to mitigate against interference from common IEEE 802.11 channels, a set of standards commonly referred to as Wi-Fi.
+
+\subsubsection{Link Layer:} This layer handles two types of communication connection-less and connection-based. \citet{yang_beyond_2020} provides that when a device only needs to send information to any devices that are listening this mechanism is used. There are two types in this scenario, the advertiser which broadcasts the information, and the scanner which is listening for these broadcasts. This happens over one of the three advertising channels, and devices can simultaneously be advertisers and scanners. Building on this, is connection-based communication. This is used when bidirectional communication is required. Here the advertisement channels are used to present a device as connectable, this is called the peripheral, then for another device to send a Connection Request, called the central \citep{gomez_overview_2012}.
+
+\subsubsection{Host-Controller Interface:} The Host-Controller Interface (HCI) is simply a protocol layer that communicates between the host layers and the controller layers.
+
+\subsubsection{Logical Link Control and Adaptation Protocol:} The L2CAP is held in common with Bluetooth Classic, however the BLE version is both simplified and optimised in order to meet the goals of lower power consumption. The goal is to multiplex the data of the upper layers to run along the link layer, i.e. combine the communication streams of multiple applications for simultaneous transmission \citep{gomez_overview_2012}. The L2CAP packets size is 27 bytes overall, with a 4 byte header leaving 23 bytes for the payload, shown in Figure \ref{fig:l2cap}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/l2cap.png}
+
+    \caption{ Simplified packet diagram for L2CAP packets. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:l2cap}
+\end{figure}
+
+\subsubsection{ATT:} The attribute protocol sits atop the L2CAP layer, and manages communication between two roles, the client and the server, each of which are on separate devices. The ATT layers manages a set of attributes, this is a data structures which stores the information managed by the above layer, the GATT. An important point is that the two roles are completely separate from the central-peripheral and advertiser-scanner roles \citep{gomez_overview_2012} discussed in the link layer section above. The client can retreive, or write information from an attribute through a direct request to the server. Alternatively, the server can send the client messages in one of two types: notifications and indications. These types are the same bar the aspect where notifications don't require the client to confirm to the server it has receieved the notification. Indications do require this.
+
+\subsubsection{GATT:} The top-level layer in the BLE stack is the genetric attribute protocol. This provides a level of abstraction over the base attributes defined in ATT, descriptors, characteristics, and services. These are linked concepts, a services is made up of characteristics, which in turn optionally contain descriptors. Descriptors provide metadata about the characteristic containing it. Characteristics are pieces of data, containing values and also properties, which act as permissions for what that characteristic allows. Finally, services are a set of related characteristics.
+
+\subsection{Received Signal Strength Indication}
+
+The RSSI is an indication of the reliability of the connection between two devices. \citet{SIG5.0}, in the Bluetooth 5.0 specification, describes how it can be used directly by the BLE protocol for hopping between channels, and can also be accessed by the upper layers of the BLE stack. It also states that if a device supports Receive Signal Strength Indicator (RSSI) the accuracy shall be +/- 6 dB, though it should be noted that this varies between hardware implementations. Within BLE the RSSI is an absolute signal strength measurement given in decibel-milliwatts (dBm).
+
+RSSI is commonly used in proximity estimation calculations through the use of a path loss estimation model \citep{ahmed_survey_2020}. However, there are many aspects that can affect the RSSI not just distance. These usually make the signal strength weaker. Examples are: self-interference, material based effects such as reflection and absorption, and noise from other Bluetooth signals.
+
+\section{Background Summary}
+
+\citet{ahmed_survey_2020} presented a review of the current state of contact tracing as a whole. This helped highlight current methodologies and identified the current implemented methods of using Bluetooth for combatting COVID-19. This allowed for finding the commonalities between this project and existing projects, which in turn provided focus for the novel aspects. There was a heavy focus on privacy concerns; people are more likely to use something they trust. This led to a project focus of inherent privacy by design.
+
+A core commonality between the contact tracing methods I researched, across all papers referenced in the contact tracing section, was the use of Bluetooth. This led to in-depth technical research on Bluetooth, and by extension BLE, using the core specification \citep{SIG5.0} to understand Bluetooth's viability as a distance estimating solution. \citet{gomez_overview_2012} and \citet{yang_beyond_2020} provided much needed additional context to how BLE worked in a more practical sense.
 
 %==================================================================================================================================
 \chapter{Analysis/Requirements}
@@ -157,6 +292,11 @@ Design should cover the abstract design in such a way that someone else might be
 %==================================================================================================================================
 \chapter{Implementation}
 What did you do to implement this idea, and what technical achievements did you make?
+
+\section{ESP 32}
+
+\textbf{Short section on the esp32 to introduce it - maybe better for design section - ask Jeremy his opinion on this. }\\
+
 \section{Guidance}
 You can't talk about everything. Cover the high level first, then cover important, relevant or impressive details.
 
