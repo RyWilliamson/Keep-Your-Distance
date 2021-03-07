@@ -633,3 +633,7 @@
 - _1 hour_: Python program to take csv of participants open codes and produce axial breakdown.
 - _1 hour_: Prep for qualitative survey analysis
 - _2 hours_: Begin open coding process for 24 responeses.
+
+### 07 Mar 2021
+
+- _4 hours_: Continue open coding process for remaining 18 responeses.
