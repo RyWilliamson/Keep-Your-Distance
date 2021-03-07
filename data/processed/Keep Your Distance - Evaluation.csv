@@ -1,0 +1,56 @@
+Question,Particpant A Answer,Particpant B Answer,,Code,Code Description
+"Did you feel comfortable that the device stopped you in time, why?",Yeah mostly apart from one time outside ,No. It wasn't consistent between the devices and appeared to be inaccurate. It was also too slow.,,O1,Problems with Device Accuracy
+"Did you feel that the device kept you too far apart, why?",No I felt that device was quite accurate once I got the hang of it,No,,O2,Got too close
+"Is it clear when the device is connected to the app, why?",Yeah it was clear once the light came on it was connected ,The app has a connected status.,,O3,Kept too far apart
+"Would you be comfortable using this if your workplace recommended it, why?",Yeah I would use this device if it was keeping everyone safe,No as I found it too slow to respond. It would be ok to monitor the time spent in close proximity,,O4,Saw device connected from app
+"If this system was widely adopted in public use would you be likely to use it, why?",Yeah same reason as above ,If it was improved it could be useful,,O5,Saw device connected from device screen
+"As previously stated the wearable form chosen for this is a lanyard, are there any other types of accessories you'd prefer this to be used with?",Yeah maybe a watch/brace would be good as well,a clippable badge would be easier to fix and would be easier to keep facing in the right direction,,O6,Comfortable in workplace
+"Did you prefer the screen alert of the vibration alert, why?",Both combined would be good ,Vibration as I feel you'd need to be constantly looking at the device rather than what you should be looking for.,,O7,Uncomfortable in workplace
+Are there any improvements or changes you would like to see on the app in general?,No it seemed pretty straight forward to use ,The app funcitons need to be larger to accomodate bigger digits.,,O8,Comfortable in public
+Are there any improvements or changes you would like to see on the device in general?,No nothing ,The device needs to be shaped to keep it's position better.,,O9,Uncomfortable in public
+Did the scan button do what you expected?,Yes,Yes,,O10,Wrist wearable
+It was easy to connect to the device I was asked to connect to.,1,5,,O11,Badge / lanyard
+It was easy to reconnect to the device after moving the experiment to a different location,5,5,,O12,Preferred vibration
+Any further comments on this page?,I think this is a really good idea and people would use this to keep their distance ,None,,O13,No feedback preference
+It was easy to disconnect from the device,5,5,,O14,Scan works as expected
+Any further comments on this page?,After I knew how to work the device I found it really easy to use ,NONE,,O15,Struggled with device connection
+It was each to change the device to outside mode.,5,5,,O16,No problem with device connection
+Any further comments on this page?,No,None,,O17,No problem with disconnection
+What do you think the x-axis represents on this bar chart?,The days of the week,Days of the week,,O18,No problem with profile change
+What do you think the y-axis represents on this bar chart?,The usage ,Number of interactions,,O19,Correct x-axis on weekly interactions
+What do you think this chart represents overall?,Weekly usage,daily count of interactions,,O20,Incorrect x-axis on weekly interactions
+"Did you understand why the graph changed after each location in the experiment, what do you think changed?",No,Number of interactions ,,O21,Correct y-axis on weekly interactions
+Any further comments on this graph?,No,It might be useful to know the time of interactions,,O22,Incorrect y-axis on weekly interactions
+What do you think the first pie chart represents?,Time taken to react,duration of the interactions in minutes,,O23,Correct understanding of weekly interaction chart
+What do you think the second pie chart represents?,Distance ,distance for the interactions,,O24,Incorrect understanding of weekly interaction chart
+"If the pie charts changed after each location in the experiment, what do you think changed?",Not sure,the number of interactions was updated,,O25,Further precision suggestion in bar chart
+It was easy to distinguish between the colours on the pie chart.,4,4,,O26,Understood why graphs updated
+Any further comments on this graph?,No,,,O27,Didn't understand why graphs updated
+What do you think the x-axis represents on this line chart?,The dates,date,,O28,Correct understanding of duration pie chart
+What do you think the y-axis represents on this line chart?,The usage ,inteactions on the date,,O29,Incorrect  understanding of duration pie chart
+What do you think it means once the colour changes from blue to red.,When it changes to red it was used a lot more,The number of interactions are excessive,,O30,Correct  understanding of distance pie chart
+It is clear why the graph is blank when I'm trying to view the trend results during the experiment.,4,2,,O31,Incorrect  understanding of distance pie chart
+Any further comments on this graph?,No ,,,O32,Easy to distinguish pie chart colours
+,,,,O33,Hard to distinguish pie chart colours
+,,,,O34,Correct x-axis on trend graph
+,,,,O35,Incorrect x-axis on trend graph
+,,,,O36,Correct y-axis on trend graph
+,,,,O37,Incorrect y-axis on trend graph
+,,,,O38,Understood trend graph colour change
+,,,,O39,Clearly understood why trend graph initially blank
+,,,,O40,Unclear on why trend graph initially blank
+,,,,O41,Unsure how to turn on device
+,,,,O42,Understood how to turn on device
+,,,,O43,Disconnected correctly
+,,,,O44,Disconnected incorrectly
+,,,,O45,Misunderstood connected icon
+,,,,O46,Assigning meaning to pie chart colours
+,,,,O47,Inconvenient to wear
+,,,,O48,Confusion with two feedback methods simultaneously
+,,,,O49,Spinners too small to use
+,,,,O50,Noticed changes in graph data
+,,,,O51,Noticed changes in device info
+,,,,O52,Problem with pie chart legend
+,,,,O53,Understood pie chart legends
+,,,,O54,Accidental pressing of Android bottom row buttons
+,,,,O55,Confusion on trend graph presentation

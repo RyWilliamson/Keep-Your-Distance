@@ -611,3 +611,25 @@
 
 - _7.5 hours_: Finish working on Background section first draft.
 - _1 hour_: Another pass over Background section, after comments givin by reviewer.
+
+# Week 19
+
+### 01 Mar 2021
+
+- _1 hour_: Get experimental data into excel files.
+- _1 hour_: Type up experiment think-aloud
+- _2 hours_: Begin open coding process
+- _2.5 hours_: Match the interaction data with the experimental data and extract timestamps to allow for chunking of RSSI data correctly.
+- _0.5 hours_: Meeting with Jeremy
+
+### 05 Mar 2021
+
+- _0.5 hours_: Type up Meeting Minutes
+- _1 hour_: Open Coding for experimental qualitative data
+
+### 06 Mar 2021
+
+- _4 hours_: Working on qualitative experiment analysis.
+- _1 hour_: Python program to take csv of participants open codes and produce axial breakdown.
+- _1 hour_: Prep for qualitative survey analysis
+- _2 hours_: Begin open coding process for 24 responeses.
