@@ -636,4 +636,5 @@
 
 ### 07 Mar 2021
 
-- _4 hours_: Continue open coding process for remaining 18 responeses.
+- _5 hours_: Finish open coding process for remaining 18 responeses.
+- _3 hours_: Axial and Selective coding process for generated codes.
