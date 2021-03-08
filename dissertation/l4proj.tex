@@ -358,7 +358,88 @@ Non-functional requirements are properties of a system which can be observed by 
 
 \section{Exploratory Data Analysis}
 
-Exploratory data analysis
+Exploratory data analysis was conducted both in the initial stages of the project and again later in the project with a more finished prototype. The aims of this analysis were to investigate the performance of the ESP32 BLE hardware and to find suitable parameters for calculation of the distance based on RSSI. The exact details of the formula will be discussed in the implementation section, the relevant parameters were the environment factor and the measured power.
+
+The analysis procedure was similar in both the initial analysis and late stage analysis.  Starting from 0.5 metres apart and going up in 0.5 metre increments until 2.5 metres 250 rssi values were recorded. The NumPy and Pandas python libraries were used for data processsing, along with MatplotLib and Seaborn being used for data visualisation. A large range of graphs were created including violinplots, swarmplots, histograms, density plots, and line graphs.
+
+The violinplot of RSSI values against specific distances (0.5m - 2.5m) were useful in getting a high level comparative overview on how the RSSI values were clustered, along with how they varied. To allow for easier comparison a density estimation plot was created which allowed for much easier identification of distinct areas along with overlapping areas that may be problematic.
+
+For finding the best parameters a separate dataset was computed for each environment variable value (integers 1 through 4), considering 50 RSSI values from -100 to -50. For each RSSI value the estimated distance was calculated. These datasets were then compared to the real dataset to find the best fit for each environment variable. To then find the best environment variable the standard deviation of the error between the real dataset and each theoretical dataset was calculated. To show this visually a series of linecharts were created to show the error for each distance category, the mean error, and the median error.
+
+\subsection{Initial Analysis}
+
+For the initial analysis data collection the early prototype version didn't have any form of timing system to determine when packets were missed so as workaround I had the receiving device listen every second, and record a dummy value if a packet wasn't received. This initial analysis was particularly important as it showed the project had potential using the ESP32 hardware Figure \ref{fig:initial_density}. A best parameter fit of environment = 3, measure power = -81 was identified as shown in \ref{fig:initial_best_fit}.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/initial_rssi_density.pdf}
+        \caption{Density estimation plot for initial exploratory data analysis. Note the distinct peaks for most distances with the exception of red (2.0m) and purple (2.5m).}
+        \label{fig:initial_density}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/initial_mp_bestfit.pdf}
+        \caption{Best fit error plot for initial exploratory data analysis. Graph for environment = 3, shows most common point when measured power = -81.}
+        \label{fig:initial_best_fit}
+    \end{subfigure}
+    ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+    %(or a blank line to force the subfigure onto a new line)    
+    \caption{ Key plots from initial exploratory data analysis. }
+    \label{fig:density_plots}
+\end{figure}
+
+\subsection{Late Stage Analysis}
+
+In the late stage analysis the timing system was fully implemented so I could determine packet loss between packets received. Two types of areas were covered in the late stage analysis: Indoor, and Urban Outdoor. Originally a Remote Outdoor investigation was planned however this was not feasible to set up. For each area the devices were set up in three ways: facing pin side up, facing pin side down, and hanging mid-air facing each other. The aim of this analysis was similar to the initial analysis but with more of a focus on determining real world performance as opposed to technical feasibility.
+
+After conducting the pin side up and pin side down versions of the indoor experiment and analysing the results , the densities of the distances seemed to have a large amount of overlap Figure \ref{fig:indoor_up_density} - much more than expected, and much more than the initial analysis. I then decided to run the experiment again but with a new setup, I had the ESP32s hanging off opposing faces. This allowed for a more realistic scenario as the devices would be facing each other as they would be when worn on people. This yielded closer to the expected result, Figure \ref{fig:indoor_hanging_density}. There was still overlap, however it was clustered into sections. These clusters were 0.5m, 1.0m \& 1.5m, and 2.0m \& 2.5m. Ideally each distance would be separately indentifiable as was the case with the initial analysis, however this is still a positive result as it does allow for distinct distance identification.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/indoor_up_rssi_density.pdf}
+        \caption{ Density estimation plot for the indoor pin side up experiment.  }
+        \label{fig:indoor_up_density}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/indoor_hanging_rssi_density.pdf}
+        \caption{ Density estimation plot for the indoor hanging experiment. }
+        \label{fig:indoor_hanging_density}
+    \end{subfigure}
+    ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+    %(or a blank line to force the subfigure onto a new line)    
+    \caption{ Comparison of the pin side up experiment density \subref{fig:indoor_up_density} vs the hanging experiment density\subref{fig:indoor_hanging_density} for indoors. The hanging experiment creates more identifiable clusters. }
+    \label{fig:initial_plots}
+\end{figure}
+
+To ensure fairness between experiments all three variants of the experiment were performed when doing the outdoor experiment. As expected this yielded similar results to the indoor experiment though with somewhat better clustering overall. However, a key drawback to the outdoor conditions was more difficulty in receiving a signal between the two devices; the pin side up variation was unable to get a consistent connection at 2.5 metres. This can be explained when considering the surrounding surfaces. Since waves are reflected off of surfaces, when indoors there is more surface area to bounce off and reach the other device.
+
+Since the hanging variant of the experiments is the most realistic in terms of mimicking real world device use these dataset were used to calculate best fit parameters for the Indoor and Outdoor City profiles. The resulting parameters were very similar with the Indoor, Figure  having parameters environment = 2, measured power = -78, Figure \ref{fig:indoor_hanging_bestfit}; Outdoor City was calculated to have the same environment and a measured power of -78, Figure \ref{fig:outdoor_hanging_bestfit}.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/indoor_hanging_bestfit.pdf}
+        \caption{ Best-fit graph for the indoor experiment. }
+        \label{fig:indoor_hanging_bestfit}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/outdoor_hanging_bestfit.pdf}
+        \caption{ Best-fit graph for the outdoor experiment. }
+        \label{fig:outdoor_hanging_bestfit}
+    \end{subfigure}
+    ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+    %(or a blank line to force the subfigure onto a new line)    
+    \caption{ Best-fit graphs based off the hanging experiment variants. }
+    \label{fig:bestfit_plots}
+\end{figure}
+
+\subsection{Requirements \& Analysis Summary}
+
+The section discussed the requirements gathering process that was used during this project. The MoSCoW prioritisation method was used to allow for a strong set of requirements that had the flexibility to accomodate project changes without having to modify the requirements list. It also discussed how parameter values were identified that could be used during the design and implementation stages.
 
 %==================================================================================================================================
 \chapter{Design}

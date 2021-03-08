@@ -642,4 +642,8 @@
 
 # Week 20
 
+### 08 Mar 2021
+
 - _3 hours_: Continue working on Requirements & Analysis section.
+- _0.5 hours_: Meeting with Jeremy.
+- _3 hours_: Finish Requirements & Analysis section.

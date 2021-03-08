@@ -12,7 +12,8 @@ lines = 250
 def getInputFiles():
     inputs = []
     for filename in os.listdir():
-        inputs.append(open(filename, "r", encoding="utf-8", newline=''))
+        if "250-values.csv" in filename:
+            inputs.append(open(filename, "r", encoding="utf-8", newline=''))
     return inputs
 
 
