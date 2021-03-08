@@ -278,10 +278,87 @@ RSSI is commonly used in proximity estimation calculations through the use of a 
 A core commonality between the contact tracing methods I researched, across all papers referenced in the contact tracing section, was the use of Bluetooth. This led to in-depth technical research on Bluetooth, and by extension BLE, using the core specification \citep{SIG5.0} to understand Bluetooth's viability as a distance estimating solution. \citet{gomez_overview_2012} and \citet{yang_beyond_2020} provided much needed additional context to how BLE worked in a more practical sense.
 
 %==================================================================================================================================
-\chapter{Analysis/Requirements}
-What is the problem that you want to solve, and how did you arrive at it?
-\section{Guidance}
-Make it clear how you derived the constrained form of your problem via a clear and logical process.
+\chapter{Analysis \& Requirements}
+
+This chapter discusses the procedure for initial project analysis, and exploratory data analysis to discover specific equation parameters. From the initial analysis functional and non-functional requirements were gathered. These requirements were created in the initial phase of the project, due to how I structured the requirements there were few modifications made throughout the project lifespan.
+
+\section{Requirements Gathering}
+
+The process followed for requirements gathering was split into 4 artefacts, each more comprehensive than the last: A high-level mindmap, a set of user personas and stories, some user scenarios, and the requirements themselves.
+
+\subsection{Mindmap}
+
+The first stage of requirements gathering was the creation of a high-level mindmap. This mindmap, Figure \ref{fig:mindmap} was created to map out the initial project space; not everything contained within the mindmap made it further into the requirements gathering process.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/mindmap.png}
+
+    \caption{ High-level mindmap created as first stage of requirements gathering. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:mindmap}
+\end{figure}
+
+I will briefly summarise the mindmap. The mindmap is composed of five primary themes:
+\begin{itemize}
+    \item Implementation: Considerations to be made on potential system features such as the visualisations, or the profile system.
+    \item Wearables: The initial considered set of ways to wear the device, also includes details in the trade-offs of each option.
+    \item Hardware: Looking into the ESP32's hardware and the constraints I would be working with, also details technology options for the project.
+    \item Concerns: Details some concerns that the system, or the project, may need to address.
+    \item Detection: Examines the factors that are related to covid transmission.
+\end{itemize}
+
+\subsection{User Personas \& Stories}
+
+User personas are fictional personalities created during requirements gathering designed to represent a user and identify user needs. User stories use these personas to provide a structured view of these needs in an "As, I want, So that" format.
+
+Seven user personas, and related user stories, were created during requirements gathering. These covered a variety of user types, considering age, technological literacy, profession, and vulnerability to covid.
+
+The following is an example of a user persona, and related user story:
+
+\textbf{Alex} has a compromised immune system due to chronic illness, this puts them at a much larger degree of risk than the average person from COVID. They wish to be able to leave the house more often to have more independence but have to stay more conscious of the people around them.
+
+As Alex, I want to keep a more strict distance from others, so that I don't become infected and become very ill.
+
+\subsection{User Scenarios}
+
+User scenarios utilise the user personas and stories created during the previous stage. They allow for user's wants and needs to be further examined by considering a hypothetical situation.
+
+There was a scenario created for each story, seven in total, each scenario considers the steps the user would take to achieve some goal. For each step I considered questions I could not yet answer, ideas that the step had sparked, and general comments on how the step related to the project. For example, in Alex's Scenario (Figure \ref{fig:alex_user_scenario}), I had an idea of making the device detect people based on passive bluetooth signals but determined within the same scenario that this would be out of scope.
+
+\section{Functional Requirements}
+
+The set of functional requirements can be derived once the requirements gathering process had been completed. Functional requirements are actions that a user can perform on the system. These requirements were used during the development process to track criteria completion. The MoSCoW prioritisation method \citet{hudaib_requirements_2018} is common way of prioritising requirements. It works by splitting requirements into four categories, each set less important than the last. Must have (M) requirements are the minimal critical set for effective operation. Should have (S) requirements are important but not essential to system operation. Could have (C) requirements are considered nice but the system would still be usable without them. Would be nice to have (W) requirements are requirements that are considered out of scope, and will be discussed towards the end of the dissertation as future work.
+
+\begin{itemize}
+    \item \textbf{(M) Real-time RSSI Proximity Sensing: } The device must be capable of sensing another of the same device to within a 2 metre distance. It must be able to do this in near real-time.
+    \item \textbf{(M) Log data to linked device for visualisation: } Since the device has no on-board storage that survives after power down there is a need to send data to device over Bluetooth connection once an interaction has occurred.
+    \item \textbf{(M) Visualisations on app: } There should be visualisations and textual statistics on interaction encounters. These should be aimed at informing the user of their current habits and prompting change in necessary.
+    \item \textbf{(S) Configurable device: } Allow for configuring device using pre-set profiles. This will need to be synced with the app every time the device boots as it has no power independent storage.
+    \item \textbf{(S) Precision in RSSI Proximity Sensing: } The device should be capable of properly differentiating between 1 metre and 2 metre distances.
+    \item \textbf{(C) Live visualisation updates on new RSSI value: } Allow for live updating graphs and statistics.
+    \item \textbf{(C) Adaptive Advertising Intervals: } This is a battery consideration, a trade-off between battery consumption and advertising frequency. Would work similar on an Additive Increase system, where the interval slowly gets longer and then if it finds another device it resets back to the base interval.
+    \item \textbf{(C) Organisation owned devices: } Organisations would have specific configuration tools that would allow data to be sent over Wi-Fi to their servers. The onus would be on the organisation to consider GDPR but the data from the devices would be anonymised.
+    \item \textbf{(C) Battery indication on request: } Battery indicator using OLED screen but only when requested by user to preserve battery.
+\end{itemize}
+
+\section{Non-Functional Requirements}
+
+Non-functional requirements are properties of a system which can be observed by the user. I used the same MoSCoW method the prioritise the non-functional requirements. Similar to the functional requirements, the would like to have non-functional requirements will be discussed as future work.
+
+\begin{itemize}
+    \item \textbf{(M) Colour-blind Acessibility: } The system must be usable to colour-blind users.
+    \item \textbf{(M) Responsiveness: } The system must be responsive, it should not enter any waiting states.
+    \item \textbf{(M) Ease of Use: } The system must be easy to use by a wide range of untrained users.
+    \item \textbf{(M) App Design: } The app must follow the recommended guidance on the Android Developer Documentation.
+    \item \textbf{(S) Subtle Alert: } The system should be capable of alerting the user and only the user.
+    \item \textbf{(C) Organisational Privacy: } The system should not allow the organisation to identify employees from interaction information.
+\end{itemize}
+
+\section{Exploratory Data Analysis}
+
+Exploratory data analysis
 
 %==================================================================================================================================
 \chapter{Design}
@@ -577,6 +654,18 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
 
     \textbf{Don't include your source code in the appendices}. It will be
     submitted separately.
+
+    \section{Alex's User Story}
+
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[width=1.0\linewidth]{images/user_story.png}
+
+        \caption{ An example user scenario. }
+
+        % use the notation fig:name to cross reference a figure
+        \label{fig:alex_user_scenario}
+    \end{figure}
 
 \end{appendices}
 

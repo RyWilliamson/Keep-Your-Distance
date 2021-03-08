@@ -637,4 +637,9 @@
 ### 07 Mar 2021
 
 - _5 hours_: Finish open coding process for remaining 18 responeses.
-- _3 hours_: Axial and Selective coding process for generated codes.
+- _2 hours_: Axial and Selective coding process for generated codes.
+- _3 hours_: Begin working on Requirements & Analysis section.
+
+# Week 20
+
+- _3 hours_: Continue working on Requirements & Analysis section.
