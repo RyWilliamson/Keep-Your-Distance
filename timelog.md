@@ -661,3 +661,4 @@
 ### 10 Mar 2021
 
 - _4.5 hours_: Writing sections 4.3 and 4.4.1 - 4.4.4
+- _4.5 hours_: Writing sections 4.3 and 4.4.5 - 4.4.6

@@ -525,7 +525,7 @@ As the project developed, a concrete protocol design was created, Figure \ref{fi
     \label{fig:protocol_diagram}
 \end{figure}
 
-\section{ESP 32 (6 Pages max)}
+\section{ESP 32}
 
 \subsection{Notification System}
 
@@ -616,15 +616,84 @@ The configuration packets have a separate format, Figure \ref{fig:config_packet}
     \label{cde:conversion}
 \end{figure}
 
-\subsection{Bulk RSSI Storage}
+\subsection{RSSI Transmission \& Bulk RSSI Storage}
 
-Mention circular queue for bulk storage then transfer - refer to Notion notes.
+There are two ways interaction data is transferred from device to app. The first, and simpler version is where the phone has a connection open with the device at the time of interaction. In this case the base rssi packet, Figure \ref{fig:rssi_packet}, is transferred immediately. The second case, where there is no connection between the phone and device is more complex and requires a data structure to store the packet to transfer. The requirements for this data structure were: be able to follow a First In First Out (FIFO) data retrieval pattern, have constant time insertion and deletion, have as little impact on memory footprint as possible, and be able to store up to a set maximum number of items.
 
-\subsection{Transmission to App}
+I looked at two data structures in particular, a singly linked list, and a circular queue.
 
-\subsection{RSSI Timeout \& Averaging System}
+A singly linked list consists of nodes containing the data, and pointers to the next node in the list. This has the advantage of only consuming exactly as much memory as it requires, and making it very easy to insert or delete from any positions in the linked list, at the cost of having to traverse the list to that point. However for this case the device would only ever be removing from the head which will always be constant (O(1)) time. The downside to the linked list is the overhead of having to store the pointer to the next node alongside the data. These pointers are 4 bytes in size, the data is 17 bytes in size, meaning there is a 23.5\% increase in memory usage which is a scarce resource on the ESP32.
 
-Mainly discuss red-black tree.
+The alternative, and the chosen data structure, is an array-based circular queue \ref{fig:circular_queue}. This works by keeping track of two indexes, a front and rear. The rear index is used to track the most recent element in the queue; when adding to the queue it is added to position rear + 1. The front index keeps track of the oldest item in the queue; when removing from the queue it is removed from position front. This allows the circular queue to wrap around, and fill the queue to capacity, even after some items have been removed.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/circular_queue.png}
+
+    \caption{ Simple example to explain a circular queue. The key aspect is that the queue can wrap around if there is space in the front of the array and it has reached the end. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:circular_queue}
+\end{figure}
+
+Since the circular queue is array-based it has a set size, meaning that a maximum size has to be defined and that block of memory set aside. While this sounds like a downside, it is positive as if memory consumption grew unchecked the device would run out of memory. The other primary advantage of the circular queue is the overhead is constant, only two 4 byte indexing integers are required, so the increase in memory usage can be considered negligible. For this application the circular queue didn't have any downsides, so was implemented.
+
+The queue size was set to be 3000, due to the hardware contraint of limited RAM. With some tweaking this size could be increased, but not by a large amount. At 3000 entries, 17 bytes each, this uses around 10\% of RAM (51kb of 520kb). At 1 value stored per second (the maximum rate for a single device-device connection) this can store 50 minutes of data. However, when multiple devices are being interacted with this time decreases; with 2 other devices 25 minutes, with 4 other devices 12.5 minutes, etc.
+
+Once the phone reconnects to the device it begins transferring from the queue until the queue is empty. It transfers a single packet at a time, only transmitting each packet after receiving an acknowledgement from the app. Note, it does not enter a waiting state here as this is done using the BLE callback functions within the BLE library.
+
+\subsection{RSSI Averaging System}
+
+The RSSI values reported through the advertising packets in BLE are volatile; without either device moving, a wide range of RSSI values can be reported. This means that it is common for devices to switch between being too close, and enough of a distance away, even without moving. This is problematic behaviour; it would be confusing to the user. To solve this a form of averaging is used, to smooth the erratic values and minimise rapid change between the two states.
+
+First two smooth algorithms were considered: exponential moving average, and sliding window average. The exponential moving average works by weighting the previous values as a new one is considered using Equation \ref{eq:ema}, where w is the weight. The weight is calculated using Equation \ref{eq:weight}, where sf is the smoothing factor, which for this project is 2.0, and m is the number of values to consider.
+
+\begin{equation}
+    {RSSI}_{Average}={({RSSI}_{New} * w)} + {({RSSI}_{PrevAverage} * (1 - w))},
+    \label{eq:ema}
+\end{equation}
+
+\begin{equation}
+    w=\frac{sf}{m + 1},
+    \label{eq:weight}
+\end{equation}
+
+The sliding window average algorithm stores and averages the last n values, this would require O(n * d) memory, where n is the number of values to consider and d is the number of devices encountered. Since this is stored as a single number it only requires O(d) space. Since the exponential moving average algorithm has a smaller memory footprint, it was chosen as the algorithm for the system.
+
+To perform this averaging a data structure was needed that supported: Quick searching to find a given mac address, efficient and consistent insertion and deletion operations, and ideally a low memory footprint. The following were considered: array of structs, sorted array of structs, hashmap, and a red-black tree. The array of structs, could not be easily indexed by mac address so search time would be O(d) which is too slow. The sorted array of structs could be searched in O(log d) using binary search but suffered from dlog(d) insertion, which was too slow as there would be many insertions. The hashmap has constant time for insertion, deletion, and search. However, it suffers from being an amortised constant time, meaning this is on average; in a worse-case scenario the hashmap could become O(d) for all these operations, so was deemed unsuitabe. Finally, the red-black tree is guaranteed O(log d) for insertion, deletion, and lookup; this comes at the cost of an increased memory footprint, and a slower average time complexity than the hashmap but this trade-off was acceptable.
+
+First, the node struct for the tree had to be defined. As seen in Figure \ref{fig:tree_node}, the node is grouped into 3 sections. The data group contains the actual data that we wish to store within the tree. The pointers group contains the related pointers to nearby nodes - this is how the tree is linked together. Finally, the properties group only contains a boolean to set the colour of the node, either red or black. In theory each node should be 29 bytes in total, however, in real hardware implementation the size will be dependant on how the architecture pads the struct. For the ESP32 this is 32 bytes as it pads the single byte boolean out to the nearest 4th byte. This node could be optimised to 28 bytes per node by storing the colour information in the least significant bit of the parent pointer \citep{munoz_bannalia_2008}; this was not implemented due to time constraints.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.4\linewidth]{images/rbtree_node.png}
+
+    \caption{ Structure of a node within the red-black tree. The node is grouped into three sections: the actual data, the pointers to related tree nodes, the colour property of the node (either red or black). }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:tree_node}
+\end{figure}
+
+The implementation of the red-black tree is too long to include here; I will give a brief overview of how this data structure operates. The red-black tree is a self-balancing binary search tree (BST) with extra constraints. \citet{morris_data_1998} provides the conditions that a red-black tree must satisfy:
+
+\begin{itemize}
+    \item Every node is either red or black
+    \item Every leaf node is black (in my implementation leaf nodes are null pointers, this has the same effect)
+    \item If a node is red, then both its children are black (i.e. a red node can't have a red child)
+    \item Every path from a node to a descendant leaf node has the same number of black nodes.
+\end{itemize}
+
+Following these conditions ensures that the tree is always balanced, which means that the maximum height of the red-black tree at all times is $2\log{d + 1}$, where d is the number of devices encountered, which is what allows its operations to all be O(log d). Insertion and deletion operations make use of rotations. Rotations are operations within the tree that are used to preserve in-order traversal ordering, as shown in Figure \ref{fig:tree_rotation}.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/rbtree_rotation.png}
+
+    \caption{ Visualisation of a tree rotation. Re-created version of diagram from \citep{morris_data_1998}. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:tree_rotation}
+\end{figure}
 
 \section{Android App (9 Pages max)}
 
