@@ -115,10 +115,9 @@ This chapter briefly discussed the motivation for the project and the goals for 
 \begin{itemize}
     \item \textbf{Chapter 2:} Presents the findings from my research into systems analogous to Keep Your Distance, such as contact tracing methods, identifying useful concepts and some criticism of current techniques. This chapter also investigates the Bluetooth Low Energy (BLE) technology stack.
     \item \textbf{Chapter 3:} Shows the steps taken for analysis, such as creating user stories and user scenarios, and the resulting set of functional and non-functional requirements for the system. Also includes a discussion of the exploratory data analysis performed.
-    \item \textbf{Chapter 4:} Outlines the steps taken in design work, including analysis of technologies to use and the limitations of hardware used. This section also includes the considerations made when designing the UI.
-    \item \textbf{Chapter 5:} Contains a brief discussion of overall implementation challenges, with in-depth discussion of particular areas of interest such as dealing with endianess differences between platforms.
-    \item \textbf{Chapter 6:} Details the variety of techniques employed to evaluate the system. This includes user evaluation, in the form of surveys and an experiment, and also unit testing of the end system.
-    \item \textbf{Chapter 7:} Provides a summary of the paper, with examination for any potential future work on the system, a discussion on the results from evaluation, and a reflection of the paper as a whole.
+    \item \textbf{Chapter 4:} Outlines the steps taken in design work, including analysis of technologies to use and the limitations of hardware used. This section also includes the considerations made when designing the UI. Contains a brief discussion of overall implementation challenges, with in-depth discussion of particular areas of interest such as dealing with endianess differences between platforms.
+    \item \textbf{Chapter 5:} Details the variety of techniques employed to evaluate the system. This includes user evaluation, in the form of surveys and an experiment, and also unit testing of the end system.
+    \item \textbf{Chapter 6:} Provides a summary of the paper, with examination for any potential future work on the system, a discussion on the results from evaluation, and a reflection of the paper as a whole.
 \end{itemize}
 
 
@@ -442,251 +441,216 @@ Since the hanging variant of the experiments is the most realistic in terms of m
 The section discussed the requirements gathering process that was used during this project. The MoSCoW prioritisation method was used to allow for a strong set of requirements that had the flexibility to accomodate project changes without having to modify the requirements list. It also discussed how parameter values were identified that could be used during the design and implementation stages.
 
 %==================================================================================================================================
-\chapter{Design}
-How is this problem to be approached, without reference to specific implementation details?
-\section{Guidance}
-Design should cover the abstract design in such a way that someone else might be able to do what you did, but with a different language or library or tool.
+\chapter{Design \& Implementation}
 
-%==================================================================================================================================
-\chapter{Implementation}
-What did you do to implement this idea, and what technical achievements did you make?
+\section{Software Engineering Process}
 
-\section{ESP 32}
+During the project lifecycle a number of common software engineering practices were employed. The aim was to allow project development to proceed smoothly at an expected pace, while also keeping the project flexible enough that change could occur during the development process.
 
-\textbf{Short section on the esp32 to introduce it - maybe better for design section - ask Jeremy his opinion on this. }\\
+\subsection{Iterative Developement}
 
-\section{Guidance}
-You can't talk about everything. Cover the high level first, then cover important, relevant or impressive details.
+Usually Design and Implementation are discussed separately. However, for this project I followed an agile developement process which followed iterative design. This resulted in the discussion being benefitted by talking about design and implementation combined per component.
 
+In iterative development the initial planning and requirements analysis feeds into a cycle, containing: Analysis \& Planning, Design, Implementation, Testing, and Evaluation. Project work was broken into weekly sprints. A sprint is a single iteraton of the cycle to complete a small subset of work. The weekly advisor meeting acted as the end of the sprint, and the beginning of the next sprint, where the produced artefacts could be reviewed. This allowed for the production of sub-system prototypes early in project developement. This was crucial to the timely development of the project as it allowed for errors and incorrect assumptions to be evaluated early so that they did not propogate through the full development of the system.
 
+\subsection{Version Control}
 
-\section{General points}
+Version control was used extensively, and consistently, throughout the developement of the project. Git was chosen as the version control tool due to its ubiquitous use as an industry standard. GitHub was used to host the repository. This had the advantage of making total project file loss far less likely to occur as GitHub is a large organisation with redundancy in place.
 
-These points apply to the whole dissertation, not just this chapter.
+Branching was used during project development when overhauling prototypes developed in previous sprints. These were then merged in with the main branch once tested against the original prototype to attempt to minimise incompatibilities, except where expected. New features were primarily developed on the main branch, as they were not interferring with existing component prototypes.
 
+For this project not only was the code kept on version control, but other project artefacts such as the experimental data and dissertation. The project notes were kept on the GitHub repository under a separate version control using the GitHub wiki feature.
 
+\subsection{Issue Tracking}
 
-\subsection{Figures}
-\emph{Always} refer to figures included, like Figure \ref{fig:relu}, in the body of the text. Include full, explanatory captions and make sure the figures look good on the page.
-You may include multiple figures in one float, as in Figure \ref{fig:synthetic}, using \texttt{subcaption}, which is enabled in the template.
+To organise tasks, and plan time allocation for a sprint an issue tracker was used. I used a custom Notion board, shown in Figure \ref{fig:issue_tracker}, as opposed to more common issue management system such as GitHub Issues or Trello. This allowed me to integrate project work easily with my existing workflow. Four categories were setup: Not Started, In Progress, Completed, and Constant. These categories indicated the stage that a given issue was at. Each issue could be expanded to provide a projected completion date and a more detailed explanation of the issue. Using this system allowed for effective time management during sprints and provided a clear overview over tasks completed when reviewing the sprint.
 
-
-
-% Figures are important. Use them well.
-\begin{figure}
+\begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/relu.pdf}
+    \includegraphics[width=1.0\linewidth]{images/issue_tracker.png}
 
-    \caption{In figure captions, explain what the reader is looking at: ``A schematic of the rectifying linear unit, where $a$ is the output amplitude,
-        $d$ is a configurable dead-zone, and $Z_j$ is the input signal'', as well as why the reader is looking at this:
-        ``It is notable that there is no activation \emph{at all} below 0, which explains our initial results.''
-        \textbf{Use vector image formats (.pdf) where possible}. Size figures appropriately, and do not make them over-large or too small to read.
-    }
+    \caption{ A custom Notion board used as my project issue tracker. Each colour tag at the top represents a state an issue can be in, the constant issues consist of tasks that must be carried out daily in the project. }
 
     % use the notation fig:name to cross reference a figure
-    \label{fig:relu}
+    \label{fig:issue_tracker}
 \end{figure}
 
+\section{Implementation Technology Discussion}
 
-\begin{figure}
+During the early stages of the project time was spent choosing technologies suited to the project domain. Discussed here are the technologies and why they were chosen over other related technologies.
+
+\subsection{ESP32 \& Related Hardware}
+
+The ESP32 is a low-power microcontroller, and was the key component provided by the project specification. It is designed for Ultra-Low power consumption making it an ideal choice of hardware for a wearable device. Further, this device has an integrated Bluetooth chip, with support for BLE, meaning that no additional hardware would be needed, as would be required by other microcontroller boards. For this project a specific model, the "Heltec WiFi LoRa 32" \citep{heltec_automation_wifi_nodate}, was used which also contained an on-board LED screen. This screen is the primary notification method. An additional notification method that was added further in development was a vibrotactile motor, used for haptic notification.
+
+\subsection{Platform IO}
+
+Early prototype development on the ESP32 board was done in Micropython, an optimised version of Python 3 designed to run on embedded systems. However, this technology was unsuitable for the project. The documentation for functionality critical to the project, such as BLE, were barebones and the support for BLE was in its early phase. The early prototypes were scrapped and re-implemented in C++ using Platform IO as a build, deployment, and dependency management system. Platform IO has easy integration with the Arduino framework, which contains support for ESP32. The Arduino SDK is a far more mature development environment than Micropython. Further the use of C++ improved code efficiency and made implementation far more structured throughout the project.
+
+\subsection{Android}
+
+When choosing a technology to implement the smartphone functionality there were a number of considerations: the number of users for each Operating System (OS), access to hardware for development and testing, and cost of hardware for the user. Android was the best choice in all cases. First the market share of Android eclipses that of any other phone OS, with it having an 87\% market share in 2019 \citep{cohen_ios_2020}. Android devices also, on average, cost less the iOS devices; there is much more competition on Android at the entry and mid level smartphone market. iOS was not feasible as it requires a Mac device for development, which I did not have access to. Finally, cross-platform development using an SDK such as Flutter was considered but ultimately rejected due to the extra complexity that comes with developing a cross-platform app.
+
+\subsection{Java}
+
+The final primary technology consideration was the programming language to use when developing using the Android SDK. There are two options Java or Kotlin. Both languages compile down to Java bytecode, and run on the Java Virtual Machine (JVM). Due to this Kotlin and Java can interoperate within a system. Kotlin has a number of advantages over Java. First, Kotlin produces safer code by having nullable and non-nullable types, nullable types come with many restrictions on use which reduce the likelihood of null pointer exceptions. Also, Kotlin has better support for functional programming concepts and reduces the need for boilerplate code, making it more concise.
+
+Even given these advantages Java was still chosen as the language of choice for two reasons: my familiarity with Java as a programming language, and Java has far more documentation online than Kotlin does making solving development issues easier in Java - someone is likely to have had a similar issue.
+
+\subsection{System Architecture}
+
+Now that the initial technologies had been chosen, a high-level system architecture diagram was created, Figure \ref{fig:arch_diagram}. This diagram shows how data and system calls flow between system components, it does not show the specific actions being modelled. This was refined as development progressed and initial assumptions about the system were proven wrong through prototypes. The system architecture was based off two ESP32 devices interacting, however the system theoretically can support more.
+
+\begin{figure}[!htb]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/synthetic.png}
-        \caption{Synthetic image, black on white.}
-        \label{fig:syn1}
-    \end{subfigure}
-    ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
-    %(or a blank line to force the subfigure onto a new line)
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/synthetic_2.png}
-        \caption{Synthetic image, white on black.}
-        \label{fig:syn2}
-    \end{subfigure}
-    ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
-    %(or a blank line to force the subfigure onto a new line)    
-    \caption{Synthetic test images for edge detection algorithms. \subref{fig:syn1} shows various gray levels that require an adaptive algorithm. \subref{fig:syn2}
-        shows more challenging edge detection tests that have crossing lines. Fusing these into full segments typically requires algorithms like the Hough transform.
-        This is an example of using subfigures, with \texttt{subref}s in the caption.
-    }\label{fig:synthetic}
+    \includegraphics[width=0.5\linewidth]{images/high-level_system_architecture.png}
+
+    \caption{ A high-level system architecture diagram for the Keep-Your-Distance system. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:arch_diagram}
 \end{figure}
 
-\clearpage
+\section{BLE Protocol Design}
 
-\subsection{Equations}
+As the project developed, a concrete protocol design was created, Figure \ref{fig:protocol_diagram}. This protocol design is the core of the communication between devices and could be implemented on any smartphone - device combination, which allows for the system to be extended in the future. The protocol is split into 4 services. The Device Advertising Service is what allows devices to detect each other. The RSSI service handles the communication of device interaction information to the app. The Heartbeat Service is designed for establishing the connection between the device and app, and reconnection in the case of an interruption. Finally, the Configuration Service allows the smartphone app to configure device settings.
 
-Equations should be typeset correctly and precisely. Make sure you get parenthesis sizing correct, and punctuate equations correctly
-(the comma is important and goes \textit{inside} the equation block). Explain any symbols used clearly if not defined earlier.
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/protocol_design.png}
 
-For example, we might define:
+    \caption{ A protocol design diagram. Showing each services components and their interactions. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:protocol_diagram}
+\end{figure}
+
+\section{ESP 32 (6 Pages max)}
+
+\subsection{Notification System}
+
+The notifications are designed to be simple boolean state objects; there is no variable levels of notification. For this project visual and haptic feedback were designed and explored to notify the user of a social distancing breach. This is the only level of User Interface (UI) on the physical wearable device, so some simple initial sketches were drawn, Figure \ref{fig:device_ui_sketch}. In device code, this was implemented by having an abstraction layer between the separate concrete notification implementations and the function that was exposed to the rest of the system. The state of the system was given to the notification system, which based on configuration activated the physical device hardware. This abstraction allows the notification to be easily extended with new types of notifications, with little modification to existing code.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/device_ui_sketch.png}
+
+    \caption{ Simple wireframe sketches of device UI. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:device_ui_sketch}
+\end{figure}
+
+\subsection{Device Detection}
+
+Device detection is done using the connection-less method of BLE communications. Each ESP32 device using this system is simultaneously advertising its existence on the BLE spectrum, while also scanning for other ESP32 devices advertising the same services. As part of this process BLE can determine the RSSI of any other ESP32 devices within its range. A technical constraint of the Arduino ESP32 BLE library is that its scan has a minimum duration of 1 second. This means that there can be a large latency between when an ESP32 first enters the anothers range and when it is detected.
+
+A number of potential ways to interfere with this process were considered, henceforth called interference vectors. These interference vectors are not considered attack vectors, as they don't bear a particular danger to the system users. First, an ESP32 device could be easily faked by duplicating the service IDs and device name. This can't be prevented without making a full-connection which takes longer than the advertisement method, which is unsuitable for use here. However, the only effect of this interference vector is that you would avoid another device, which is not inherently harmful. Similar to this, a high power BLE transmitter could be used which would interfere with the systems ability to detect other devices. This is a real issue, however would only occur in exceptional circumstances due to the cost of specialist high power transmitters. A final interference vector, with a more realy use case, is tracking a person using this system. By scanning BLE it is possible to see the device MAC address. A malicious attacker could track the device by looking at the RSSI of the scan and moving in the direction that made it stronger. This risk is difficult to mitigate against, and even exists within existing contact tracing solutions \citep{ahmed_survey_2020}, as even randomising the MAC address wouldn't work due as an attacker would notice when the device changes over and begin to follow this new address. So solving this issue was deemed out of scope for this project.
+
+\subsection{Distance Estimation}
+
+Distance estimation is determined using the RSSI value returned in the device detection phase. This is possible as the signal transmitted by a BLE transmitter decays in strength with distance travelled. To calculate the average rssi for a given distance $d$ we a free-space path loss model, Equation \ref{eq:ahmed_formula} from \citep{ahmed_survey_2020}, is used. ${RSSI}_{(d_0)}$ is the measured power which is the average RSSI value, in decibel metres, at the reference distance $d_0$. $n$ is the environmental factor, used in an attempt to capture some of the variation in the environment around the user.
+
 \begin{equation}
-    \hat{f}(\xi) = \frac{1}{2}\left[ \int_{-\infty}^{\infty} f(x) e^{2\pi i x \xi} \right],
+    {RSSI(dBm)}={RSSI}_{(d_0)}{(dBm)}-10n\log_{10}{(\frac{d}{d_0})},
+    \label{eq:ahmed_formula}
 \end{equation}
-where $\hat{f}(\xi)$ is the Fourier transform of the time domain signal $f(x)$.
 
-\subsection{Algorithms}
-Algorithms can be set using \texttt{algorithm2e}, as in Algorithm \ref{alg:metropolis}.
+Since the reference distance in this project is always based off the 1 metre distance Equation \ref{eq:ahmed_formula} can be simplified, for easier and more efficient calculation, shown in Equation \ref{eq:distance_to_rssi}. This is the equation that was used in the final device prototype. The environmental factor and measured power are varied based on the profile selected by the user, then Equation \ref{eq:distance_to_rssi} is used to calculate a threshold RSSI value. This means that only a single calculation needs to be performed on the device when the configuration is updated, then subsequent distance estimation only needs to check whether the RSSI value is above or below the threshold and by how much.
 
-% NOTE: line ends are denoted by \; in algorithm2e
-\begin{algorithm}
-    \DontPrintSemicolon
-    \KwData{$f_X(x)$, a probability density function returing the density at $x$.\; $\sigma$ a standard deviation specifying the spread of the proposal distribution.\;
-        $x_0$, an initial starting condition.}
-    \KwResult{$s=[x_1, x_2, \dots, x_n]$, $n$ samples approximately drawn from a distribution with PDF $f_X(x)$.}
-    \Begin{
-        $s \longleftarrow []$\;
-        $p \longleftarrow f_X(x)$\;
-        $i \longleftarrow 0$\;
-        \While{$i < n$}
-        {
-            $x^\prime \longleftarrow \mathcal{N}(x, \sigma^2)$\;
-            $p^\prime \longleftarrow f_X(x^\prime)$\;
-            $a \longleftarrow \frac{p^\prime}{p}$\;
-            $r \longleftarrow U(0,1)$\;
-            \If{$r<a$}
-            {
-                $x \longleftarrow x^\prime$\;
-                $p \longleftarrow f_X(x)$\;
-                $i \longleftarrow i+1$\;
-                append $x$ to $s$\;
-            }
-        }
-    }
+\begin{equation}
+    {RSSI(dBm)}={{RSSI}_{(1m)}{(dBm)}} - 10n\log_{10}{(d)},
+    \label{eq:distance_to_rssi}
+\end{equation}
 
-    \caption{The Metropolis-Hastings MCMC algorithm for drawing samples from arbitrary probability distributions,
-        specialised for normal proposal distributions $q(x^\prime|x) = \mathcal{N}(x, \sigma^2)$. The symmetry of the normal distribution means the acceptance rule takes the simplified form.}\label{alg:metropolis}
-\end{algorithm}
+Early in the development stages rather than using a target RSSI value as above, the distance was calculated at each interaction then compared with a target distance. This was done by rearranging Equation \ref{eq:distance_to_rssi} to give Equation \ref{eq:rssi-to-distance}. As previously mentioned, this approach was problematic; requiring many applications of the forumla causing increased battery usage. However, this did mean the device knew the approximated distance, whereas using the target RSSI system it only knows whether it is above or below the threshold. Ultimately it was decided to use the target RSSI system and move the use of Equation \ref{eq:rssi-to-distance} onto the mobile device, which could handle more calculations with little increase to battery usage. This means that the device needs to send slightly more data over BLE but this is not a problem since it is still within the packet size limit.
 
-\subsection{Tables}
+\begin{equation}
+    {d}=10^{{({{RSSI}_{(1m)}{(dBm)}} - {RSSI(dBm)})} / {10n}},
+    \label{eq:rssi-to-distance}
+\end{equation}
 
-If you need to include tables, like Table \ref{tab:operators}, use a tool like https://www.tablesgenerator.com/ to generate the table as it is
-extremely tedious otherwise.
+\subsection{Packets}
 
-\begin{table}[]
-    \caption{The standard table of operators in Python, along with their functional equivalents from the \texttt{operator} package. Note that table
-        captions go above the table, not below. Do not add additional rules/lines to tables. }\label{tab:operators}
-    %\tt 
-    \rowcolors{2}{}{gray!3}
-    \begin{tabular}{@{}lll@{}}
-        %\toprule
-        \textbf{Operation}    & \textbf{Syntax}                         & \textbf{Function}                          \\ %\midrule % optional rule for header
-        Addition              & \texttt{a + b}                          & \texttt{add(a, b)}                         \\
-        Concatenation         & \texttt{seq1 + seq2}                    & \texttt{concat(seq1, seq2)}                \\
-        Containment Test      & \texttt{obj in seq}                     & \texttt{contains(seq, obj)}                \\
-        Division              & \texttt{a / b}                          & \texttt{div(a, b) }                        \\
-        Division              & \texttt{a / b}                          & \texttt{truediv(a, b) }                    \\
-        Division              & \texttt{a // b}                         & \texttt{floordiv(a, b)}                    \\
-        Bitwise And           & \texttt{a \& b}                         & \texttt{and\_(a, b)}                       \\
-        Bitwise Exclusive Or  & \texttt{a \textasciicircum b}           & \texttt{xor(a, b)}                         \\
-        Bitwise Inversion     & \texttt{$\sim$a}                        & \texttt{invert(a)}                         \\
-        Bitwise Or            & \texttt{a | b}                          & \texttt{or\_(a, b)}                        \\
-        Exponentiation        & \texttt{a ** b}                         & \texttt{pow(a, b)}                         \\
-        Identity              & \texttt{a is b}                         & \texttt{is\_(a, b)}                        \\
-        Identity              & \texttt{a is not b}                     & \texttt{is\_not(a, b)}                     \\
-        Indexed Assignment    & \texttt{obj{[}k{]} = v}                 & \texttt{setitem(obj, k, v)}                \\
-        Indexed Deletion      & \texttt{del obj{[}k{]}}                 & \texttt{delitem(obj, k)}                   \\
-        Indexing              & \texttt{obj{[}k{]}}                     & \texttt{getitem(obj, k)}                   \\
-        Left Shift            & \texttt{a \textless{}\textless b}       & \texttt{lshift(a, b)}                      \\
-        Modulo                & \texttt{a \% b}                         & \texttt{mod(a, b)}                         \\
-        Multiplication        & \texttt{a * b}                          & \texttt{mul(a, b)}                         \\
-        Negation (Arithmetic) & \texttt{- a}                            & \texttt{neg(a)}                            \\
-        Negation (Logical)    & \texttt{not a}                          & \texttt{not\_(a)}                          \\
-        Positive              & \texttt{+ a}                            & \texttt{pos(a)}                            \\
-        Right Shift           & \texttt{a \textgreater{}\textgreater b} & \texttt{rshift(a, b)}                      \\
-        Sequence Repetition   & \texttt{seq * i}                        & \texttt{repeat(seq, i)}                    \\
-        Slice Assignment      & \texttt{seq{[}i:j{]} = values}          & \texttt{setitem(seq, slice(i, j), values)} \\
-        Slice Deletion        & \texttt{del seq{[}i:j{]}}               & \texttt{delitem(seq, slice(i, j))}         \\
-        Slicing               & \texttt{seq{[}i:j{]}}                   & \texttt{getitem(seq, slice(i, j))}         \\
-        String Formatting     & \texttt{s \% obj}                       & \texttt{mod(s, obj)}                       \\
-        Subtraction           & \texttt{a - b}                          & \texttt{sub(a, b)}                         \\
-        Truth Test            & \texttt{obj}                            & \texttt{truth(obj)}                        \\
-        Ordering              & \texttt{a \textless b}                  & \texttt{lt(a, b)}                          \\
-        Ordering              & \texttt{a \textless{}= b}               & \texttt{le(a, b)}                          \\
-        % \bottomrule
-    \end{tabular}
-\end{table}
-\subsection{Code}
+Information is sent over the BLE network as a byte stream. The payload has a maximum size of 20 bytes, once bytes attached by the various BLE layers are accounted for. This is a tiny amount of data, so some data trunaction had to take place before and after sending. Data truncation specifically occurs in both the base RSSI packet and the bulk RSSI packet \ref{fig:main_packets}.
 
-Avoid putting large blocks of code in the report (more than a page in one block, for example). Use syntax highlighting if possible, as in Listing \ref{lst:callahan}.
+Figure \ref{fig:rssi_packet} shows the base RSSI packet. This contains a 12 byte mac address, in string representation form, which is the identifier of the other device found, which is needed for separating encounters. Without the mac address, if there were two other devices the app wouldn't be able to tell these apart and they'd get logged as a single interaction. It also contains a 1 byte rssi value.
 
-\begin{lstlisting}[language=python, float, caption={The algorithm for packing the $3\times 3$ outer-totalistic binary CA successor rule into a 
-    $16\times 16\times 16\times 16$ 4 bit lookup table, running an equivalent, notionally 16-state $2\times 2$ CA.}, label=lst:callahan]
-    def create_callahan_table(rule="b3s23"):
-        """Generate the lookup table for the cells."""        
-        s_table = np.zeros((16, 16, 16, 16), dtype=np.uint8)
-        birth, survive = parse_rule(rule)
+Figure \ref{fig:bulk_packet} shows the extended bulk RSSI packet, that is used when the device is storing interactions in RAM and sending them all at once. To do this a time offset is required, the timestamp is a 4 byte integer of milliseconds since the interaction occurred. This timestamp is sent in little endian form, as this is what the ESP32 uses so not having to perform a conversion saves cycles on the device. The app handles conversion to its native format of big endian. The beginning of the packet is identical to the base RSSI packet.
 
-        # generate all 16 bit strings
-        for iv in range(65536):
-            bv = [(iv >> z) & 1 for z in range(16)]
-            a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p = bv
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}[b]{0.8\textwidth}
+        \includegraphics[width=\textwidth]{images/rssi_packet.png}
+        \caption{Packet diagram for the base RSSI packet.}
+        \label{fig:rssi_packet}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{1.0\textwidth}
+        \includegraphics[width=\textwidth]{images/bulk_packet.png}
+        \caption{Packet diagram for the extended bulk RSSI packet.}
+        \label{fig:bulk_packet}
+    \end{subfigure}
+    ~
+    \caption{ Two packets core to the communication between device and smartphone app. }
+    \label{fig:main_packets}
+\end{figure}
 
-            # compute next state of the inner 2x2
-            nw = apply_rule(f, a, b, c, e, g, i, j, k)
-            ne = apply_rule(g, b, c, d, f, h, j, k, l)
-            sw = apply_rule(j, e, f, g, i, k, m, n, o)
-            se = apply_rule(k, f, g, h, j, l, n, o, p)
+In the ESP32 BLE library the device mac address is exposed as a string, representing the hex digits of the mac address bytes separated by a colon, e.g. "1A:2B:3C:4D:5E:6F". Sending this would require 17 bytes, which when combined with other packet data would exceed the 20 byte limit. The solution to this was to process the string and remove the colons, as these contributed no information, and could be reconstructed on the app end. Late in the project a function, not included in the documentation, was found that exposed the raw mac address in bytes. This would be the preferred way to send this data, however given time constraints the decision was made not to refactor.
 
-            # compute the index of this 4x4
-            nw_code = a | (b << 1) | (e << 2) | (f << 3)
-            ne_code = c | (d << 1) | (g << 2) | (h << 3)
-            sw_code = i | (j << 1) | (m << 2) | (n << 3)
-            se_code = k | (l << 1) | (o << 2) | (p << 3)
+The configuration packets have a separate format, Figure \ref{fig:config_packet}. This packet is sent from the smartphone to the ESP32, and is used to change the on-device parameters used in Equation \ref{eq:distance_to_rssi}. All parameters here are in big endian form, which is standard for transmission over a network known as network byte order, and must be converted by the device to its native format. This is not a problem for battery usage as configuration packets occur infrequently. The conversion algorithm involved bitwise operations and is outlined in Figure \ref{cde:conversion}.
 
-            # compute the state for the 2x2
-            next_code = nw | (ne << 1) | (sw << 2) | (se << 3)
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/config_packet.png}
 
-            # get the 4x4 index, and write into the table
-            s_table[nw_code, ne_code, sw_code, se_code] = next_code
+    \caption{ Packet diagram for the configuration packet sent from app to device. }
 
-        return s_table
+    % use the notation fig:name to cross reference a figure
+    \label{fig:config_packet}
+\end{figure}
 
-\end{lstlisting}
+\begin{figure}[!htb]
+    \lstinputlisting[language=c, basicstyle=\small]{snippets/endian_conversion.c}
+    \caption{ Endianess conversion code from big endian to little endian. }
+    \label{cde:conversion}
+\end{figure}
+
+\subsection{Bulk RSSI Storage}
+
+Mention circular queue for bulk storage then transfer - refer to Notion notes.
+
+\subsection{Transmission to App}
+
+\subsection{RSSI Timeout \& Averaging System}
+
+Mainly discuss red-black tree.
+
+\section{Android App (9 Pages max)}
+
+\subsection{App-Device Interaction}
+
+Blessed BLE library, many challenges - discuss initial attempt at doing it myself.
+
+\subsection{Room Database}
+
+Show ER diagram, maybe talk about the complex query.
+
+\subsection{User Interface: Pages}
+
+Wireframes + end result
+
+\subsection{User Interface: Visualisation}
+
+Wireframes + end result
+
+\section{Design \& Implementation Summary}
+
+
 
 %==================================================================================================================================
 \chapter{Evaluation}
 How good is your solution? How well did you solve the general problem, and what evidence do you have to support that?
-
-\section{Guidance}
-\begin{itemize}
-    \item
-          Ask specific questions that address the general problem.
-    \item
-          Answer them with precise evidence (graphs, numbers, statistical
-          analysis, qualitative analysis).
-    \item
-          Be fair and be scientific.
-    \item
-          The key thing is to show that you know how to evaluate your work, not
-          that your work is the most amazing product ever.
-\end{itemize}
-
-\section{Evidence}
-Make sure you present your evidence well. Use appropriate visualisations, reporting techniques and statistical analysis, as appropriate.
-
-If you visualise, follow the basic rules, as illustrated in Figure \ref{fig:boxplot}:
-\begin{itemize}
-    \item Label everything correctly (axis, title, units).
-    \item Caption thoroughly.
-    \item Reference in text.
-    \item \textbf{Include appropriate display of uncertainty (e.g. error bars, Box plot)}
-    \item Minimize clutter.
-\end{itemize}
-
-See the file \texttt{guide\_to\_visualising.pdf} for further information and guidance.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1.0\linewidth]{images/boxplot_finger_distance.pdf}
-
-    \caption{Average number of fingers detected by the touch sensor at different heights above the surface, averaged over all gestures. Dashed lines indicate
-        the true number of fingers present. The Box plots include bootstrapped uncertainty notches for the median. It is clear that the device is biased toward
-        undercounting fingers, particularly at higher $z$ distances.
-    }
-
-    % use the notation fig:name to cross reference a figure
-    \label{fig:boxplot}
-\end{figure}
-
 
 %==================================================================================================================================
 \chapter{Conclusion}

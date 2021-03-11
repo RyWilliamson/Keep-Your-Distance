@@ -648,3 +648,16 @@
 - _0.5 hours_: Meeting with Jeremy.
 - _3 hours_: Finish Requirements & Analysis section.
 - _0.5 hours_: Fix up background sections with Jeremy's recommendations.
+
+### 09 Mar 2021
+
+- _0.5 hours_: Typing up Meeting Notes.
+
+### 10 Mar 2021
+
+- _2 hours_: Planning section headings for Design & Implementation Section.
+- _4 hours_: Writing sections 4.1 and 4.2.
+
+### 10 Mar 2021
+
+- _4.5 hours_: Writing sections 4.3 and 4.4.1 - 4.4.4
