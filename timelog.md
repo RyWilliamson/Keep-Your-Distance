@@ -662,3 +662,4 @@
 
 - _4.5 hours_: Writing sections 4.3 and 4.4.1 - 4.4.4
 - _4.5 hours_: Writing sections 4.3 and 4.4.5 - 4.4.6
+- _0.5 hours_: Making changes to sections 4.1 - 4.4 based on feedback of 1st draft of this half of the section.
