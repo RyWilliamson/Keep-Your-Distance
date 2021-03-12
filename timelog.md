@@ -658,8 +658,13 @@
 - _2 hours_: Planning section headings for Design & Implementation Section.
 - _4 hours_: Writing sections 4.1 and 4.2.
 
-### 10 Mar 2021
+### 11 Mar 2021
 
 - _4.5 hours_: Writing sections 4.3 and 4.4.1 - 4.4.4
 - _4.5 hours_: Writing sections 4.3 and 4.4.5 - 4.4.6
 - _0.5 hours_: Making changes to sections 4.1 - 4.4 based on feedback of 1st draft of this half of the section.
+- _0.5 hours_: Begin writing section 4.5 - get section plan down.
+
+### 12 Mar 2021
+
+- _6 hours_: Continuing to write design and implementation section.

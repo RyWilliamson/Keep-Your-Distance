@@ -449,7 +449,7 @@ During the project lifecycle a number of common software engineering practices w
 
 \subsection{Iterative Developement}
 
-Usually Design and Implementation are discussed separately. However, for this project I followed an agile developement process which used iterative design. A benefit of this is coordinating design and implementation together, this allows for these to be discussed together in this report.
+Usually Design and Implementation are discussed separately. However, for this project I followed an agile developement process which used iterative design. A benefit of this is coordinating design and implementation together, which has allowed these to be discussed together in this report.
 
 In iterative development the initial planning and requirements analysis feeds into a cycle, containing: Analysis \& Planning, Design, Implementation, Testing, and Evaluation. Project work was broken into weekly sprints. A sprint is a single iteraton of the cycle to complete a small subset of work. The weekly advisor meeting acted as the end of the sprint, and the beginning of the next sprint, where the produced artefacts could be reviewed. This allowed for the production of sub-system prototypes early in project developement. This was crucial to the timely development of the project as it allowed for errors and incorrect assumptions to be evaluated early so that they did not propogate through the full development of the system.
 
@@ -695,27 +695,151 @@ Following these conditions ensures that the tree is always balanced, which means
     \label{fig:tree_rotation}
 \end{figure}
 
-\section{Android App (9 Pages max)}
-
-\subsection{App-Device Interaction}
-
-Blessed BLE library, many challenges - discuss initial attempt at doing it myself.
-
-\subsection{Room Database}
-
-Show ER diagram, maybe talk about the complex query.
+\section{Android App (8 Pages max)}
 
 \subsection{User Interface: Pages}
 
-Wireframes + end result
+The user interface was designed to be minimally designed so as to not overload the user with information. Power users were a secondary consideration with few options tailored to their use.
+
+For the initial page design digital wireframing, using the Balsamiq \citep{balsamiq_balsamiq_2021} tool, was used. These wireframes were low-fidelity to allow for rapid wireframe prototyping. One reason for using a digital wireframing tool over traditional paper wireframe sketching is that it allows for the wireframes to have a level of mock interactivity to them. This allowed for modelling of the user journey through the UI.
+
+Throughout the initial design, and followed into implementation, the UI was designed to feedback the system state to the user. The system has two states: connected or disconnected. There were two methods of this feedback. First, on every page within the app there is a status indicator icon in the top right of the screen, displaying a checkmark when connected and an exclamation mark when disconnected. Second, some pages change component architecture depending on system state, which allows the user to intuitively grasp the current system state.
+
+For the low-fidelity wireframes the principles of Material Design, \citep{google_design_nodate}, were not followed, this came later during interface implementation. A prime example of Material Design is the bottom navigation bar used throughout the app, Figure \ref{fig:bottom_nav}. Using components and principles from Material Design means that the app will be externally consistent with many existing Android apps. This allows a user to feel a sense of familiarity even during their first use of the app.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/bottom_nav.png}
+
+    \caption{ Example of the bottom navigation bar, a commonly used Material Design component.  }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:bottom_nav}
+\end{figure}
+
+The first page in the user journey is the device connection page. This is presented first as connecting to the ESP32 is the primary function of the app. It allows two methods of connecting to an ESP32, the user can either scan for a new device and connect to it or the user can reconnect the previously connected device. This reconnection option helps in usability for novice users, and more efficient use for advanced users.
+
+This page is then followed by the device information page, assuming the user connects. This information page gives the user an overview of the device they're currently connected to, and contains functionality related to the specific device. This includes: exporting stored data, clearing stored data, renaming the device (remembering mac addresses is difficult), and disconnecting from the device. Both the information page and the home page are accessed via the Device button on the bottom nav bar, \ref{fig:bottom_nav}. The page it goes to depends on the system state, if connected it switches to information, if not connected it switches to the device connection page.
+
+The settings page also responds to system state. When not connected the settings page contains fewer components, Figure \ref{fig:settings_not_connected}. When the device is connected to the app the settings page populates the screen with the connection related components, Figure \ref{fig:settings_connected}. These components are the update device button, and the update status label. These would not be usable when no device is connected so instead of being visible but having an error on use, they are simply hidden.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{images/settings_not_connected.png}
+        \caption{ Implemented UI for the settings page, when the system state is "not connected". }
+        \label{fig:settings_not_connected}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{images/settings_connection.png}
+        \caption{ Implemented UI for the settings page, when the system state is "connected". }
+        \label{fig:settings_connected}
+    \end{subfigure}
+    ~
+    \caption{ The settings page, as it displays when in both system states. The remaining whitespace on the page and bottom navigation bar have been omitted }
+    \label{fig:settings_page}
+\end{figure}
+
+From a technical viewpoint the UI was implemented using a base Activity component and a Fragment for each view. The Activity contained elements common between pages such as the navigation bar, and system status icon. Also within this activity was a Fragment container, which allowed for swapping the pages while keeping the same base Activity content. For interacting with the data a View Model was used. This was an abstracted view of the database which all Fragments could access. Android supports this, and by extension supports the Model-View-Controller pattern which was used in this app.
 
 \subsection{User Interface: Visualisation}
 
-Wireframes + end result
+Android does not natively support any form of data visualisation functionality. To implement these visualisations an external library, MPAndroidChart \citep{jahoda_mpandroidchart_2020}, was used. MPAndroidChart is a feature rich visualisation library for Android, by default supporting a number of common visualisations such as line charts, pie charts, and bar charts. For each chart supported it comes with a number of animation and aesthetic options; the visualisation renderers can also be extended to implement custom functionality.
+
+For the initial design of the graphs a combination of paper and digital prototypes were used. The weekly interactions bar chart was modelled on Balsamiq along with the rest of the wireframes while the pie charts and interaction trend graph were developed on paper. The interactivity benefit from using digital wireframing was less useful for these so paper prototypes were deemed adequate.
+
+The bar chart represents the interactions per day over the last 7 days, left-most on Figure \ref{fig:app_visualisations}. Its goal is to provide an overview of recent social distancing behaviour, allowing users to check if there has been a spike over a single day. This should allow users to identify problematic behaviour quickly and avoid the cause of the spike. A single colour was used across all bars; having a separate colour per bar would be confusing as it would suggest another layer of data to the visualisation.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/graphs.png}
+
+    \caption{ An example of all three visualisations the app provides. Left shows the interactions per day for the last 7 days. Middle shows time and average distance of all interactions. Right shows the trend of interactions, changing the line colour to red once they are above 8 interactions in a given day. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:app_visualisations}
+\end{figure}
+
+The pie charts, Figure \ref{fig:app_visualisations}, allow for an aggregated view of the critical factors for COVID-19 infection: duration of contact, and distance of contact. Categories were separated by colour, along with a given key to identify the slices by category. These colours were chosen with particular thought to making the chart as accessible as possible to those with colour blindness. A colour blindess simulator Coblis \citep{colblindor_coblis_2018}, was used to identify problematic colours for each form of colour blindess and check the design. However, there are two forms of colour blindness that this design is not accessible to: Tritanopia and Achromatopsia, simulations of which are shown in Figure \ref{fig:colour_blindess}.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{images/tritanopia.png}
+        \caption{ A simulated version of the colour scheme considering tritanopia (blue-blind colour blindess). }
+        \label{fig:tritanopia}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{images/achromatopsia.png}
+        \caption{ A simulated version of the colour scheme considering achromatopsia (monochromatic colour blindess). }
+        \label{fig:achromatopsia}
+    \end{subfigure}
+    ~
+    \caption{ Simulated version of the two versions of colour blindess this design fails to accomodate. In \subref{fig:tritanopia} it is near impossible to differentiate "1-2cm" and "2-3cm". In \subref{fig:achromatopsia} the shades are not distinct enough to properly differentiate. }
+    \label{fig:colour_blindess}
+\end{figure}
+
+The interaction trend graph, Figure \ref{fig:app_visualisations}, is designed to be a longer term approach to giving the users the information they need to make decisions about their social distancing behaviour. This forms a trend based on all the interaction data collected from that device, the line changes colour, via a short gradient change, when the interaction trend climbs above 8 interactions. Similar colour blindess considerations and methods were used for the colours here; achromatopsia remains negatively affected by this design. Due to constraints written within the MPAndroidChart library itself having multiple colours along the single line proved challenging. A number of implementation attempts were made. The final implementation achieved this by overriding the shader in the implementation of MPAndroidChart with my own custom LinearGradient shader.
+
+\subsection{Room Database}
+
+The database is a critical part of the app design and infrastructure, it allows the data collected from the ESP32s to be stored. This allows it to drive the data visualisations discussed above. This makes the Database Management System (DBMS) a crucial component in achieving the key goal of user education.
+
+A relational database architecture was modelled using a Crow's Foot notation Entity Relationship (ER) diagram, Figure \ref{fig:er_diagram}. ER diagrams are especially useful for designing a database schema; ER diagrams typically map very well onto relational databases, more work has to be done for many-to-many relationships however these are not used in this project. To summarise the schema, there are three entities. Device,  which encapsulates the relevant information about the physical ESP32 device. Interaction, which stores all the necessary information about an encounter. RSSI, which is a representation of a single RSSI value logged. An Interaction occurs between two Devices, which is represented as two distinct one-to-many relationships. An Interaction is made up of many RSSI values, which again is represented using one-to-many relationships. In one sentence this can be described as: A device can be part of many interactions, which may contain many RSSI values.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/rssi_er.pdf}
+
+    \caption{ A Crow's Foot notation Entity Relationship (ER) diagram used when designing the database structure. Interaction and RSSI contains a compound key. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:er_diagram}
+\end{figure}
+
+The database was implemented using the Room persistence library, which is part of the Android SDK. Room provides an alternative to working with the raw SQLite database that Android makes use of. It provides a layer of abstraction over the SQLite DBMS while still allowing full control. This is the officially recommended DBMS for Android. It offers a distinct advantage of compile-time SQL query checking, this reduces the chance for runtime errors to occur due to the database. Another problem with using SQLite directly in Android, which Room solves, is that the SQLite application programming interface (API) requires significant repetitive boilerplate code.
+
+Room is split into three primary components: The room database object, the data access objects (DAO), and entity objects. Having the entities modelled as objects allows for query results to be easily captured and used throughout the app. Within each entity Java annotations are used to model attribute properties such as if it's a primary key, or the attributes nullability. Annotations also allow mapping foreign key contraints to defined attributes. The DAO are modelled using interfaces, and their purpose is to provide the database interactions for a given entity. This means there is a one-to-one mapping of entity classes to dao interfaces. They have default annotations for insertion, deletion, and updating. And allow for full custom SQL queries to be run on the underlying SQLite DBMS.
+
+The final layer is the database object itself. It is modelled using an abstract class, which contains static variables and functions. In my implementation I included a ExecutorService references for reading and for writing. The executor services allow queries to be run in a separate thread, asynchronously, preventing the app from visibly pausing when interacting with the DBMS since these operations are not instant. Finally, as part of this class I used a singleton pattern, as recommended by the Room documentation, to ensure that only one instance of the Room database is created during the apps runtime, Figure \ref{cde:singleton}. A singleton pattern just prevents a class from being instantiated more than once.
+
+\begin{figure}[!htb]
+    \lstinputlisting[language=java, basicstyle=\small]{snippets/singleton.java}
+    \caption{ Singleton pattern implementation for Room instance creation. Also includes threading locks to prevent two executor services from trying creating a database at the same time due to a data race. }
+    \label{cde:singleton}
+\end{figure}
+
+I also implemented an abstraction layer, called a repository, between the DAOs and the ViewModel. These allowed me to make use of the queries within the DAO, while also wrapping the database calls within the executor services. This was not possible within the DAO as the Java code is generated at compile-time based on the SQL queries. It also allowed me to create more complex operations, such as the case where a device is being inserted but already exists in the database, so is retrieved and has the "times\_connected" attribute incremented, then updates the related device within the database.
+
+One of the technical challenges faced was the incompatibility of the Java Date object format, used to represent and manipulate the date/time information, and the SQL storage of date/time. Forunately, Room provides annotations for specifying custom type convertors. I made the decision to store the date/time information in the database as a long integer, which represents the number of milliseconds in the 1st January 1970, known as Unix Time. This required two type converters, one to convert from a date object to a long integer, and another to covert a long integer to a date object. Doing this also made it possible to select ranges of dates, which was used extensively during visualisation.
+
+For the construction of the average distance pie chart there was a particularly complex SQL query required, Figure \ref{cde:sql}. The aim of this query is to return the number of encounters whose average interaction distance falls within a specified range. For example, the number of encounters that, on average, were 1 metre to 1.5 metres apart. This was achieved by using a parameterised nested SQL query. It had to be parameterised as there were a number of ranges to check, one for each category on the pie chart. It would be bad programming practice to simply copy these queries and hardcode the values in them. A nested query is one which contains multiple queries, in this case two, to allow for intermediate results to be used. Here the inner query is used to obtain the average value of all RSSI values within an interaction for a given receiver device mac address within a given range. This requires using a join between the Interaction and RSSI tables, then getting the average of the RSSI values using the aggregate function AVG. Finally it checks if it falls within the range. Then, the outer query counts the number of values returned, using the aggregate function COUNT.
+
+\begin{figure}[!htb]
+    \lstinputlisting[language=sql, basicstyle=\small]{snippets/average_dist.sql}
+    \caption{ Parameterised nested SQL query, :receiver is the mac address of the device, :start\_range is the beginning of the distance range, :end\_range is the end of this range. }
+    \label{cde:sql}
+\end{figure}
+
+The final key function within the data management system is the custom export functionality. This allows the user to export the data stored within the database about the currently connected device, into an external format. This functionality is aimed at power-users who wish to use their data for custom visualisations outwith the app, or to perform custom data analysis. I chose to use the comma separated values (CSV) file format to export the data, as it maps well to the table structure of relational databases. Each table in the database schema is mapped to a separate csv file. The header row of the csv file is constructed using the attribute names within the table. There are many areas where it is possible for this process to fail, so it is designed to fail gracefully. Whenever an error is encountered during exporting, it aborts the process and provides an Android toast to the user detailing the error.
+
+\subsection{Communication}
+
+
+
+Blessed BLE library, many challenges - discuss initial attempt at doing it myself.
+
+Abstraction Layer between bluetooth handling and UI, each UI fragment did have their own callbacks for per page functionality. Common functionality for all UI fragments contained within parent activity.
+
+\subsection{RSSI Storage + Processing}
+
+\subsection{Device Configuration}
 
 \section{Design \& Implementation Summary}
 
-
+This chapter discussed the high-level design and implementation process used during the project. Key topics and interesting technical areas were discussed in greater detail. Also highlighted, were some of the technical challenges faced throughout the implementation process such as endianess conversion and BLE implementation. The software engineering practices discussed were critical to being able to manage and implement two separate codebases.
 
 %==================================================================================================================================
 \chapter{Evaluation}
