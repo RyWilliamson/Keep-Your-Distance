@@ -668,3 +668,4 @@
 ### 12 Mar 2021
 
 - _6 hours_: Continuing to write design and implementation section.
+- _4 hours_: Finish first draft of design and implementation section.

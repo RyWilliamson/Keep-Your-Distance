@@ -503,7 +503,7 @@ Now that the initial technologies had been chosen, a high-level system architect
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/high-level_system_architecture.png}
+    \includegraphics[width=0.4\linewidth]{images/high-level_system_architecture.png}
 
     \caption{ A high-level system architecture diagram for the Keep-Your-Distance system. }
 
@@ -827,15 +827,25 @@ The final key function within the data management system is the custom export fu
 
 \subsection{Communication}
 
+As previously mentioned, to communicate with the ESP32 device. The Bluetooth libraries included in the Android sdk are low-level and require a lot of boilerplate code and management to communicate at a basic level. During the initial stages of implementation I attempted to use the low level libraries and write a custom high-level BLE management library. This was challenging and was taking too much time from development of key project areas, so the decision was made to refactor my code to make use of the high-level BLE library Blessed \citep{welie_weliemblessed-android_2021}. As this project is under active development with frequent releases I restricted the project to use library version 1.29 to prevent library updates breaking app functionality.
 
+The majority of BLE communication functionality was abstracted from UI Fragments into a custom Bluetooth handler class. This primarily handles the required operations after a change in BLE state. For example, after a disconnection the references held to all the Bluetooth GATT characteristics need to be nullified as they are no longer valid; attempting to use them would crash the app. They also provide an interface for page specific functionality to get and set a select few BLE properties, these properties are not critical to BLE operation so are safe to be changed. The BLE handler also manages the Bluetooth related system permissions which is one of the most critical app functions. If this is not correctly requested then Bluetooth will not function at all. Specifically, it checks if the "ACCESS\_FINE\_LOCATION" permission has been granted. If it has not it requests this app permission from the user. This check needs to happen whenever any BLE operation is executed.
 
-Blessed BLE library, many challenges - discuss initial attempt at doing it myself.
-
-Abstraction Layer between bluetooth handling and UI, each UI fragment did have their own callbacks for per page functionality. Common functionality for all UI fragments contained within parent activity.
+The only BLE functionality not encapsulated by the handler is event based page specific behaviour. For event based functionality that was consistent across all the UI in the app the callbacks were implemented in the base Activity class. This included calling the relevant handler functions when connections or disconnections were occurring, service discovery, and receiving incoming RSSI values. For page specific behaviour, such as hiding and showing components on the settings page, BLE callbacks were defined in the Fragment. To call the page specific call backs an interface was defined IBluetoothImplementer, which specified a contract for implementing two getter functions, one for a BluetoothCentralCallback, and another for a BluetoothPeripheralCallback. The Fragments implement this interface which allows the base Activity to activate the Fragment BLE callbacks from the main BLE callbacks.
 
 \subsection{RSSI Storage + Processing}
 
+This is the parallel to the RSSI transmission discussed in the ESP32 section. The app needs to recieve and decode the RSSI packet to be able to store the RSSI information in the database. This process is started when a characteristic update event is receieved from the Blessed BLE library. As previously mentioned the base Activity callback captures this event.
+
+To understand how the overall RSSI processing system works it is first important to understand the timeout system. This system is required to chunk receieved RSSI values into the relevant interaction. A cut off was set to separate interactions, if more than three seconds had passed between RSSI values then they were counted as separate interactions. This was implemented using a hash map, and a custom TimeoutData class. This allowed mapping mac addresses to these custom objects. These objects stored the start and end time for the interaction, and on updating it would check if the gap was more than 3000 milliseconds. If this was the case, a new interaction had occurred so the start and end time were set to be the new time. Otherwise just the end time would be updated to signify the interaction getting longer.
+
+When a new RSSI value is receieved the system uses byte buffers to easily convert the received bytes to the correct data types. Byte buffers also natively support endian conversions, making this step simpler. Once this data has been decoded it begins the process of inserting this data into the database. First the device is inserted. For interactions, using the timeout system allows for an easy way of updating interactions when presented with new RSSI values. The timeout system is updated with the timestamp of the newest packet, then the start time is retreived from the hash map. This gives the correct start and end times for the current interaction, so the interaction in the database is inserted or updated if it already exists. Finally, now that the interaction has been updated the estimated distance is calculated using Equation \ref{eq:rssi-to-distance}. This provides the final piece of information to insert this new RSSI value into the database.
+
+The base RSSI and bulk RSSI packets are processed in mostly the same way. The bulk RSSI packet has a separate instantiation of the timeout system to prevent interference when both bulk RSSI and base RSSI packets are receieved at the same time. Also the timestamp offset is extracted from the bulk RSSI packet. This is then used to calculate the timestamp by subtracting the offset from the current time. The base RSSI timestamp is just the time it arrives.
+
 \subsection{Device Configuration}
+
+To allow the system to be suitable for a number of environments and scenarios it had to be configurable. Since the device had no means of input from the user this had to be done on the app. This was accomplished by having two configuration options the user could modify, each with pre-set categories. First, the user could change the range they would like the device to be sensitive to other devices. They could also change profile to one of three profiles: Indoor, Outdoor City, and Outdoor Nature. These profiles internally consist of a measured power value, and an environment value. They are coupled into a profile to make the system more usable; it is much more intuitive to say you are indoors rather than saying your measured power is -78 and the environmental factor is 2. This data is packed into bytes, in the format given in Figure \ref{fig:config_packet}, using a byte buffer. This packet is sent to the device to update its settings at two times. First, when the user wants to update the device settings via a button press. Second, when the device first connects. This is necessary as the devices can't store configuration changes between power cycles, due to a lack of non-volatile storage.
 
 \section{Design \& Implementation Summary}
 
