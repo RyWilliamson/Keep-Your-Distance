@@ -896,15 +896,43 @@ AUnit, \citep{park_bxparksaunit_2021}, is the library chosen to perform unit tes
 
 \section{Ethics}
 
+Evaluation of this system was performed ethically. The survey performed was ethically sound, shown by following and signing the ethics checklist as seen in Figures \ref{fig:ethics_checklist1} - \ref{fig:ethics_checklist3}. The experiment required a request for formal ethical approval, which was granted as seen in Figures \ref{fig:full_ethics_approval1} - \ref{fig:full_ethics_approval3}. These required formal ethical approval as my project used non-standard hardware, namely the ESP32, which violated point 2 of the ethics checklist. As part of the experiment process, participants were asked to fill in a consent form, Figure \ref{fig:participant_consent}, along with receiving information sheets, Figure \ref{fig:participant_information},  and a debriefing email, Figure \ref{fig:participant_debriefing}. Finally, during the surveys performed their was an informed consent section in the Google Form, which the user had to agree to, to begin the survey.
+
 \section{Experiment}
+
+A single experiment was run during this project. This experiment had two aims: to find a real world view of the system's performance, and to understand the usability of the created system. The first aim was achieved through the tasks the participants performed. The second aim was achieved through observation of participants, and feedback they provided. Each experiment consisted of two participants. The tasks the participants had to perform can be broken into two categories: device based tasks, and app based tasks.
+
+First, have the participants choose three arbitrary locations within their home or within their garden, if this experiment were to be performed with many groups the wide number of environments would provide more reliable data. Then, each participant is separately asked to turn the devices on and connect the device to the app. The participants should not see each other during this stage as they may learn from each other which would compromise the evaluation of system usability, however if the participant cannot do this then I should help and note this down.
+
+Once both participants have completed this, have them standing 3 metres apart, using a tape measure of 3 metres length between them as seen in Figure \ref{fig:experiment_setup}. This 3 metre distance should be outwith the range of the maximum size profile, so the devices should not be interacting at this stage. Now, the participants are asked to ensure the devices are set to the relevant profile and a distance of 2 metres, with this being checked to be correct. One participant should now be instructed to move towards the other, stopping when the devices alert the user and having the experimenter record the distance apart. Then they are asked to move backwards until they stop interacting, again recording this distance. Now the other participant should perform these tasks. This is repeated for 1.5 metre, and for 1 metre configurations, then again for each of the other two locations.
+
+The participants are then separated again. They are each asked to explore the app further, speaking their thoughts during the process. These are written down as a think-aloud evaluation, which allows collection of qualitative data on the app usability. Finally, the participants are asked to disconnect the devices, turn off the devices, and complete a Google Forms survey, Figures \ref{fig:survey-questions-1} - \ref{fig:survey-questions-2}, about their experiences with the app.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.93\linewidth]{images/experiment.png}
+
+    \caption{ Example of how the experiment would be setup in a given area. Participants stand at each end of the tape measure which is 3 metres in length. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:experiment_setup}
+\end{figure}
 
 \subsection{Limitations}
 
-Mention COVID reasons here.
+Due to the Scottish COVID-19 restrictions of not being able to meet with others that persisted for the duration of this project I was only able to perform this experiment a single time, with those that I lived with. This gives a very small sample size to draw conclusions from. In the results section I will discuss some hypotheses that can be made based on the data collected from the experiment, however these hypotheses may have been shown to be inaccurate if this experiment had been able to run with a larger sample size.
+
+\subsection{Device Tasks}
+
+These tasks involved the participants interacting with the physical ESP32 microcontroller, and using it to attempt to stay socially distant from the other participant. These tasks were created to ensure the participant interacted with the board, and allowed an insight into participants understood the physical device with little to no instruction. The specific tasks were turning on the device, using the devices to social distance, trying both alert types, and turning off the device. The device data was collected at the end of the experiment to cross reference what distance the device believed the participants were from each versus the real physical distance.
+
+\subsection{App Tasks}
+
+These tasks involved the particpants interacting with the Android app. This, along with the questionnaire, provides the information on usability. During these tasks the participants explore the data visualisations within the app. Part of the evaluation is observing how clear these visualisations are to the participants, and also aiming to understand how well these visualisations educate the user on their current social distancing. Since doing this with the data collected from the experiment alone would not capture the full breadth of the visualisations, a fake device was inserted into the device list that they are instructed to choose. This could be problematic in that the data in the visualisations doesn't personally relate to the participants, so they may have reacted differently to real data. However, this could only be overcome by running an experiment in an environment where multiple people would be using the devices daily, which was not feasible for this project.
 
 \section{Qualitative Survey}
 
-"To try account for the limitations described above..."
+To attempt to account for the COVID-19 limitations described above a separate survey was created that could be sent to participants online. This survey was designed to only look at usability and education. The survey contained a section for each page in the app, a section for the device, and a general questions section. Within each section was a short video, of either the app being operated, or the device being used. These videos were the basis for the questions are were an attempt at a substitute for using the device. This survey received 24 responses, a significant amount, and was segmented into 17 (70.8\%) tech-literate responses, and 7 (29.2\%) tech-iliterate responses. This survey was designed to enable quantitative and qualitative responses; Likert scale, and yes/no questions were used to obtain quantitative data.
 
 \section{Results Analysis}
 
@@ -933,6 +961,12 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
           Indicate what future work could be done, but remember: \textbf{you
               won't get credit for things you haven't done}.
 \end{itemize}
+
+\section{Summary}
+
+\section{Future Work}
+
+\section{Key Reflections}
 
 %==================================================================================================================================
 %

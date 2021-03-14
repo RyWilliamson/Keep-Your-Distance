@@ -682,3 +682,11 @@
 ### 14 Mar 2021
 
 - _0.5 hours_: Fixing up 2nd half of Design & Implementation after feedback.
+- _0.5 hours_: Written Ethics section
+- _2 hours_: Written Experiment & Qualitative survey section
+
+# Week 21
+
+### 15 Mar 2021
+
+- _0.5 hours_: Meeting with Jeremy. (Predicted)
