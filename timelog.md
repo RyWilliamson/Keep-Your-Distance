@@ -669,3 +669,12 @@
 
 - _6 hours_: Continuing to write design and implementation section.
 - _4 hours_: Finish first draft of design and implementation section.
+
+### 13 Mar 2021
+
+- _0.5 hours_: High level plan for Evaluation section
+- _1 hour_: Fixing the broken code coverage within Android Studio so a code coverage report could be included within my dissertation.
+- _0.5 hours_: Writing UI testing section
+- _0.5 hours_: Add in some missing Android tests, improves code coverage.
+- _1.5 hours_: Writing Android Unit Testing section.
+- _1.5 hours_: Sorting out ethics and survey appendicies.

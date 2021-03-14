@@ -1,4 +1,4 @@
-package com.github.rywilliamson.configurator.Database;
+package com.github.rywilliamson.configurator.DatabaseUI;
 
 import android.app.Application;
 import android.util.Log;

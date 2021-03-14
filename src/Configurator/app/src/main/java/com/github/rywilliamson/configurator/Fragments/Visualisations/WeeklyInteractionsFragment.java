@@ -19,7 +19,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.DatabaseUI.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Fragments.GraphFragment;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;

@@ -2,10 +2,8 @@ package com.github.rywilliamson.configurator.Activities;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.DatabaseUI.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.Entity.Device;
 import com.github.rywilliamson.configurator.Database.Entity.RSSI;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;

@@ -1,6 +1,6 @@
 package com.github.rywilliamson.configurator.Interfaces;
 
-import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.DatabaseUI.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Utils.BluetoothHandler;
 
 import java.io.Serializable;

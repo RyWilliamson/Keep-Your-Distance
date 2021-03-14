@@ -2,7 +2,6 @@ package com.github.rywilliamson.configurator.Fragments.Visualisations;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.DatabaseUI.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;
 import com.github.rywilliamson.configurator.Interfaces.IGraphImplementer;

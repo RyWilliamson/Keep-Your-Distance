@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 
-import com.github.rywilliamson.configurator.Database.DatabaseViewModel;
+import com.github.rywilliamson.configurator.DatabaseUI.DatabaseViewModel;
 import com.github.rywilliamson.configurator.Database.Entity.Device;
 import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.Interfaces.IBackendContainer;

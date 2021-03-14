@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +40,25 @@ public class DeviceRepositoryUnitTest {
     }
 
     @Test
+    public void getUsedDevice_isCorrect() {
+        Device device1 = new Device( "A", "", 1 );
+        Device device2 = new Device( "B", "", 1 );
+        Device device3 = new Device( "C", "", 0 );
+        database.deviceDao().insertDevice( device1 );
+        database.deviceDao().insertDevice( device2 );
+        database.deviceDao().insertDevice( device3 );
+        List<Device> used = repo.getUsedDevices();
+        for ( Device device : used ) {
+            assertThat( device.macAddress ).isNotEqualTo( "C" );
+        }
+    }
+
+    @Test
+    public void deviceToString_isCorrect() {
+        assertThat( new Device( "A", "alias", 0 ).toString() ).isEqualTo( "alias" );
+    }
+
+    @Test
     public void getDevice_nothingOnWrongID() {
         assertThat( repo.getDevice( "WRONG" ) ).isNull();
     }
@@ -58,7 +78,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ).times_connected ).isEqualTo( 0 );
@@ -73,7 +93,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ).times_connected ).isEqualTo( 1 );
@@ -89,7 +109,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id1" ).times_connected ).isEqualTo( 0 );
@@ -106,7 +126,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ).times_connected ).isEqualTo( 0 );
@@ -121,7 +141,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ).alias ).isEqualTo( "alias2" );
@@ -134,7 +154,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ) ).isNull();
@@ -149,7 +169,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ).times_connected ).isEqualTo( 50 );
@@ -162,7 +182,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ) ).isNull();
@@ -176,7 +196,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ).macAddress ).isEqualTo( device.macAddress );
@@ -185,7 +205,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "id" ) ).isNull();
@@ -198,7 +218,7 @@ public class DeviceRepositoryUnitTest {
         RSSIDatabase.databaseWriteExecutor.shutdown();
         try {
             RSSIDatabase.databaseWriteExecutor.awaitTermination( 5000, TimeUnit.MILLISECONDS );
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             assertThat( true ).isFalse();
         }
         assertThat( repo.getDevice( "WRONG" ) ).isNull();

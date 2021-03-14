@@ -1,4 +1,4 @@
-package com.github.rywilliamson.configurator.Database;
+package com.github.rywilliamson.configurator.DatabaseUI;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import com.github.rywilliamson.configurator.Database.Entity.Device;
 import com.github.rywilliamson.configurator.Database.Entity.Interaction;
 import com.github.rywilliamson.configurator.Database.Entity.RSSI;
+import com.github.rywilliamson.configurator.Database.RSSIDatabase;
 import com.github.rywilliamson.configurator.R;
 import com.github.rywilliamson.configurator.Utils.Keys;
 import com.opencsv.CSVWriter;
