@@ -489,11 +489,11 @@ Early prototype development on the ESP32 board was done in Micropython, an optim
 
 \subsection{Android}
 
-When choosing a technology to implement the smartphone functionality there were a number of considerations: the number of users for each Operating System (OS), access to hardware for development and testing, and cost of hardware for the user. Android was the best choice in all cases. First the market share of Android eclipses that of any other phone OS, with it having an 87\% market share in 2019 \citep{cohen_ios_2020}. Android devices also, on average, cost less the iOS devices; there is much more competition on Android at the entry and mid level smartphone market. iOS was not a feasible option as it requires a Mac device for development, which I did not have access to. Finally, cross-platform development using an SDK such as Flutter was considered but ultimately rejected due to the extra complexity that comes with developing a cross-platform app.
+When choosing a technology to implement the smartphone functionality there were a number of considerations: the number of users for each Operating System (OS), access to hardware for development and testing, and cost of hardware for the user. Android was the best choice in all cases. First, the market share of Android eclipses that of any other phone OS, with it having an 87\% market share in 2019 \citep{cohen_ios_2020}. Android devices also, on average, cost less the iOS devices; there is much more competition on Android in the entry and mid level smartphone market. iOS was not a feasible option as it requires a Mac for development, which I did not have access to. Finally, cross-platform development using an SDK such as Flutter was considered but ultimately rejected due to the extra complexity that comes with developing a cross-platform app.
 
 \subsection{Java}
 
-The final primary technology consideration was the programming language to use when developing using the Android SDK. There are two options, Java or Kotlin. Both languages compile down to Java bytecode, and run on the Java Virtual Machine (JVM). Due to this Kotlin and Java can interoperate within a system. Kotlin has a number of advantages over Java. First, Kotlin produces safer code by having nullable and non-nullable types, nullable types come with many restrictions on use which reduce the likelihood of null pointer exceptions. Also, Kotlin has better support for functional programming concepts and reduces the need for boilerplate code, making it more concise.
+The final technology consideration was the programming language to use with the Android SDK. There are two options, Java or Kotlin. Both languages compile down to Java bytecode, and run on the Java Virtual Machine (JVM). Due to this Kotlin and Java can interoperate within a system. Kotlin has a number of advantages over Java. First, Kotlin produces safer code by having nullable and non-nullable types, nullable types come with many restrictions on use which reduce the likelihood of null pointer exceptions. Also, Kotlin has better support for functional programming concepts and reduces the need for boilerplate code, making it more concise.
 
 Even given these advantages Java was still chosen as the language of choice for two reasons: my familiarity with Java as a programming language, and Java has far more documentation online than Kotlin does making solving development issues easier in Java, Java having previously been the standard for Android means that people are likely to have had, and solved, similar issues to the ones I encounter during development.
 
@@ -503,7 +503,7 @@ Now that the initial technologies had been chosen, a high-level system architect
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.4\linewidth]{images/high-level_system_architecture.png}
+    \includegraphics[width=0.5\linewidth]{images/high-level_system_architecture.png}
 
     \caption{ A high-level system architecture diagram for the Keep-Your-Distance system. }
 
@@ -699,11 +699,11 @@ Following these conditions ensures that the tree is always balanced, which means
 
 \subsection{User Interface: Pages}
 
-The user interface was designed to be minimally designed so as to not overload the user with information. Power users were a secondary consideration with few options tailored to their use.
+The user interface was designed to be minimalistic so as to not overload the user with information. Power users were a secondary consideration with few options tailored to their use.
 
-For the initial page design digital wireframing, using the Balsamiq \citep{balsamiq_balsamiq_2021} tool, was used. These wireframes were low-fidelity to allow for rapid wireframe prototyping. One reason for using a digital wireframing tool over traditional paper wireframe sketching is that it allows for the wireframes to have a level of mock interactivity to them. This allowed for modelling of the user journey through the UI.
+For the initial page design, digital wireframing was used. This was done using the Balsamiq \citep{balsamiq_balsamiq_2021} tool. These wireframes were low-fidelity to allow for rapid wireframe prototyping. One reason for using a digital wireframing tool over traditional paper wireframe sketching is that it allows for the wireframes to have a level of mock interactivity to them. This allowed for modelling of the user journey through the UI.
 
-Throughout the initial design, and followed into implementation, the UI was designed to feedback the system state to the user. The system has two states: connected or disconnected. There were two methods of this feedback. First, on every page within the app there is a status indicator icon in the top right of the screen, displaying a checkmark when connected and an exclamation mark when disconnected. Second, some pages change component architecture depending on system state, which allows the user to intuitively grasp the current system state.
+Throughout the initial design, which continued into implementation, the UI was designed to feedback the system state to the user. The system has two states: connected or disconnected. There were two methods of this feedback. First, on every page within the app there is a status indicator icon in the top right of the screen, displaying a checkmark when connected and an exclamation mark when disconnected. Second, some pages change component architecture depending on system state, which allows the user to intuitively grasp the current system state.
 
 For the low-fidelity wireframes the principles of Material Design, \citep{google_design_nodate}, were not followed, this came later during interface implementation. A prime example of Material Design is the bottom navigation bar used throughout the app, Figure \ref{fig:bottom_nav}. Using components and principles from Material Design means that the app will be externally consistent with many existing Android apps. This allows a user to feel a sense of familiarity even during their first use of the app.
 
@@ -717,9 +717,9 @@ For the low-fidelity wireframes the principles of Material Design, \citep{google
     \label{fig:bottom_nav}
 \end{figure}
 
-The first page in the user journey is the device connection page. This is presented first as connecting to the ESP32 is the primary function of the app. It allows two methods of connecting to an ESP32, the user can either scan for a new device and connect to it or the user can reconnect the previously connected device. This reconnection option helps in usability for novice users, and more efficient use for advanced users.
+The first page in the user journey is the device connection page. This is presented first, as connecting to the ESP32 is the primary function of the app. It allows two methods of connecting to an ESP32, the user can either scan and connect to a new device or can reconnect to the last connected device. This reconnection option helps in usability for novice users, and more efficient use for advanced users.
 
-This page is then followed by the device information page, assuming the user connects. This information page gives the user an overview of the device they're currently connected to, and contains functionality related to the specific device. This includes: exporting stored data, clearing stored data, renaming the device (remembering mac addresses is difficult), and disconnecting from the device. Both the information page and the home page are accessed via the Device button on the bottom nav bar, \ref{fig:bottom_nav}. The page it goes to depends on the system state, if connected it switches to information, if not connected it switches to the device connection page.
+This page is then followed by the device information page, assuming the user connects. This information page gives the user an overview of the device they're currently connected to, and contains functionality related to the specific device. This includes: exporting stored data, clearing stored data, renaming the device (remembering mac addresses is difficult), and disconnecting from the device. Both the information page and the home page are accessed via the Device button on the bottom nav bar, Figure \ref{fig:bottom_nav}. The page it goes to depends on the system state, if connected it switches to information, if not connected it switches to the device connection page.
 
 The settings page also responds to system state. When not connected the settings page contains fewer components, Figure \ref{fig:settings_not_connected}. When the device is connected to the app the settings page populates the screen with the connection related components, Figure \ref{fig:settings_connected}. These components are the update device button, and the update status label. These would not be usable when no device is connected so instead of being visible but having an error on use, they are simply hidden.
 
@@ -753,7 +753,7 @@ The bar chart represents the interactions per day over the last 7 days, left-mos
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.8\linewidth]{images/graphs.png}
+    \includegraphics[width=0.78\linewidth]{images/graphs.png}
 
     \caption{ An example of all three visualisations the app provides. Left shows the interactions per day for the last 7 days. Middle shows time and average distance of all interactions. Right shows the trend of interactions, changing the line colour to red once they are above 8 interactions in a given day. }
 
@@ -761,7 +761,7 @@ The bar chart represents the interactions per day over the last 7 days, left-mos
     \label{fig:app_visualisations}
 \end{figure}
 
-The pie charts, Figure \ref{fig:app_visualisations}, allow for an aggregated view of the critical factors for COVID-19 infection: duration of contact, and distance of contact. Categories were separated by colour, along with a given key to identify the slices by category. These colours were chosen with particular thought to making the chart as accessible as possible to those with colour blindness. A colour blindess simulator Coblis \citep{colblindor_coblis_2018}, was used to identify problematic colours for each form of colour blindess and check the design. However, there are two forms of colour blindness that this design is not accessible to: Tritanopia and Achromatopsia, simulations of which are shown in Figure \ref{fig:colour_blindess}.
+The pie charts, Figure \ref{fig:app_visualisations}, allow for an aggregated view of the critical factors for COVID-19 infection: duration of contact, and distance of contact. Categories were separated by colour, along with a given key to identify the slices by category. These colours were chosen with particular thought to making the chart as accessible as possible to those with colour blindness. A colour blindess simulator Coblis \citep{colblindor_coblis_2018}, was used to identify problematic colours for each form of colour blindess and check the design. However, there are two forms of colour blindness that this design is not accessible to: Tritanopia and Achromatopsia, simulations of which are shown in Figure \ref{fig:colour_blindess}. Hatching was considered to overcome this, however could not be implemented due to technical constraints of MPAndroidChart.
 
 \begin{figure}[!htb]
     \centering
@@ -783,7 +783,7 @@ The pie charts, Figure \ref{fig:app_visualisations}, allow for an aggregated vie
 
 The interaction trend graph, Figure \ref{fig:app_visualisations}, is designed to be a longer term approach to giving the users the information they need to make decisions about their social distancing behaviour. This forms a trend based on all the interaction data collected from that device, the line changes colour, via a short gradient change, when the interaction trend climbs above 8 interactions. Similar colour blindess considerations and methods were used for the colours here; achromatopsia remains negatively affected by this design. Due to constraints written within the MPAndroidChart library itself having multiple colours along the single line proved challenging. A number of implementation attempts were made. The final implementation achieved this by overriding the shader in the implementation of MPAndroidChart with my own custom LinearGradient shader.
 
-\subsection{Room Database}
+\subsection{Database}
 
 The database is a critical part of the app design and infrastructure, it allows the data collected from the ESP32s to be stored. This allows it to drive the data visualisations discussed above. This makes the Database Management System (DBMS) a crucial component in achieving the key goal of user education.
 
@@ -823,7 +823,7 @@ For the construction of the average distance pie chart there was a particularly 
     \label{cde:sql}
 \end{figure}
 
-The final key function within the data management system is the custom export functionality. This allows the user to export the data stored within the database about the currently connected device, into an external format. This functionality is aimed at power-users who wish to use their data for custom visualisations outwith the app, or to perform custom data analysis. I chose to use the comma separated values (CSV) file format to export the data, as it maps well to the table structure of relational databases. Each table in the database schema is mapped to a separate csv file. The header row of the csv file is constructed using the attribute names within the table. There are many areas where it is possible for this process to fail, so it is designed to fail gracefully. Whenever an error is encountered during exporting, it aborts the process and provides an Android toast to the user detailing the error.
+The final key function within the data management system is the custom export functionality. This allows the user to export the data stored within the database about the currently connected device, into an external format. This functionality is aimed at power-users who wish to use their data for custom visualisations outwith the app, or to perform custom data analysis. I chose to use the comma separated values (CSV) file format to export the data, as it maps well to the table structure of relational databases. Each table in the database schema is mapped to a separate csv file. The header row of the csv file is constructed using the attribute names within the table. There are many areas where it is possible for this process to fail, so it is designed to fail gracefully. Whenever an error is encountered during exporting, it aborts the process and provides an Android toast, a popup message, to the user detailing the error.
 
 \subsection{Communication}
 
@@ -894,13 +894,17 @@ AUnit, \citep{park_bxparksaunit_2021}, is the library chosen to perform unit tes
     \label{fig:esp32_tests_pass}
 \end{figure}
 
+\section{Ethics}
+
 \section{Experiment}
 
+\subsection{Limitations}
 
+Mention COVID reasons here.
 
 \section{Qualitative Survey}
 
-Mention COVID reasons here.
+"To try account for the limitations described above..."
 
 \section{Results Analysis}
 

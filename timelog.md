@@ -678,3 +678,7 @@
 - _0.5 hours_: Add in some missing Android tests, improves code coverage.
 - _1.5 hours_: Writing Android Unit Testing section.
 - _1.5 hours_: Sorting out ethics and survey appendicies.
+
+### 14 Mar 2021
+
+- _0.5 hours_: Fixing up 2nd half of Design & Implementation after feedback.
