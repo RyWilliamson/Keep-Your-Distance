@@ -693,3 +693,4 @@
 - _0.5 hours_: Meeting with Jeremy.
 - _0.5 hours_: Type up meeting minutes.
 - _1 hour_: Quantitative device evaluation.
+- _1 hour_: Open, axial, selective coding section
