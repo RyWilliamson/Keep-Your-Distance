@@ -689,4 +689,7 @@
 
 ### 15 Mar 2021
 
-- _0.5 hours_: Meeting with Jeremy. (Predicted)
+- _2 hours_: Quantitative device evaluation.
+- _0.5 hours_: Meeting with Jeremy.
+- _0.5 hours_: Type up meeting minutes.
+- _1 hour_: Quantitative device evaluation.

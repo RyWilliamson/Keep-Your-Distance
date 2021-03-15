@@ -622,7 +622,7 @@ There are two ways interaction data is transferred from device to app. The first
 
 I looked at two data structures in particular, a singly linked list, and a circular queue.
 
-A singly linked list consists of nodes containing the data, and pointers to the next node in the list. This has the advantage of only consuming exactly as much memory as it requires, and making it very easy to insert or delete from any positions in the linked list, at the cost of having to traverse the list to that point. However for this case the device would only ever be removing from the head which will always be constant (O(1)) time. The downside to the linked list is the overhead of having to store the pointer to the next node alongside the data. These pointers are 4 bytes in size, the data is 17 bytes in size, meaning there is a 23.5\% increase in memory usage which is a scarce resource on the ESP32.
+A singly linked list consists of nodes containing the data, and pointers to the next node in the list. This has the advantage of only consuming exactly as much memory as it requires, and making it very easy to insert or delete from any positions in the linked list, at the cost of having to traverse the list to that point. However for this case the device would only ever be removing from the head which will always be constant ($O(1)$) time. The downside to the linked list is the overhead of having to store the pointer to the next node alongside the data. These pointers are 4 bytes in size, the data is 17 bytes in size, meaning there is a 23.5\% increase in memory usage which is a scarce resource on the ESP32.
 
 The alternative, and the chosen data structure, is an array-based circular queue \ref{fig:circular_queue}. This works by keeping track of two indexes, a front and rear. The rear index is used to track the most recent element in the queue; when adding to the queue it is added to position rear + 1. The front index keeps track of the oldest item in the queue; when removing from the queue it is removed from position front. This allows the circular queue to wrap around, and fill the queue to capacity, even after some items have been removed.
 
@@ -658,9 +658,9 @@ First two smoothing algorithms were considered: exponential moving average, and 
     \label{eq:weight}
 \end{equation}
 
-The sliding window average algorithm stores and averages the last n values, this would require O(n * d) memory, where n is the number of values to consider and d is the number of devices encountered. The exponential moving average was chosen as the algorithm for the system due to its smaller memory footprint. Since it only requires a single number to be stored it required O(d) space, lower than the O(n * d) space that the sliding window requires.
+The sliding window average algorithm stores and averages the last n values, this would require $O(nd)$ memory, where $n$ is the number of values to consider and $d$ is the number of devices encountered. The exponential moving average was chosen as the algorithm for the system due to its smaller memory footprint. Since it only requires a single number to be stored it required $O(d)$ space, lower than the $O(nd)$ space that the sliding window requires.
 
-To perform this averaging a data structure was needed that supported: Quick searching to find a given mac address, efficient and consistent insertion and deletion operations, and ideally a low memory footprint. The following were considered: array of structs, sorted array of structs, hashmap, and a red-black tree. The array of structs, could not be easily indexed by mac address so search time would be O(d) which is too slow. The sorted array of structs could be searched in O(log d) using binary search but suffered from dlog(d) insertion, which was too slow as there would be many insertions. The hashmap has constant time for insertion, deletion, and search. However, it suffers from being an amortised constant time, meaning this is on average; in a worse-case scenario the hashmap could become O(d) for all these operations, so was deemed unsuitabe. Finally, the red-black tree is guaranteed O(log d) for insertion, deletion, and lookup; this comes at the cost of an increased memory footprint, and a slower average time complexity than the hashmap but this trade-off was acceptable.
+To perform this averaging a data structure was needed that supported: Quick searching to find a given mac address, efficient and consistent insertion and deletion operations, and ideally a low memory footprint. The following were considered: array of structs, sorted array of structs, hashmap, and a red-black tree. The array of structs, could not be easily indexed by mac address so search time would be $O(d)$ which is too slow. The sorted array of structs could be searched in $O(\log{d})$ using binary search but suffered from $O(d\log{d})$ insertion, which was too slow as there would be many insertions. The hashmap has constant time for insertion, deletion, and search. However, it suffers from being an amortised constant time, meaning this is on average; in a worse-case scenario the hashmap could become $O(d)$ for all these operations, so was deemed unsuitabe. Finally, the red-black tree is guaranteed $O(\log{d})$ for insertion, deletion, and lookup; this comes at the cost of an increased memory footprint, and a slower average time complexity than the hashmap but this trade-off was acceptable.
 
 First, the node struct for the tree had to be defined. As seen in Figure \ref{fig:tree_node}, the node is grouped into 3 sections. The data group contains the actual data that we wish to store within the tree. The pointers group contains the related pointers to nearby nodes - this is how the tree is linked together. Finally, the properties group only contains a boolean to set the colour of the node, either red or black. In theory each node should be 29 bytes in total, however, in real hardware implementation the size will be dependant on how the architecture pads the struct. For the ESP32 this is 32 bytes as it pads the single byte boolean out to the nearest 4th byte. This node could be optimised to 28 bytes per node by storing the colour information in the least significant bit of the parent pointer \citep{munoz_bannalia_2008}; this was not implemented due to time constraints.
 
@@ -683,7 +683,7 @@ The implementation of the red-black tree is too long to include here; I will giv
     \item Every path from a node to a descendant leaf node has the same number of black nodes.
 \end{itemize}
 
-Following these conditions ensures that the tree is always balanced, which means that the maximum height of the red-black tree at all times is $2\log{d + 1}$, where d is the number of devices encountered, which is what allows its operations to all be O(log d). Insertion and deletion operations make use of rotations. Rotations are operations within the tree that are used to preserve in-order traversal ordering, as shown in Figure \ref{fig:tree_rotation}.
+Following these conditions ensures that the tree is always balanced, which means that the maximum height of the red-black tree at all times is $2\log{d + 1}$, where $d$ is the number of devices encountered, which is what allows its operations to all be $O(\log{d})$. Insertion and deletion operations make use of rotations. Rotations are operations within the tree that are used to preserve in-order traversal ordering, as shown in Figure \ref{fig:tree_rotation}.
 
 \begin{figure}[!htb]
     \centering
@@ -932,7 +932,7 @@ These tasks involved the particpants interacting with the Android app. This, alo
 
 \section{Qualitative Survey}
 
-To attempt to account for the COVID-19 limitations described above a separate survey was created that could be sent to participants online. This survey was designed to only look at usability and education. The survey contained a section for each page in the app, a section for the device, and a general questions section. Within each section was a short video, of either the app being operated, or the device being used. These videos were the basis for the questions are were an attempt at a substitute for using the device. This survey received 24 responses, a significant amount, and was segmented into 17 (70.8\%) tech-literate responses, and 7 (29.2\%) tech-iliterate responses. This survey was designed to enable quantitative and qualitative responses; Likert scale, and yes/no questions were used to obtain quantitative data.
+To attempt to account for the COVID-19 limitations described above a separate survey was created that could be sent to participants online, Figures \ref{fig:non-contact-survey-questions-1} - \ref{fig:non-contact-survey-questions-2}. This survey was designed to only look at usability and education. The survey contained a section for each page in the app, a section for the device, and a general questions section. Within each section was a short video, of either the app being operated, or the device being used. These videos were the basis for the questions are were an attempt at a substitute for using the device. This survey received 24 responses, a significant amount, and was segmented into 17 (70.8\%) tech-literate responses, and 7 (29.2\%) tech-iliterate responses. This survey was designed to enable quantitative and qualitative responses; Likert scale, and yes/no questions were used to obtain quantitative data.
 
 \section{Results Analysis}
 
@@ -941,6 +941,14 @@ To attempt to account for the COVID-19 limitations described above a separate su
 \subsection{Quantitative Analysis}
 
 \section{Findings}
+
+I will break down the findings using the open, axial, and selective codes defined above to highlight key results from the analysis.
+
+\subsection{In Favour of System Use}
+
+\subsection{Against System Use}
+
+\subsection{General Suggestions}
 
 \section{Evaluation Summary}
 
