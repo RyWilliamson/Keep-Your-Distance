@@ -707,3 +707,5 @@
 ### 17 Mar 2021
 
 - _1 hour_: Finish working on Against System Use section. (Maybe still add some qualititative data to back up para 2).
+- _0.5 hours_: Do the section on General Feedback
+- _1 hour_: Refining Requirements & Analysis chapter from Jeremy's feedback.

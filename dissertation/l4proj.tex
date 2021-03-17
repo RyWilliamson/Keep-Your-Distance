@@ -279,15 +279,15 @@ A core commonality between the contact tracing methods I researched, across all 
 %==================================================================================================================================
 \chapter{Analysis \& Requirements}
 
-This chapter discusses the procedure for initial project analysis, and exploratory data analysis to discover specific equation parameters. From the initial analysis functional and non-functional requirements were gathered. These requirements were created in the initial phase of the project, due to how I structured the requirements there were few modifications made throughout the project lifespan.
+This chapter discusses the procedure for initial project analysis, and exploratory data analysis to discover specific equation parameters. From the initial analysis, functional and non-functional requirements were gathered. These requirements were created in the initial phase of the project, due to how I structured the requirements there were few modifications made throughout the project lifespan.
 
 \section{Requirements Gathering}
 
-The process followed for requirements gathering was split into 4 artefacts, each more comprehensive than the last: A high-level mindmap, a set of user personas and stories, some user scenarios, and the requirements themselves.
+The process followed for requirements gathering was split into 4 stages, each more comprehensive than the last: A high-level mindmap, a set of user personas and stories, some user scenarios, and the requirements themselves.
 
 \subsection{Mindmap}
 
-The first stage of requirements gathering was the creation of a high-level mindmap. This mindmap, Figure \ref{fig:mindmap} was created to map out the initial project space; not everything contained within the mindmap made it further into the requirements gathering process.
+The first stage of requirements gathering was the creation of a high-level mindmap. This mindmap, Figure \ref{fig:mindmap} was created to map out the initial project space; not everything contained within the mindmap made it further into the requirements gathering process. The mindmap was where the initial thought of having two components, an app on a smartphone and a wearable hardware sensor (ESP32), originated.
 
 \begin{figure}[!htb]
     \centering
@@ -310,29 +310,29 @@ I will briefly summarise the mindmap. The mindmap is composed of five primary th
 
 \subsection{User Personas \& Stories}
 
-User personas are fictional personalities created during requirements gathering designed to represent a user and identify user needs. User stories use these personas to provide a structured view of these needs in an "As, I want, So that" format.
+User personas are fictional personalities created during requirements gathering designed to represent a user and identify user needs. User stories make use of these personas to provide a structured view of these needs in an "As, I want, So that" format by using the user persona as context for why those actions are desireable.
 
-Seven user personas, and related user stories, were created during requirements gathering. These covered a variety of user types, considering age, technological literacy, profession, and vulnerability to covid.
+Seven user personas, and related user stories, were created during requirements gathering. These covered a variety of user types, considering age, technological literacy, profession, and vulnerability to COVID-19.
 
 The following is an example of a user persona, and related user story:
 
-\textbf{Alex} has a compromised immune system due to chronic illness, this puts them at a much larger degree of risk than the average person from COVID. They wish to be able to leave the house more often to have more independence but have to stay more conscious of the people around them.
+\textbf{Alex} has a compromised immune system due to chronic illness, this puts them at a much larger degree of risk than the average person from COVID-19. They wish to be able to leave the house more often to have more independence but have to stay more conscious of the people around them.
 
 As Alex, I want to keep a more strict distance from others, so that I don't become infected and become very ill.
 
 \subsection{User Scenarios}
 
-User scenarios utilise the user personas and stories created during the previous stage. They allow for user's wants and needs to be further examined by considering a hypothetical situation.
+User scenarios utilise the user personas and stories created during the previous stage. They allow for user wants and needs to be further examined by considering a hypothetical situation.
 
 There was a scenario created for each story, seven in total, each scenario considers the steps the user would take to achieve some goal. For each step I considered questions I could not yet answer, ideas that the step had sparked, and general comments on how the step related to the project. For example, in Alex's Scenario (Figure \ref{fig:alex_user_scenario}), I had an idea of making the device detect people based on passive bluetooth signals but determined within the same scenario that this would be out of scope.
 
 \section{Functional Requirements}
 
-The set of functional requirements can be derived once the requirements gathering process had been completed. Functional requirements are actions that a user can perform on the system. These requirements were used during the development process to track criteria completion. The MoSCoW prioritisation method \citet{hudaib_requirements_2018} is common way of prioritising requirements. It works by splitting requirements into four categories, each set less important than the last. Must have (M) requirements are the minimal critical set for effective operation. Should have (S) requirements are important but not essential to system operation. Could have (C) requirements are considered nice but the system would still be usable without them. Would be nice to have (W) requirements are requirements that are considered out of scope, and will be discussed towards the end of the dissertation as future work.
+The set of functional requirements can be derived once the requirements gathering process is completed. Functional requirements are actions that a user can perform on the system. These requirements were used during the development process to track criteria completion. The MoSCoW prioritisation method \citep{hudaib_requirements_2018} is common way of prioritising requirements. It works by splitting requirements into four categories, each set less important than the last. Must have (M) requirements are the minimal critical set for effective operation. Should have (S) requirements are important but not essential to system operation. Could have (C) requirements are considered nice but the system would still be usable without them. Would be nice to have (W) requirements are requirements that are considered out of scope, and will be discussed towards the end of the dissertation as future work.
 
 \begin{itemize}
-    \item \textbf{(M) Real-time RSSI Proximity Sensing: } The device must be capable of sensing another of the same device to within a 2 metre distance. It must be able to do this in near real-time.
-    \item \textbf{(M) Log data to linked device for visualisation: } Since the device has no on-board storage that survives after power down there is a need to send data to device over Bluetooth connection once an interaction has occurred.
+    \item \textbf{(M) Real-time RSSI Proximity Sensing: } The device must be capable of sensing another of the same device to within a 2 metre distance. It must be able to do this within three seconds precision.
+    \item \textbf{(M) Log data to linked device for visualisation: } Since the device has no on-board storage that survives after power down there is a need to send data to the smartphone over a Bluetooth connection once an interaction has occurred.
     \item \textbf{(M) Visualisations on app: } There should be visualisations and textual statistics on interaction encounters. These should be aimed at informing the user of their current habits and prompting change in necessary.
     \item \textbf{(S) Configurable device: } Allow for configuring device using pre-set profiles. This will need to be synced with the app every time the device boots as it has no power independent storage.
     \item \textbf{(S) Precision in RSSI Proximity Sensing: } The device should be capable of properly differentiating between 1 metre and 2 metre distances.
@@ -357,9 +357,9 @@ Non-functional requirements are properties of a system which can be observed by 
 
 \section{Exploratory Data Analysis}
 
-Exploratory data analysis was conducted both in the initial stages of the project and again later in the project with a more finished prototype. The aims of this analysis were to investigate the performance of the ESP32 BLE hardware and to find suitable parameters for calculation of the distance based on RSSI. The exact details of the formula will be discussed in the implementation section, the relevant parameters were the environment factor and the measured power.
+Exploratory data analysis was conducted both in the initial stages of the project and again later in the project with a more finished prototype. The aims of this analysis were to investigate the performance of the ESP32 BLE hardware and to find suitable parameters for calculation of the distance based on RSSI. The exact details of the formula will be discussed in the implementation section, the relevant parameters were the environment factor and the measured power. Exploring this early better informed initial requirement specification, while performing late-stage analysis helped reinforce that the requirements were correctly defined.
 
-The analysis procedure was similar in both the initial analysis and late stage analysis.  Starting from 0.5 metres apart and going up in 0.5 metre increments until 2.5 metres 250 rssi values were recorded. The NumPy and Pandas python libraries were used for data processsing, along with MatplotLib and Seaborn being used for data visualisation. A large range of graphs were created including violinplots, swarmplots, histograms, density plots, and line graphs.
+The analysis procedure was similar in both the initial analysis and late stage analysis. Starting from 0.5 metres apart and going up in 0.5 metre increments until 2.5 metres 250 rssi values were recorded. The NumPy and Pandas python libraries were used for data processsing, along with MatplotLib and Seaborn being used for data visualisation. A large range of graphs were created including violinplots, swarmplots, histograms, density plots, and line graphs.
 
 The violinplot of RSSI values against specific distances (0.5m - 2.5m) were useful in getting a high level comparative overview on how the RSSI values were clustered, along with how they varied. To allow for easier comparison a density estimation plot was created which allowed for much easier identification of distinct areas along with overlapping areas that may be problematic.
 
@@ -367,17 +367,17 @@ For finding the best parameters a separate dataset was computed for each environ
 
 \subsection{Initial Analysis}
 
-For the initial analysis data collection the early prototype version didn't have any form of timing system to determine when packets were missed so as workaround I had the receiving device listen every second, and record a dummy value if a packet wasn't received. This initial analysis was particularly important as it showed the project had potential using the ESP32 hardware Figure \ref{fig:initial_density}. A best parameter fit of environment = 3, measure power = -81 was identified as shown in \ref{fig:initial_best_fit}.
+For the initial analysis data collection the early prototype version didn't have any form of timing system to determine when packets were missed so as workaround I had the receiving device listen every second, and record a dummy value if a packet wasn't received. This initial analysis was particularly important as it showed the project had potential using the ESP32 hardware Figure \ref{fig:initial_density}. A best parameter fit of environment = 3, measure power = -81 was identified, Figure \ref{fig:initial_best_fit}.
 
 \begin{figure}[!htb]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.40\textwidth}
         \includegraphics[width=\textwidth]{images/initial_rssi_density.pdf}
         \caption{Density estimation plot for initial exploratory data analysis. Note the distinct peaks for most distances with the exception of red (2.0m) and purple (2.5m).}
         \label{fig:initial_density}
     \end{subfigure}
     ~
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.40\textwidth}
         \includegraphics[width=\textwidth]{images/initial_mp_bestfit.pdf}
         \caption{Best fit error plot for initial exploratory data analysis. Graph for environment = 3, shows most common point when measured power = -81.}
         \label{fig:initial_best_fit}
@@ -390,9 +390,9 @@ For the initial analysis data collection the early prototype version didn't have
 
 \subsection{Late Stage Analysis}
 
-In the late stage analysis the timing system was fully implemented so I could determine packet loss between packets received. Two types of areas were covered in the late stage analysis: Indoor, and Urban Outdoor. Originally a Remote Outdoor investigation was planned however this was not feasible to set up. For each area the devices were set up in three ways: facing pin side up, facing pin side down, and hanging mid-air facing each other. The aim of this analysis was similar to the initial analysis but with more of a focus on determining real world performance as opposed to technical feasibility.
+In the late stage analysis the timing system was fully implemented, so I could determine packet loss between packets received. Two types of locations were covered in the late stage analysis: Indoor, and Urban Outdoor. Originally a Remote Outdoor investigation was planned however this was not feasible to set up. For each area the devices were set up in three ways: facing pin side up, facing pin side down, and hanging mid-air facing each other. The aim of this analysis had more of a focus on determining real world performance as opposed to technical feasibility.
 
-After conducting the pin side up and pin side down versions of the indoor experiment and analysing the results , the densities of the distances seemed to have a large amount of overlap Figure \ref{fig:indoor_up_density} - much more than expected, and much more than the initial analysis. I then decided to run the experiment again but with a new setup, I had the ESP32s hanging off opposing faces. This allowed for a more realistic scenario as the devices would be facing each other as they would be when worn on people. This yielded closer to the expected result, Figure \ref{fig:indoor_hanging_density}. There was still overlap, however it was clustered into sections. These clusters were 0.5m, 1.0m \& 1.5m, and 2.0m \& 2.5m. Ideally each distance would be separately indentifiable as was the case with the initial analysis, however this is still a positive result as it does allow for distinct distance identification.
+After conducting the pin side up and pin side down versions of the indoor experiment and analysing the results, the densities of the distances seemed to have a large amount of overlap Figure \ref{fig:indoor_up_density} - much more than expected, and much more than the initial analysis. The experiment was run again but with a new setup, I had the ESP32s hanging off opposing faces. This allowed for a more realistic scenario as the devices would be facing each other as they would be when worn on people. This yielded closer to the expected result, Figure \ref{fig:indoor_hanging_density}. There was still overlap, however it was clustered into sections. These clusters were 0.5m, 1.0m \& 1.5m, and 2.0m \& 2.5m. Ideally each distance would be separately identifiable as was the case with the initial analysis, however this is still a positive result as it does allow for distinct distance identification.
 
 \begin{figure}[!htb]
     \centering
@@ -413,9 +413,9 @@ After conducting the pin side up and pin side down versions of the indoor experi
     \label{fig:initial_plots}
 \end{figure}
 
-To ensure fairness between experiments all three variants of the experiment were performed when doing the outdoor experiment. As expected this yielded similar results to the indoor experiment though with somewhat better clustering overall. However, a key drawback to the outdoor conditions was more difficulty in receiving a signal between the two devices; the pin side up variation was unable to get a consistent connection at 2.5 metres. This can be explained when considering the surrounding surfaces. Since waves are reflected off of surfaces, when indoors there is more surface area to bounce off and reach the other device.
+To ensure fairness between experiments all three variants of the experiment were performed when doing the outdoor experiment. As expected this yielded similar results to the indoor experiment though with somewhat better clustering overall. However, a key drawback to the outdoor conditions was more difficulty in receiving a signal between the two devices; the pin side up variation was unable to get a consistent connection at 2.5 metres. This can be explained when considering the surrounding surfaces. Since waves are reflected off surfaces, when indoors there is more surface area to bounce off and reach the other device.
 
-Since the hanging variant of the experiments is the most realistic in terms of mimicking real world device use these dataset were used to calculate best fit parameters for the Indoor and Outdoor City profiles. The resulting parameters were very similar with the Indoor, Figure  having parameters environment = 2, measured power = -78, Figure \ref{fig:indoor_hanging_bestfit}; Outdoor City was calculated to have the same environment and a measured power of -78, Figure \ref{fig:outdoor_hanging_bestfit}.
+Since the hanging variant of the experiments is the most realistic in terms of mimicking real world device use, the hanging datasets were used to calculate best fit parameters for the Indoor and Outdoor City profiles. The resulting parameters were very similar with the Indoor, having parameters environment = 2, measured power = -78, Figure \ref{fig:indoor_hanging_bestfit}; Outdoor City was calculated to have the same environment and a measured power of -77, Figure \ref{fig:outdoor_hanging_bestfit}.
 
 \begin{figure}[!htb]
     \centering
@@ -438,7 +438,7 @@ Since the hanging variant of the experiments is the most realistic in terms of m
 
 \subsection{Requirements \& Analysis Summary}
 
-The section discussed the requirements gathering process that was used during this project. The MoSCoW prioritisation method was used to allow for a strong set of requirements that had the flexibility to accomodate project changes without having to modify the requirements list. It also discussed how parameter values were identified that could be used during the design and implementation stages.
+The section discussed the requirements gathering process that was used during this project. The MoSCoW prioritisation method was used to allow for a clear set of requirements that had the flexibility to accomodate project changes without having to modify the requirements list. It also discussed how parameter values were identified that could be used during the design and implementation stages.
 
 %==================================================================================================================================
 \chapter{Design \& Implementation}
@@ -996,13 +996,15 @@ Another aspect that showed a user preference against using this device is poor d
 
 \subsection{General Suggestions}
 
-
+There were many suggestions made during user feedback. Here I will highlight a couple I consider important, or that occurred over multiple responses. First, from the experiment participants, both experienced frustration from the size of the drop-down lists (spinners), they wanted these to be increased; this would improve usability for all users. A common point was participants suggesting a tutorial, or help information, Code NO43. My original goal was to design so this would not be required, however on reflection this was a naïve design decision.
 
 \section{Evaluation Summary}
 
 Overall users found the system to have more positive attributes than negative.
 
 From an accuracy point of view the system definitely needs significant improvement.
+
+Brief overview of met requirements.
 
 %==================================================================================================================================
 \chapter{Conclusion (2 Pages)}
