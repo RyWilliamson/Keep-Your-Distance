@@ -972,11 +972,41 @@ I will break down the findings using the open, axial, and selective codes define
 
 \subsection{In Favour of System Use}
 
-In total, during the non-contact survey, participants commented on more positive attributes than negative with 256 codes in favour of the system compared (NS1) to 168 attributes against system use (NS2).
+In total, during the non-contact survey, participants commented on more positive attributes than negative with 256 codes in favour of the system compared (NS1) to 168 attributes against system use (NS2). This section will discuss a few key aspects that were expressed by participants as particularly good.
 
-Comment on the behaviour changing for each graph type, link to education goal and to codes for reasons. Also mention here that only 1 participant would not be comfortable using it in a workplace, with only 3 being unsure. Say that this high adoption rate coupled with learning shows education.
+First, the data visualisations on the app were particularly well received, especially in regards to prompting behavioural change in users, Figure \ref{fig:behaviour}, which suggests the users were learning useful information from these visualisations helping achieve the system goal of education. The large impact of the trend interaction graph was further explored and can be backed up with qualitative feedback. The trend graphs were well understood with all but one participant understading the x-axis, 20 understanding the y, and 18 understanding the gradient colour change. The gradient colour change seemed to make a significant impact as it used standard colours for danger (red) and safety (blue), with 15 of the 18 participants who indicated it would change behaviour, also had an intuitive understanding of the colour change meaning. Only a single participant indicated a behviour change for trend without understanding the colour change.
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/behaviour-graphs.png}
 
+    \caption{ Showing the likelihood that each graph will change participants behaviour. Left is the weekly interactions chart with 50\% of users saying it would change behaviour, middle are the pie charts with 58.3\%, and right is the interaction trend graph with 70.8\% }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:behaviour}
+\end{figure}
+
+The visual method of alerting the user was well understood when given in context. Alerting was evaluated both in context and without context, this was done to discover how a first time user would intuitively understand the system both before their first interaction, and after their first interaction. This resulted in a stark difference with only 6 participants having a correct understanding of the visual interaction alert initially, but once provided with the context of another device moving towards and away 23 of the 24 participants understood. Overall this is positive, with some room for improvement on providing the user with context.
+
+Finally, in terms of general app design, users intuitively understood many aspects of the UI which showed positive usability. Particularly the usage of the clear and export buttons on the device info page were well understood Figure \ref{fig:button_likert}. These results show two components of the overall app that contribute to having 157 total positive app usability codes (NA1) across all participants.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{images/rename_likert.png}
+        \caption{ Likert scale for rename button usability. }
+        \label{fig:rename_likert}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{images/export_likert.png}
+        \caption{ Likert scale for export button usability. }
+        \label{fig:export_likert}
+    \end{subfigure}
+    ~
+    \caption{ Likert scales for quantitative data collected from the non-contact survey. \subref{fig:rename_likert} shows the feedback on the rename button with 95.8\% of participants having a good understanding, \subref{fig:export_likert} shows the feedback on the export button with 62.5\% of participants having a good understanding }
+    \label{fig:button_likert}
+\end{figure}
 
 \subsection{Against System Use}
 
@@ -998,13 +1028,13 @@ Another aspect that showed a user preference against using this device is poor d
 
 There were many suggestions made during user feedback. Here I will highlight a couple I consider important, or that occurred over multiple responses. First, from the experiment participants, both experienced frustration from the size of the drop-down lists (spinners), they wanted these to be increased; this would improve usability for all users. A common point was participants suggesting a tutorial, or help information, Code NO43. My original goal was to design so this would not be required, however on reflection this was a naïve design decision.
 
+\section{Requirements Validation}
+
+In terms of requirements which were not met, none of the "Could Have" requirements were implemented due to time contraints. I would consider the Ease of Use requirement partially met, however there is clear room for improvement. Finally, the precision in RSSI proximity sensing requirement is not met, and would require hardware changes to solve. This means that all 7 of the must have requirements were met, 2 of 3 should have requirements were met, and 0 of 5 could have requirements were met.
+
 \section{Evaluation Summary}
 
-Overall users found the system to have more positive attributes than negative.
-
-From an accuracy point of view the system definitely needs significant improvement.
-
-Brief overview of met requirements.
+When considering the evaluation process as a whole it was clear that there was more positive feedback than negative, showing this device has potential for future application. However, there are significant technical and usability issues that would need to be solved before this device could be reliably used to re-enforce social distancing practices. Particularly the current combination of BLE hardware and software support on the ESP32, I will discuss solutions to this primary problem in the future work section.
 
 %==================================================================================================================================
 \chapter{Conclusion (2 Pages)}
