@@ -942,7 +942,7 @@ Different methods were required for analysing quantitative vs qualitative. For a
 
 To analyse the qualitative questions in the surveys open, axial, and selective coding was used, with a modification to look at cumulative category mentions. This technique is applied by first reviewing all the qualitative data collected. When reviewing this data open codes are created, which reflect ideas that occur. For example, in my evaluation of the non-contact survey open code 1 was "Correct definition of interaction". Then axial codes are created by reviewing the open codes and looking for commonalities between them, axial codes can also be though of as categories of open codes. For example, in my evaluation axial code 5 is "Understanding of concepts", which contains open code 1. To derive selective codes a similar process takes place, the links between axial codes are identified and categories (selective codes) are created. Figure \ref{fig:oas_codes} shows a partial open, axial, selective coding workbook. In additonal to produces these codes I derived a cumulative total of mentions for each axial and selective code by each participant. This is used to obtain a participants overall feelings on the system, and when totalled across participants it provides a view of how the system performed with regards to usability overall.
 
-Finally, for this project I performed two separate sections of open, axial, and selective coding. One for the post-experiment survey and another for the non-contact survey. This was to allow for separate analysis, as participants who have used the device had a different experience with the system.
+Finally, for this project I performed two separate sections of open, axial, and selective coding. One for the post-experiment survey and another for the non-contact survey. This was to allow for separate analysis, as participants who have used the device had a different experience with the system. Henceforth, codes from the experiment will be prefixed with 'E', and codes from the non-contact survey will be prefixed with 'N'.
 
 \begin{figure}[!htb]
     \centering
@@ -956,21 +956,53 @@ Finally, for this project I performed two separate sections of open, axial, and 
 
 \subsection{Quantitative Analysis: Survey Data}
 
+For both the post-experiment survey and the non-contact survey Google Forms were used in the collection of data. Part of this data is quantitative, using Google forms Likert Scale, and multiple choice question types. Part of the Google Forms functionality is to create categorical data visualisations based on the received question responses. Having these visualisations allowed for easier analysis by inspection.
+
 \subsection{Quantitative Analysis: Experimental Data}
 
+Two dependant variables were considered during the experiment: the physical distance when alerts started and stopped, and the device data throughout the experiment, which was extracted using the export data feature of the system. After the experiment had concluded to device data was processed to extract the timestamps of each interaction. These timestamps were then analysed to map the real distance measurements to the device recorded data, i.e. map the device belief to the observed distance. Once the timestamps for the start and end of each user task had been located they were extracted and estimated distances were calculated from the related RSSI data.
 
+This data was used to calculate important key metrics, such as: difference in reaction time between the two devices, and the difference between the real distance between participants and the distance set in the profile. These metrics were then used to create data visualisations to provide insight, for or against, some hypotheses which will be disucssed in the Findings section. Due to only being able to carry out a single experiment due to COVID-19 limitations described above, the data here can neither prove nor disprove any claims as there is not enough data to perform statistical tests with sufficient confidence levels.
+
+On reflection, a better approach to the experiment would have been to record the participants performing the walking task from a top-down perspective. This would have provided an easier, and possibly more accurate, method of mapping the device belief to real data. Further, this would have allowed further exploration and analysis of the data as the speed could be calculated and taken into account.
 
 \section{Findings}
 
-I will break down the findings using the open, axial, and selective codes defined above to highlight key results from the analysis.
+I will break down the findings using the open, axial, and selective codes defined above to highlight significant and unexpected results from the analysis. Each section will contain analysis from both qualitative and quantitative data to illustrate these key findings.
 
 \subsection{In Favour of System Use}
 
+In total, during the non-contact survey, participants commented on more positive attributes than negative with 256 codes in favour of the system compared (NS1) to 168 attributes against system use (NS2).
+
+Comment on the behaviour changing for each graph type, link to education goal and to codes for reasons. Also mention here that only 1 participant would not be comfortable using it in a workplace, with only 3 being unsure. Say that this high adoption rate coupled with learning shows education.
+
+
+
 \subsection{Against System Use}
+
+A significant problem with the current implementation of the system is the performance of the physical devices in social distancing. From the experiment, significant difference was found between the real distance participants kept from each other and the distance that should have been kept. In the living room a mean error of 0.32m and standard deviation (std) of 0.18m was found, for the garden a mean of 0.63m and std of 0.48m, and for the hallway a mean of 0.58m and std of 0.6m. This highlights the problems with using Bluetooth RSSI values to estimate proximity, and shows that the categories set by the profile can't be appropriately differentiated between. To back this up, the difference in time between devices alerting can be used as another indicator of this issue. As seen in Figure \ref{fig:clustered-time-diff}, there is often a significant time difference which may cause confusion between system users. This point is backed up in the qualitative analysis through both experiment participants using codes E01, and E02, which are both related to the device not keeping sufficient distance between them.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/clustered-time-diff.png}
+
+    \caption{ Analysis of mean absolute time differences of devices reacting to change in real world state. Clustered by location, showing the time difference for each distance profile. Error bars are calculated from standard sample deviation. }
+
+    % use the notation fig:name to cross reference a figure
+    \label{fig:clustered-time-diff}
+\end{figure}
+
+Another aspect that showed a user preference against using this device is poor device usability. Overall there were slightly more negative device usability axial codes (NA04), with 61 code uses, compared to positive device usability axial codes (NA03), with 59 code uses. This is near a "break-even" in usability, however this is a poor result in terms of usability, as this suggests that the current design is unusable by many users. On further examination of the open codes it was found that the open codes related to user misunderstanding of the device log size number accounted for 44 of 61 (72.13\%) negative device usability codes. This suggests that primary device usability issue is how the device log size is presented to the user. This is tricky to solve, as adding in a descriptor of the number, such as "Size: " takes up screen space. At the font size used only 8 characters can fit on a line, with the smaller font size allowing 16 characters. If a smaller font size were used then understanding may be gained, but usability may be lost in terms of users being able to read the text.
 
 \subsection{General Suggestions}
 
+
+
 \section{Evaluation Summary}
+
+Overall users found the system to have more positive attributes than negative.
+
+From an accuracy point of view the system definitely needs significant improvement.
 
 %==================================================================================================================================
 \chapter{Conclusion (2 Pages)}

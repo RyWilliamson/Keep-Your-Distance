@@ -694,3 +694,16 @@
 - _0.5 hours_: Type up meeting minutes.
 - _1 hour_: Quantitative device evaluation.
 - _1 hour_: Open, axial, selective coding section
+- _0.5 hours_: Starting Quantitative Analysis: Experimental Data section
+
+### 16 Mar 2021
+
+- _1 hour_: Figuring out how to graph the device data.
+- _1 hour_: Finishing Quantitative Analysis: Experimental Data section
+- _0.5 hours_: Write Quantitative Analysis: Survey Data section
+- _0.5 hours_: Start work on findings section plan.
+- _0.5 hours_: Write some more of Evaluation.
+
+### 17 Mar 2021
+
+- _1 hour_: Finish working on Against System Use section. (Maybe still add some qualititative data to back up para 2).
