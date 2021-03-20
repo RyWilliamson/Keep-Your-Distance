@@ -13,20 +13,13 @@
 %% METADATA
 \title{Keep Your Distance! Real-time Social Distancing Using Wearable ESP32s}
 \author{Ryan Williamson}
-\date{February 01, 2021}
+\date{March 20, 2021}
 
 \maketitle
 
 %==============================================================================
 %% ABSTRACT
 \begin{abstract}
-    Every abstract follows a similar pattern. Motivate; set aims; describe work; explain results.
-    \vskip 0.5em
-    ``XYZ is bad. This project investigated ABC to determine if it was better.
-    ABC used XXX and YYY to implement ZZZ. This is particularly interesting as XXX and YYY have
-    never been used together. It was found that
-    ABC was 20\% better than XYZ, though it caused rabies in half of subjects.''
-
     During the COVID-19 pandemic systems were designed and developed to "track and trace" people
     who may have been infected. However, these systems don't offer protection to those in the
     potentially infectious situation. This project investigated using Bluetooth enabled
@@ -35,8 +28,11 @@
     time. This uses, ESP32 micro-controllers, Bluetooth received signal strength, and mobile
     connectivity to implement "active contact identification". While there are some existing
     solutions similar to this project, many of these are proprietary and don't explore many
-    considerations of usability with this technology.
-    -- THIS IS NOT DONE, WILL BE UPDATED AS TIME GOES ON --
+    considerations of usability with this technology. Through user evaluation, testing, and an experiment
+    it was found that receieved signal strength alone was not a strong enough indicator for
+    distance approximation. However, the overall system is still beneficial in its considerations
+    for accessibility and usability, and could be adapted to fit with more promising technologies such
+    as UWB.
 \end{abstract}
 
 %==============================================================================
@@ -51,7 +47,7 @@
 % this declaration, but doing so would help future students.
 %
 \def\consentname {Ryan Williamson} % your full name
-\def\consentdate {01 February 2021} % the date you agree
+\def\consentdate {20 March 2021} % the date you agree
 %
 \educationalconsent
 
@@ -481,7 +477,7 @@ During the early stages of the project, time was spent choosing technologies sui
 
 \subsection{ESP32 \& Related Hardware}
 
-The ESP32 is a low-power microcontroller, and was the key component provided by the project specification. It is designed for Ultra-Low power consumption making it an ideal choice of hardware for a wearable device. Further, this device has an integrated Bluetooth chip, with support for BLE, meaning that no additional hardware would be needed, as would be required by other microcontroller boards. For this project a specific model, the "Heltec WiFi LoRa 32" \citep{heltec_automation_wifi_nodate}, was used which also contained an on-board LED screen. This screen is the primary notification method. An additional notification method that was added further in development was a vibrotactile motor, used for haptic notification.
+The ESP32 is a low-power microcontroller, and was the key component provided by the project specification. It is designed for Ultra-Low power consumption, and low-cost (about £15 for our particular model) making it an ideal choice of hardware for a wearable device. Further, this device has an integrated Bluetooth chip, with support for BLE, meaning that no additional hardware would be needed, as would be required by other microcontroller boards. For this project a specific model, the "Heltec WiFi LoRa 32" \citep{heltec_automation_wifi_nodate}, was used which also contained an on-board LED screen. This screen is the primary notification method. An additional notification method that was added further in development was a vibrotactile motor, used for haptic notification.
 
 \subsection{Platform IO}
 
@@ -1037,28 +1033,39 @@ In terms of requirements which were not met, none of the "Could Have" requiremen
 When considering the evaluation process as a whole it was clear that there was more positive feedback than negative, showing this device has potential for future application. However, there are significant technical and usability issues that would need to be solved before this device could be reliably used to re-enforce social distancing practices. Particularly the current combination of BLE hardware and software support on the ESP32, I will discuss solutions to this primary problem in the future work section.
 
 %==================================================================================================================================
-\chapter{Conclusion (2 Pages)}
-Summarise the whole project for a lazy reader who didn't read the rest (e.g. a prize-awarding committee).
-\section{Guidance}
-\begin{itemize}
-    \item
-          Summarise briefly and fairly.
-    \item
-          You should be addressing the general problem you introduced in the
-          Introduction.
-    \item
-          Include summary of concrete results (``the new compiler ran 2x
-          faster'')
-    \item
-          Indicate what future work could be done, but remember: \textbf{you
-              won't get credit for things you haven't done}.
-\end{itemize}
+\chapter{Conclusion}
 
 \section{Summary}
 
+This project aimed at building Keep Your Distance, an integrated microcontroller and smartphone system to allow people to be more confident that they were adhering to social distancing practices. ESP32 was the chosen microcontroller, delivering both a low-power and low-cost solution. This introduced some technical constraints. Some technical constraints were manageable, such as not having any non-volatile storage on-board. Some technical constraints could not be mitigated for and would require hardware changes, such as the transmission power of the Bluetooth system. There was a focus on user education, allowing users to make changes to their habits based on recorded system use. There was also a focus on system usability, ensuring this system could be used by a wide range of users; considerations were made for aspects like technical knowledge, and colour blindness.
+
+Through user evaluation and testing it was shown that, for both functional and non-functional requirements, all the must have requirements in the MoSCoW framework were met, with a further 66\% of should have requirements being met. The user experiment showed that further development is needed to achieve active contact identification in a precise and timely manner. This is shown by the best of the result sets having a mean error of 0.32m and std of 0.18m, along with a significant time difference in device activation of at minimum 2000 milliseconds. However, both the education and usability goals were met, as shown by the open, axial, selective coding process and the quantitative questionnaire data. For education, all the data visualisation were well understood with the best being the trend graph at 70.8\% of participants reacting positively. In terms of usability, this was shows by the 157 positive app usability codes. This shows the participants had an intuitive understanding of the interface
+
 \section{Future Work}
 
+There have been numerous areas of the project which I have idenitfied areas to focus improvements on if I had more time on the project, or if someone were to continue this project further.
+
+\subsection{Hardware Changes}
+
+There are a number of issues to be solved and improvements to be made, the majority of which can be resolved through hardware changes. The main issue is BLEs poor suitability for real-time accurate distance approximation. The RSSI values are subject to significant variance caused by environmental factors such as surrounding surfaces, surface material, interference from other signals, and people themselves. Additional hardware could be incorporated into the system in the form of Ultra-Wideband (UWB) transmitters. This would allow far more accurate, and precise distance estimation using the Two Way Ranging technique \citep{inpixon_ultra_wideband_2021}.
+
+\subsection{Alternative Distance Approximation Models}
+
+A parallel area for future work would be changing the distance approximation model that is used. Currently the model only takes into account the fluctating RSSI values. More complex models could be created that include temporal aspects as show by \citet{chandel_proxitrak_2020} in the ProxiTrak system. These models could be constructed from large datasets using machine learning then deployed onto the ESP32 for efficient use. This has the potential to improve the the accuracy of the distance approximation, but it is unclear if this would solve the timing issues.
+
+\subsection{Multi-platform App}
+
+Currently the companion app is only implemented on Android OS, specifically higher than version 23 of the Android SDK. However, this prevents people who don't own an Android device from being able to use a system, so the app should be implemented to work on other mobile operating systems such as iOS. There is also the potential here for the app to be transferred to operating systems which run on wearable devices.
+
+\subsection{Further Acessibility \& Usability}
+
+While consideration were made for accessibility during this process, such as designing colour sets to work over a wide variety of colour blindness types. However, further work is needed in accessibility for low-vision and blind users. Currently key areas of the app, such as the data visualisations, have no support for screen readers. This should be changed so that no users are excluded from using the system. To improve overall usability help sections should be added to the app, both for information on certain app functionality and to describe the device output to users.
+
 \section{Key Reflections}
+
+Working through the process to create the Keep Your Distance system has allowed the development of many new skills and the consolidation of existing skills developed throughout 4 years of university study. Particularly, I have now seen firsthand the importance of project and time management, along with skills and tools to improve these processes. Working on two distinct but related codebases simultaneously, and interlinking these through BLE networking, has emphasised the value of protocol and system architecture. This project has also allowed me to appreciate the difficulties in anticipating problems during early requirements gathering and analysis, and the further difficulties in mitigating these issues as they arise.
+
+The development process followed iterative design and agile practices, which were beneficial in allowing concepts to be trialed early. However, a great deal of time was spent on locating and fixing obscure bugs that arose from the numerous refactorings applied to the codesbases over the project. If I'd followed a test-drive development approach, there would have been less time spent in solving these issues allowing for more time in feature development.
 
 %==================================================================================================================================
 %

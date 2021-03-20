@@ -711,3 +711,9 @@
 - _1 hour_: Refining Requirements & Analysis chapter from Jeremy's feedback.
 - _0.5 hours_: Evaluation summary section.
 - _1.5 hours_: Finished evaluation section.
+
+### 20 Mar 2021
+
+- _1 hour_: Summary section of conclusion.
+- _1 hour_: Future Work section of conclusion.
+- _1 hour_: Reflection section of conclusion.
