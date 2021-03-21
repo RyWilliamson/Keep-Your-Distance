@@ -717,3 +717,7 @@
 - _1 hour_: Summary section of conclusion.
 - _1 hour_: Future Work section of conclusion.
 - _1 hour_: Reflection section of conclusion.
+
+### 21 Mar 2021
+
+- _1.5 hours_: Fix up evaluation and conclusion sections.
