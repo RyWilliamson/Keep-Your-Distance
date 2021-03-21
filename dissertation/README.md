@@ -2,8 +2,6 @@
 
 Provides `l4proj.cls`, the standard LaTeX template for Honours Individual Projects.
 
-![Preview of the layout](images/l4proj.png)
-
 ## Notes on formatting
 
 The first page, abstract and table of contents are numbered using Roman numerals and are not
@@ -17,4 +15,12 @@ to but excluding the appendices and bibliography.
 
 ## LaTeX
 This template has been tested with `pdflatex`. It should also work with `xelatex` and `lualatex`. Note that on Linux you may need to copy the contents of the `fonts/` folder to `~/.fonts/`.
+
+## Prerequisites
+
+1. Install LaTeX -  I used [texlive](https://www.tug.org/texlive/acquire-netinstall.html) on Windows 10 or on Ubuntu: `apt-get install texlive-full`
+
+## Dissertation (Windows 10 / Linux)
+
+Navigate to the dissertation directory within the project, inside a terminal, and use the command: `pdflatex l4proj.tex`. This will compile the LaTeX document into a pdf file.
 
