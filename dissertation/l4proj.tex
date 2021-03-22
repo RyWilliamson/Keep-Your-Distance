@@ -137,7 +137,7 @@ In addition to the prevention guidelines discussed above countries have also fou
 
 To be able to perform this contact tracing effectively it is not enough to rely solely on manual contact tracing methods alone \citep{shubina_technical_2020}. Instead the strategy has been to augment manual efforts through using digital contact tracing i.e., wireless technologies on electronic devices. Smartphones are the most common choice of device as for digital contact people not using the same system will be invisible to each other, and smartphones are devices that most of the population carries with then daily, meaning driving public adoption of a system is easier.
 
-\subsection{Digital Contact Tracing Technologies}
+\subsection{Digital Contact Tracing Technologies} \label{sec:dctt}
 
 In the development of their own digital contact tracing systems countries have made use of a number of wireless technologies to accomplish the task of proximity estimation. I'll briefly describe a few discussing their suitability for use in contact detection.
 
@@ -260,7 +260,7 @@ I will give a brief overview of each layer on the BLE architecture presented in 
 
 \subsubsection{GATT:} The top-level layer in the BLE stack is the genetric attribute protocol. This provides a level of abstraction over the base attributes defined in ATT, descriptors, characteristics, and services. These are linked concepts, a services is made up of characteristics, which in turn optionally contain descriptors. Descriptors provide metadata about the characteristic containing it. Characteristics are pieces of data, containing values and also properties, which act as permissions for what that characteristic allows. Finally, services are a set of related characteristics.
 
-\subsection{Received Signal Strength Indication}
+\subsection{Received Signal Strength Indication} \label{sec:rssi}
 
 The RSSI is an indication of the reliability of the connection between two devices. \citet{SIG5.0}, in the Bluetooth 5.0 specification, describes how it can be used directly by the BLE protocol for hopping between channels, and can also be accessed by the upper layers of the BLE stack. It also states that if a device supports Received Signal Strength Indicator (RSSI) the accuracy shall be +/- 6 dB, though it should be noted that this varies between hardware implementations. Within BLE the RSSI is an absolute signal strength measurement given in decibel-milliwatts (dBm).
 
@@ -850,19 +850,21 @@ This chapter discussed the high-level design and implementation process used dur
 %==================================================================================================================================
 \chapter{Evaluation}
 
+Evaluation for the project was multi-faceted, considering unit testing, user experiments, user surveys, and requirements validation.
+
 \section{Testing}
 
-Unit testing was performed for both the ESP32 codebase and the Android App codebase, a total of 129 unit tests were written between the two codebases. The unit tests were created to ensure correctness of implemented code. For each function tested, both normal input and edge case input were tested. Unit tests don't guarantee correct execution but they do help in finding some bugs that exist within the code. On reflection, I should have followed a test-drive development (TDD) approach throughout the project rather than testing at the end, followed by bug fixing. This would have made the constant refactoring during the project far safer, and saved trouble from unseen bugs persisting through iterations during implementation.
+Unit testing was performed for both the ESP32 codebase and the Android App codebase, a total of 129 unit tests were written between the two codebases. The unit tests were created to ensure correctness of implemented code. For each function tested, both normal input and edge case input were tested. Unit tests don't guarantee correct execution but they do help in finding some bugs that exist within the code. On reflection, I should have followed a test-driven development (TDD) approach throughout the project rather than testing at the end, followed by bug fixing. This would have made the constant refactoring during the project far safer, and saved trouble from unseen bugs persisting through iterations during implementation.
 
 \subsection{Android UI Testing}
 
-UI testing was considered and had some attempts to be used in the project using the Espresso UI Test Recorder as part of the Android Studio framework. This allows you to record a set of actions then create assertions on certain UI components to verify their correctness. Unfortunately, this was not suitable for this project as the UI in this project is dependant on BLE interaction with the ESP32 device. Without this interaction it makes certain parts of the UI impossible to test and this framework doesn't allow for mocking this behaviour. Further, since the database operates asynchronously from the UI using the test recording framework isn't reliable since results may vary depending on execution timing. For these reasons the UI of the Android app contains no automated testing.
+UI testing was considered and some attempts were made to do this in the project using the Espresso UI Test Recorder as part of the Android Studio framework. This allows you to record a set of actions then create assertions on certain UI components to verify their correctness. Unfortunately, this was not suitable for this project as the UI in this project is dependent on BLE interaction with the ESP32 device. Without this interaction it makes certain parts of the UI impossible to test and this framework doesn't allow for mocking this behaviour. Further, since the database operates asynchronously from the UI using the test recording framework isn't reliable since results may vary depending on execution timing. For these reasons the UI of the Android app contains no automated testing; it was considered too complex to be able to properly test.
 
 \subsection{Android Unit Testing}
 
 There are two types of unit testing available on Android. There is Java Virtual Machine (JVM) unit testing and instrumented unit testing. Instrumented unit testing runs either on the phone or within a smartphone emulator; these tests are much slower to execute as they need to upload to the smartphone. JVM unit tests are much quicker but are difficult implement as the Android functionality that an app relies upon can't be executed. To enable implementation of JVM unit testing Robolectric \citep{robolectric_robolectric_2019} was used. This is a library which mocks many common Android SDK function calls. Further, to allow testing components which handled BLE objects Mockito \citep{faber_mockito_2020} was used. Mockito is a library which allows for custom behaviour mocking of certain object types. By using these two libraries, along with the base unit testing library JUnit, \citep{junit_team_junit_2020}, I was able to implement my unit testing within the JVM.
 
-There were some components that were not feasible to test at all. Testing the BLE callbacks was not possible, this is due to how Android, and by extension Blessed, handles callback events. They are declared final, meaning that Mockito is unable to mock a call to them as final classes cannot be extended. This means code contained within the callbacks cannot be covered by tests. Further, the auto-generated code from Android navigation was excluded from testing as this is the domain of UI testing, whereas the auto-generated code from the Room DAO was left in to show the tested state of the database system. A total of 86 unit tests were written for the Android codebase, all of which passed.
+There were some components that were not feasible to test at all. Testing the BLE callbacks was not possible, this is due to how Android, and by extension the Blessed library, handles callback events. They are declared final, meaning that Mockito is unable to mock a call to them as final classes cannot be extended. This means code contained within the callbacks cannot be covered by tests. Further, the auto-generated code from Android navigation was excluded from testing as this is the domain of UI testing, whereas the auto-generated code from the Room DAO was left in to show the tested state of the database system. A total of 86 unit tests were written for the Android codebase, all of which passed.
 
 Figure \ref{fig:android_coverage} shows the coverage report generated from running the test suite. Unfortunately, the most precise metric this test suite can provide is line coverage, more fine-grained metrics such as branch coverage and condition coverage can provide greater insight. As expected the Activity, Fragment, Visualisation, and DatabaseUI sections of code, which are responsible for UI, are very poorly covered. The main database functionality was aggressively tested, as seen by the 100\% line coverage of entities and repositories. The DAO and main Database package coverage is lower as these packages contain code that is auto-generated, so is harder to design tests for. Overall the line coverage is 44.7\%, including auto-generated and UI sources.
 
@@ -892,7 +894,7 @@ AUnit, \citep{park_bxparksaunit_2021}, is the library chosen to perform unit tes
 
 \section{Ethics}
 
-A requirement of this system was that evaluation was performed ethically. The survey performed was ethically sound, shown by following and signing the ethics checklist as seen in Figures \ref{fig:ethics_checklist1} - \ref{fig:ethics_checklist3}. The experiment required a request for formal ethical approval, which was granted as seen in Figures \ref{fig:full_ethics_approval1} - \ref{fig:full_ethics_approval3}. These required formal ethical approval as my project used non-standard hardware, namely the ESP32, which violated point 2 of the ethics checklist. As part of the experiment process, participants were asked to fill in a consent form, Figure \ref{fig:participant_consent}, along with receiving information sheets, Figure \ref{fig:participant_information},  and a debriefing email, Figure \ref{fig:participant_debriefing}. Finally, during the surveys performed their was an informed consent section in the Google Form, which the user had to agree to, to begin the survey.
+A requirement of this system was that evaluation was performed ethically. The survey performed was ethically sound, shown by following and signing the ethics checklist as seen in Figures \ref{fig:ethics_checklist1} - \ref{fig:ethics_checklist3}. The experiment required a request for formal ethical approval, which was granted as seen in Figures \ref{fig:full_ethics_approval1} - \ref{fig:full_ethics_approval3}. These required formal ethical approval as my project used non-standard hardware, namely the ESP32, which was identified by point 2 of the ethics checklist. As part of the experiment process, participants were asked to fill in a consent form, Figure \ref{fig:participant_consent}, along with receiving information sheets, Figure \ref{fig:participant_information},  and a debriefing email, Figure \ref{fig:participant_debriefing}. Finally, during the surveys performed their was an informed consent section in the Google Form, which the user had to agree to, to begin the survey.
 
 \section{Experiment}
 
@@ -914,7 +916,7 @@ The participants are then separated again. They are each asked to explore the ap
     \centering
     \includegraphics[width=0.95\linewidth]{images/experiment.png}
 
-    \caption{ Example of how the experiment would be setup in a given area. Participants stand at each end of the tape measure which is 3 metres in length. }
+    \caption{ Example of how the experiment would be setup in a given area. A pair of participants stand at each end of the tape measure which is 3 metres in length. }
 
     % use the notation fig:name to cross reference a figure
     \label{fig:experiment_setup}
@@ -930,7 +932,7 @@ These tasks involved the particpants interacting with the Android app. This, alo
 
 \section{Qualitative Survey}
 
-To attempt to account for the COVID-19 limitations described above a separate survey was created that could be sent to participants online, Figures \ref{fig:non-contact-survey-questions-1} - \ref{fig:non-contact-survey-questions-2}. This survey was designed to only look at usability and education. The survey contained a section for each page in the app, a section for the device, and a general questions section. Within each section was a short video, of either the app being operated, or the device being used. These videos were the basis for the questions are were an attempt at a substitute for using the device. This survey received 24 responses, a significant amount, and was segmented into 17 (70.8\%) tech-literate responses, and 7 (29.2\%) tech-iliterate responses. This survey was designed to enable quantitative and qualitative responses; Likert scale, and yes/no questions were used to obtain quantitative data.
+To attempt to account for the COVID-19 limitations described above a separate survey was created that could be sent to participants online, Figures \ref{fig:non-contact-survey-questions-1} - \ref{fig:non-contact-survey-questions-2}. This survey was designed to only look at usability and education; it wouldn't have been a suitable evaluation for the other aspects of the system. The survey contained a section for each page in the app, a section for the device, and a general questions section. Within each section was a short video, of either the app being operated, or the device being used. These videos were the basis for the questions are were an attempt at a substitute for using the device. This survey received 24 responses and was segmented into 17 (70.8\%) tech-literate responses, and 7 (29.2\%) tech-illiterate responses. This survey was designed to enable quantitative and qualitative responses; Likert scale, and yes/no questions were used to obtain quantitative data.
 
 \section{Results Analysis}
 
@@ -954,11 +956,11 @@ Finally, for this project I performed two separate sections of open, axial, and 
 
 \subsection{Quantitative Analysis: Survey Data}
 
-For both the post-experiment survey and the non-contact survey Google Forms were used in the collection of data. Part of this data is quantitative, using Google forms Likert Scale, and multiple choice question types. Part of the Google Forms functionality is to create categorical data visualisations based on the received question responses. Having these visualisations allowed for easier analysis by inspection.
+For both surveys Google Forms were used in the collection of data. Part of this data is quantitative, using Google forms Likert Scale, and multiple choice question types. Part of the Google Forms functionality is to create categorical data visualisations based on the received question responses. Having these visualisations allowed for easier analysis by inspection.
 
 \subsection{Quantitative Analysis: Experimental Data}
 
-Two dependant variables were considered during the experiment: the physical distance when alerts started and stopped, and the device data throughout the experiment, which was extracted using the export data feature of the system. After the experiment had concluded to device data was processed to extract the timestamps of each interaction. These timestamps were then analysed to map the real distance measurements to the device recorded data, i.e. map the device belief to the observed distance. Once the timestamps for the start and end of each user task had been located they were extracted and estimated distances were calculated from the related RSSI data.
+Two dependent variables were considered during the experiment: the physical distance when alerts started and stopped, and the device data throughout the experiment, which was extracted using the export data feature of the system. After the experiment had concluded to device data was processed to extract the timestamps of each interaction. These timestamps were then analysed to map the real distance measurements to the device recorded data, i.e. map the device belief to the observed distance. Once the timestamps for the start and end of each user task had been located they were extracted and estimated distances were calculated from the related RSSI data.
 
 This data was used to calculate important key metrics, such as: difference in reaction time between the two devices, and the difference between the real distance between participants and the distance set in the profile. These metrics were then used to create data visualisations to provide insight, for or against, some hypotheses which will be disucssed in the Findings section. Due to only being able to carry out a single experiment due to COVID-19 limitations described above, the data here can neither prove nor disprove any claims as there is not enough data to perform statistical tests with sufficient confidence levels.
 
@@ -972,13 +974,13 @@ I will break down the findings using the open, axial, and selective codes define
 
 In total, during the non-contact survey, participants commented on more positive attributes than negative with 256 codes in favour of the system compared (NS1) to 168 attributes against system use (NS2). This section will discuss a few key aspects that were expressed by participants as particularly good.
 
-First, the data visualisations on the app were particularly well received, especially in regards to prompting behavioural change in users, Figure \ref{fig:behaviour}, which suggests the users were learning useful information from these visualisations helping achieve the system goal of education. The large impact of the trend interaction graph was further explored and can be backed up with qualitative feedback. The trend graphs were well understood with all but one participant understading the x-axis, 20 understanding the y, and 18 understanding the gradient colour change. The gradient colour change seemed to make a significant impact as it used standard colours for danger (red) and safety (blue), with 15 of the 18 participants who indicated it would change behaviour, also had an intuitive understanding of the colour change meaning. Only a single participant indicated a behviour change for trend without understanding the colour change.
+First, the data visualisations on the app were particularly well received, especially in regards to prompting behavioural change in users, Figure \ref{fig:behaviour}, which suggests the users were learning useful information from these visualisations helping achieve the system goal of education. The large impact of the trend interaction graph was further explored and can be backed up with qualitative feedback. The trend graphs were well understood with all but one participant understading the x-axis, 20 understanding the y, and 18 understanding the gradient colour change. The gradient colour change seemed to make a significant impact as it used standard colours for danger (red) and safety (blue), with 15 of the 18 participants who indicated it would change behaviour, also had an intuitive understanding of the colour change meaning. Only a single participant indicated a behvioural change for trend without understanding the colour change.
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.9\linewidth]{images/behaviour-graphs.png}
+    \includegraphics[width=0.85\linewidth]{images/behaviour-graphs.png}
 
-    \caption{ Showing the likelihood that each graph will change participants behaviour. Left is the weekly interactions chart with 50\% of users saying it would change behaviour, middle are the pie charts with 58.3\%, and right is the interaction trend graph with 70.8\% }
+    \caption{ Showing the likelihood that each graph will change participant behaviour. Left is the weekly interactions chart with 50\% of users saying it would change behaviour, middle are the pie charts with 58.3\%, and right is the interaction trend graph with 70.8\% }
 
     % use the notation fig:name to cross reference a figure
     \label{fig:behaviour}
@@ -1002,7 +1004,7 @@ Finally, in terms of general app design, users intuitively understood many aspec
         \label{fig:export_likert}
     \end{subfigure}
     ~
-    \caption{ Likert scales for quantitative data collected from the non-contact survey. \subref{fig:rename_likert} shows the feedback on the rename button with 95.8\% of participants having a good understanding, \subref{fig:export_likert} shows the feedback on the export button with 62.5\% of participants having a good understanding }
+    \caption{ Likert scales, 1 (Strongly Disagree) to 5 (Strongly Agree), for quantitative data collected from the non-contact survey. \subref{fig:rename_likert} shows feedback on the rename button; 95.8\% of participants had a good understanding, \subref{fig:export_likert} shows feedback on the export button; 62.5\% of participants had a good understanding }
     \label{fig:button_likert}
 \end{figure}
 
@@ -1012,9 +1014,9 @@ A significant problem with the current implementation of the system is the perfo
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=1.0\linewidth]{images/clustered-time-diff.png}
+    \includegraphics[width=0.8\linewidth]{images/clustered-time-diff.png}
 
-    \caption{ Analysis of mean absolute time differences of devices reacting to change in real world state. Clustered by location, showing the time difference for each distance profile. Error bars are calculated from standard sample deviation. }
+    \caption{ Analysis of mean absolute time differences of devices reacting to change in real world state. Clustered by location, showing the time difference for each distance profile. Error bars indicate +/- 1 standard deviation. Each bar consists of two distinct measurements. }
 
     % use the notation fig:name to cross reference a figure
     \label{fig:clustered-time-diff}
@@ -1041,15 +1043,15 @@ When considering the evaluation process as a whole it was clear that there was m
 
 This project aimed at building Keep Your Distance, an integrated microcontroller and smartphone system to allow people to be more confident that they were adhering to social distancing practices. ESP32 was the chosen microcontroller, delivering both a low-power and low-cost solution. This introduced some technical constraints which influenced the project. Some constraints were manageable, such as not having any non-volatile storage on-board. Some constraints could not be mitigated against and would require hardware changes, such as the transmission power of the Bluetooth system. In addition to enforcing social distancing there was a focus on user education, allowing users to make changes to their habits based on recorded system use. There was also a focus on system usability, ensuring this system could be used by a wide range of users; considerations were made for aspects like technical knowledge, and colour blindness.
 
-Through user evaluation and testing it was shown that, for both functional and non-functional requirements, all the must have requirements in the MoSCoW framework were met, with a further 66\% of should have requirements being met. The user experiment showed that further development is needed to achieve active contact identification in a precise and timely manner. This is shown by the best of the result sets having a mean error of 0.32m and std of 0.18m, along with a significant time difference in device activation of at minimum 2000 milliseconds. However, both the education and usability goals were met, as shown by the open, axial, selective coding process and the quantitative questionnaire data. For education, all the data visualisation were well understood with the best being the trend graph at 70.8\% of participants reacting positively. In terms of usability, this was shows by the 157 positive app usability codes. This shows the participants had an intuitive understanding of the interface
+Through user evaluation and testing it was shown that, for both functional and non-functional requirements, all the must have requirements in the MoSCoW framework were met, with a further 66\% of should have requirements being met. The user experiment showed that further development is needed to achieve active contact identification in a precise and timely manner. This is shown by the best of the result sets having a mean error of 0.32m and standard deviation (std) of 0.18m, along with a significant time difference in device activation of at minimum 2 seconds. However, both the education and usability goals were met, as shown by the open, axial, selective coding process and the quantitative questionnaire data. For education, all the data visualisation were well understood with the best being the trend graph at 70.8\% of participants reacting positively. In terms of usability, this was shows by the 157 positive app usability codes. This shows the participants had an intuitive understanding of the interface
 
 \section{Future Work}
 
-There have been numerous areas of the project which I have idenitfied areas to focus improvements on if I had more time on the project, or if someone were to continue this project further.
+There have been numerous areas of the project which I have identified areas to focus improvements on if I had more time on the project, or if someone were to continue this project further.
 
 \subsection{Hardware Changes}
 
-There are a number of issues to be solved and improvements to be made, the majority of which can be resolved through hardware changes. The main issue is BLEs poor suitability for real-time accurate distance approximation. The RSSI values are subject to significant variance caused by environmental factors such as surrounding surfaces, surface material, interference from other signals, and people themselves. Additional hardware could be incorporated into the system in the form of Ultra-Wideband (UWB) transmitters. This would allow far more accurate, and precise distance estimation using the Two Way Ranging technique \citep{inpixon_ultra_wideband_2021}.
+There are a number of issues to be solved and improvements to be made, the majority of which can be resolved through hardware changes. The main issue is BLE's poor suitability for real-time accurate distance approximation, this was also found in other studies as seen in Section \ref{sec:dctt}. The RSSI values are subject to significant variance caused by environmental factors such as surrounding surfaces, surface material, interference from other signals, and people themselves. Additional hardware could be incorporated into the system in the form of Ultra-Wideband (UWB) transmitters. This would allow far more accurate, and precise distance estimation using the Two Way Ranging technique \citep{inpixon_ultra_wideband_2021}.
 
 \subsection{Alternative Distance Approximation Models}
 
@@ -1061,13 +1063,15 @@ Currently the companion app is only implemented on Android OS, specifically high
 
 \subsection{Further Acessibility \& Usability}
 
-While consideration were made for accessibility during this process, such as designing colour sets to work over a wide variety of colour blindness types. However, further work is needed in accessibility for low-vision and blind users. Currently key areas of the app, such as the data visualisations, have no support for screen readers. This should be changed so that no users are excluded from using the system. To improve overall usability help sections should be added to the app, both for information on certain app functionality and to describe the device output to users.
+Consideration was made for accessibility during this process, such as designing colour sets to work over a wide variety of colour blindness types. However, further work is needed in accessibility for low-vision and blind users. Currently key areas of the app, such as the data visualisations, have no support for screen readers. This should be changed so that no users are excluded from using the system. To improve overall usability help sections should be added to the app, both for information on certain app functionality and to describe the device output to users.
 
 \section{Key Reflections}
 
-Working through the process to create the Keep Your Distance system, allowed the development of many new skills and the consolidation of existing skills developed throughout 4 years of university study. Particularly, I have now seen firsthand the importance of project and time management, along with skills and tools to improve these processes. Working on two distinct but related codebases simultaneously, and interlinking these through BLE networking, has emphasised the value of protocol and system architecture. This project has also allowed me to appreciate the difficulties in anticipating problems during early requirements gathering and analysis, and the further difficulties in mitigating these issues as they arise.
+Working through the process to create the Keep Your Distance system, allowed the development of many new skills and the consolidation of existing skills developed throughout 4 years of university study. Particularly, I have now seen firsthand the importance of project and time management, along with skills and tools to improve these processes. Working on two distinct but related codebases simultaneously, and inter-operating these through BLE networking, has emphasised the value of protocol and system architecture. This project has also allowed me to appreciate the difficulties in anticipating problems during early requirements gathering and analysis, and the further difficulties in mitigating these issues as they arise.
 
 The development process followed iterative design and agile practices, which were beneficial in allowing concepts to be trialed early. However, a great deal of time was spent on locating and fixing obscure bugs that arose from the numerous refactorings applied to the codesbases over the project. If I'd followed a test-driven development approach, there would have been less time spent in solving these issues allowing for more time in feature development.
+
+Finally, working on this project allowed me to better my skills in changing my internal understanding of a technical concept into an easy to understand format. This was developed both through communicating my work, thoughts, and plans to my advisor so that he could understand the work at the right level to provide feedback. This was then further developed through writing my dissertation; taking my project and explaining the core concepts to an unfamiliar reader, using both text and diagrams.
 
 %==================================================================================================================================
 %

@@ -722,3 +722,7 @@
 
 - _1.5 hours_: Fix up evaluation and conclusion sections.
 - _1.5 hours_: Sort out GitHub repo readmes.
+
+### 22 Mar 2021
+
+- _1.5 hours_: Make Jeremy's suggested changes to my evaluation and conclusion sections.
