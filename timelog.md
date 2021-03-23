@@ -725,4 +725,8 @@
 
 ### 22 Mar 2021
 
+- _0.5 hours_: Meeting with Jeremy.
+- _0.5 hours_: Type up meeting minutes.
 - _1.5 hours_: Make Jeremy's suggested changes to my evaluation and conclusion sections.
+- _0.5 hours_: Check BibTex.
+- _3.5 hours_: Spelling and grammar checks.
