@@ -723,6 +723,8 @@
 - _1.5 hours_: Fix up evaluation and conclusion sections.
 - _1.5 hours_: Sort out GitHub repo readmes.
 
+# Week 22
+
 ### 22 Mar 2021
 
 - _0.5 hours_: Meeting with Jeremy.
@@ -730,3 +732,17 @@
 - _1.5 hours_: Make Jeremy's suggested changes to my evaluation and conclusion sections.
 - _0.5 hours_: Check BibTex.
 - _3.5 hours_: Spelling and grammar checks.
+
+### 26 Mar 2021
+
+- _2 hours_: Working on presentation.
+
+### 27 Mar 2021
+
+- _1 hour_: Working on presentation.
+
+### 28 Mar 2021
+
+- _4 hours_: Working on presentation.
+- _0.5 hours_: Setup OBS and record first run-through of presentation.
+- _0.5 hours_: Setup noise gate and noise suppressor in OBS, then record second run-through.
