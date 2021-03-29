@@ -746,3 +746,12 @@
 - _4 hours_: Working on presentation.
 - _0.5 hours_: Setup OBS and record first run-through of presentation.
 - _0.5 hours_: Setup noise gate and noise suppressor in OBS, then record second run-through.
+
+# Week 23
+
+### 22 Mar 2021
+
+- _0.5 hours_: Meeting with Jeremy.
+- _0.5 hours_: Typed up Meeting notes.
+- _0.5 hours_: Making changes Jeremy asked for.
+- _0.5 hours_: Re-recording presentation for final time.
